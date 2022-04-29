@@ -758,6 +758,26 @@ public:
 	}
 };
 
+class MetaEffectCanoeTime : public MetaEffect
+{
+public:
+	MetaEffectCanoeTime()
+	{
+		ID = "canoe_time";
+		name = "Canoe Time";
+		EffectDuration = 180;
+	}
+
+	virtual void OnActivate() override;
+	virtual void OnDeactivate() override;
+
+	virtual void OnTick() override;
+
+private:
+	std::vector<Vehicle> canoes;
+
+};
+
 
 std::vector<Entity> GetNearbyProps(int32_t Max);
 
