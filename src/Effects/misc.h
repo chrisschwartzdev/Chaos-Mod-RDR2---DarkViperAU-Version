@@ -762,6 +762,28 @@ private:
 	std::set <Ped> peds;
 };
 
+class EffectChaosRain : public Effect
+{
+public:
+	EffectChaosRain()
+	{
+		ID = "chaos_rain";
+		name = "Chaos Rain";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	std::vector<Ped> peds;
+	std::vector<Vehicle> vehs;
+};
+
 
 /** Meta */
 

@@ -1662,3 +1662,132 @@ void EffectPotatoMode::OnDeactivate()
 	
 	peds.clear();
 }
+
+void EffectChaosRain::OnActivate()
+{
+	peds.clear();
+	vehs.clear();
+}
+
+void EffectChaosRain::OnTick()
+{
+	if (TimerTick(2000, 0))
+	{
+		static std::vector<const char*> models = { "CART01", "CART02", "CART03", "CART04", "CART05", "CART06", "CART07",
+											"CART08", "ARMYSUPPLYWAGON", "BUGGY01", "BUGGY02", "BUGGY03",
+											"CHUCKWAGON000X", "CHUCKWAGON002X", "COACH2", "COACH3", "COACH4", "COACH5",
+											"COACH6", "coal_wagon", "OILWAGON01X", "POLICEWAGON01X", "WAGON02X",
+											"WAGON04X", "LOGWAGON", "WAGON03X", "WAGON05X", "WAGON06X",
+											"WAGONPRISON01X", "STAGECOACH001X", "STAGECOACH002X", "UTILLIWAG",
+											"GATCHUCK", "GATCHUCK_2", "wagonCircus01x", "wagonDairy01x", "wagonWork01x",
+											"wagonTraveller01x", "KEELBOAT", "CANOE", "CANOETREETRUNK", "SKIFF",
+											"BREACH_CANNON", "trolley01x" };
+
+		static Hash model = GET_HASH(models[rand() % models.size()]);
+
+		Ped playerPed = PLAYER::PLAYER_PED_ID();
+		Vector3 vec = GetRandomCoordAroundPlayer(float(rand() % 50));
+		Vehicle veh = VEHICLE::CREATE_VEHICLE(model, vec.x, vec.y, vec.z + 175.0f, 0.0f, 0, 0, true, 0);
+
+		ENTITY::SET_ENTITY_ROTATION(veh, 0.0f, 180.0f, 0.0f, 2, 1);
+		ENTITY::SET_ENTITY_VELOCITY(veh, 0.0f, 0.0f, -150.0f);
+
+		vehs.push_back(veh);
+
+		if (ENTITY::DOES_ENTITY_EXIST(veh))
+		{
+			ChaosMod::vehsSet.insert(veh);
+		}
+
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+	}
+	if (TimerTick(2000, 1))
+	{
+		Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+		Vector3 vec = GetRandomCoordAroundPlayer(float(rand() % 20));
+
+		static std::vector<const char*> models = {
+			"A_C_Alligator_01",
+			"A_C_BearBlack_01",
+			"A_C_BigHornRam_01",
+			"A_C_BoarLegendary_01",
+			"A_C_Buck_01",
+			"A_C_Buffalo_01",
+			"A_C_Chicken_01",
+			"A_C_Cougar_03",
+			"A_C_Cow",
+			"A_C_Coyote_01",
+			"A_C_Deer_01",
+			"A_C_Donkey_01",
+			"A_C_Elk_01",
+			"A_C_Fox_01",
+			"A_C_GilaMonster_01",
+			"A_C_Goat_01",
+			"A_C_LegendaryPanther_01",
+			"A_C_Moose_01",
+			"A_C_Ox_01",
+			"A_C_Pig_01",
+			"A_C_Possum_01",
+			"A_C_Raccoon_01",
+			"A_C_Rooster_01",
+			"A_C_SharkHammerhead_01"
+			"A_C_SharkTiger",
+			"A_C_Sheep_01",
+			"A_C_Turkey_01",
+			"A_C_Turkey_02",
+			"A_C_TurtleSea_01",
+			"A_C_TurtleSnapping_01",
+			"A_C_Wolf",
+			"A_C_Wolf_Medium",
+			"A_C_Wolf_Small",
+			"A_C_Horse_TennesseeWalker_Chestnut",
+			"A_C_Horse_Shire_LightGrey",
+			"A_C_Horse_Morgan_Bay",
+			"A_C_Horse_KentuckySaddle_ChestnutPinto",
+			"A_C_Arabian_White"
+		};
+
+		static Hash model = GET_HASH(models[rand() % models.size()]);
+		
+		Ped ped = SpawnPedAroundPlayer(model, false, false);
+
+		ENTITY::SET_ENTITY_COORDS(ped, vec.x, vec.y, vec.z + 35.0f, false, false, false, false);
+
+		ENTITY::SET_ENTITY_INVINCIBLE(ped, true);
+
+		PED::SET_PED_TO_RAGDOLL(ped, 10000, 10000, 0, true, true, false);
+
+		PED::_SET_PED_RAGDOLL_BLOCKING_FLAGS(ped, 512);
+
+		ENTITY::SET_ENTITY_VELOCITY(ped, 0.0f, 0.0f, -50.0f);
+
+		peds.push_back(ped);
+
+		invoke<Void>(0x22B0D0E37CCB840D, ped, playerPed, 5000.0f, -1.0f, 0, 3.0f, 0);
+	}
+}
+
+void EffectChaosRain::OnDeactivate()
+{
+	for (auto veh : vehs)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(veh))
+		{
+			ChaosMod::vehsSet.erase(veh);
+			VEHICLE::DELETE_VEHICLE(&veh);
+		}
+	}
+
+	for (auto ped : peds)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			ChaosMod::pedsSet.erase(ped);
+			PED::DELETE_PED(&ped);
+		}
+	}
+
+	vehs.clear();
+	peds.clear();
+}
