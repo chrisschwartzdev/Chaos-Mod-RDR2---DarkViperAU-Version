@@ -563,6 +563,50 @@ void EffectSpawnAngrySkeleton::OnActivate()
 	PED::SET_PED_CONFIG_FLAG(ped, 263, true);
 }
 
+void EffectTownTooSmall::OnActivate()
+{
+	Effect::OnActivate();
+
+	static Hash skinModel = GAMEPLAY::GET_HASH_KEY((char*) "A_M_M_UniGunslinger_01");
+
+	Ped ped = SpawnPedAroundPlayer(skinModel, false, false);
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	/** _SET_PED_SCALE */
+	invoke<Void>(0x25ACFC650B65C538, playerPed, 10.0f);
+	invoke<Void>(0x25ACFC650B65C538, ped, 10.0f);
+
+	static Hash weaponHash = GAMEPLAY::GET_HASH_KEY((char*) "WEAPON_REVOLVER_DOUBLEACTION_EXOTIC");
+	WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 1, true, 0x2cd419dc);
+	WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+
+	MarkPedAsEnemy(ped);
+
+	AI::TASK_LOOK_AT_ENTITY(ped, PLAYER::PLAYER_PED_ID(), -1, 2048, 3, 1);
+	AI::TASK_WANDER_STANDARD(ped, 10.0f, 10);
+}
+
+void EffectTownTooSmall::OnTick()
+{
+	if (TimerTick(500))
+	{
+		Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+		/** _SET_PED_SCALE */
+		invoke<Void>(0x25ACFC650B65C538, playerPed, 10.0f);
+	}
+}
+
+void EffectTownTooSmall::OnDeactivate()
+{
+	Effect:OnDeactivate();
+
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	/** _SET_PED_SCALE */
+	invoke<Void>(0x25ACFC650B65C538, playerPed, 1.0f);
+}
+
 void EffectSpawnAngryDwarf::OnActivate()
 {
 	Effect::OnActivate();

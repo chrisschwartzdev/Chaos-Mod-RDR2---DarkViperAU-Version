@@ -205,6 +205,23 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectTownTooSmall : public Effect
+{
+public:
+	EffectTownTooSmall()
+	{
+		ID = "town_too_small";
+		name = "This Town Ain't Big Enough";
+		bTimed = true;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+};
+
 class EffectSpawnAngryDwarf : public Effect
 {
 public:

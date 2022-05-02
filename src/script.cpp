@@ -952,7 +952,7 @@ void ChaosMod::InitEffects()
 				  new EffectBanditoKidnapsPlayer(), new EffectTpRandomLocation(), new EffectFakeTeleport(),
 				  new EffectSpawnRandomVeh(), new EffectHorsesAreDonkeys(), new EffectSpawnTwitchViewer(),
 				  new EffectEveryoneIsLenny(), new EffectShadesOfGray(), new EffectPotatoMode(),
-				  new EffectSpawnExtremeEvilMicah(), new EffectOilWagonsRain()};
+				  new EffectSpawnExtremeEvilMicah(), new EffectOilWagonsRain(), new EffectTownTooSmall()};
 	
 	EffectsMap.clear();
 	
