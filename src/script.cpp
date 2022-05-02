@@ -961,8 +961,13 @@ void ChaosMod::InitEffects()
 	{
 		EffectsMap.emplace(effect->ID, effect);
 	}
-	
-	AllMetaEffects = {new MetaEffectTotalChaos(), new MetaEffectComboTime(), new MetaEffectDoubleSubs()};
+
+	AllMetaEffects = {
+		new MetaEffectTotalChaos(),
+		new MetaEffectComboTime(),
+		new MetaEffectDoubleSubs(),
+		new MetaEffectCanoeTime()
+	};
 	
 	MetaEffectsMap.clear();
 	
@@ -1252,9 +1257,19 @@ void ChaosMod::StartWSServer()
 
 std::vector<Effect*> ChaosMod::GenerateEffectsWithChances(uint32_t maxEffects)
 {
-	std::vector < Effect * > effects;
-	std::vector <uint16_t> effectsIndices = {};
-	std::set <std::string> oldEffectIDs;
+	std::vector<Effect*> effects;
+
+	if (IsEffectActive("canoe_time"))
+	{
+		for (uint32_t i = 0; i < maxEffects; i++)
+		{
+			effects.push_back(EffectsMap["spawn_canoe"]);
+		}
+		return effects;
+	}
+
+	std::vector<uint16_t> effectsIndices = {};
+	std::set<std::string> oldEffectIDs;
 	
 	for (auto oldEffect : oldEffects)
 	{

@@ -1791,3 +1791,72 @@ void EffectChaosRain::OnDeactivate()
 	vehs.clear();
 	peds.clear();
 }
+
+void MetaEffectCanoeTime::OnActivate()
+{
+	canoes.clear();
+}
+
+void MetaEffectCanoeTime::OnDeactivate()
+{
+	for (auto canoe : canoes)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(canoe))
+		{
+			VEHICLE::DELETE_VEHICLE(&canoe);
+		}
+	}
+
+	canoes.clear();
+}
+
+void MetaEffectCanoeTime::OnTick()
+{
+	Effect::OnTick();
+
+	if (TimerTick(500, 0))
+	{
+		static Hash canoeHash = GAMEPLAY::GET_HASH_KEY((char*)"CANOE");
+
+		LoadModel(canoeHash);
+
+		Vector3 vec = GetRandomCoordAroundPlayer(float(rand() % 20));
+
+		Vehicle canoe = VEHICLE::CREATE_VEHICLE(canoeHash, vec.x, vec.y, vec.z + 35.0f, rand() % 360, false, false, false, false);
+
+		ENTITY::SET_ENTITY_VELOCITY(canoe, 0.0f, 0.0f, -150.0f);
+
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(canoeHash);
+
+		canoes.push_back(canoe);
+
+		if (ENTITY::DOES_ENTITY_EXIST(canoe))
+		{
+			ChaosMod::vehsSet.insert(canoe);
+		}
+	}
+
+	if (TimerTick(10000, 1))
+	{
+		Ped playerPed = PLAYER::PLAYER_PED_ID();
+		Vector3 playerLocation = ENTITY::GET_ENTITY_COORDS(playerPed, true, 0);
+
+		static Hash model = GAMEPLAY::GET_HASH_KEY((char*)"CANOE");
+
+		LoadModel(model);
+
+		Vehicle canoe = VEHICLE::CREATE_VEHICLE(model, playerLocation.x, playerLocation.y, playerLocation.z, rand() % 360, false, false, false, false);
+
+		Vehicle canoeCopy = canoe;
+		ENTITY::SET_ENTITY_AS_NO_LONGER_NEEDED(&canoeCopy);
+
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+
+		PED::SET_PED_INTO_VEHICLE(playerPed, canoe, -1);
+
+		if (ENTITY::DOES_ENTITY_EXIST(canoe))
+		{
+			ChaosMod::vehsSet.insert(canoe);
+		}
+	}
+}
