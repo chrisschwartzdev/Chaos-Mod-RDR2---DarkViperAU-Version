@@ -213,6 +213,7 @@ public:
 		ID = "town_too_small";
 		name = "This Town Ain't Big Enough";
 		bTimed = true;
+		EffectDuration = 30;
 	}
 
 	virtual void OnActivate() override;
