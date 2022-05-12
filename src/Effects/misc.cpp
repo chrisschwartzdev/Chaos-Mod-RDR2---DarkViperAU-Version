@@ -1667,6 +1667,7 @@ void EffectChaosRain::OnActivate()
 {
 	peds.clear();
 	vehs.clear();
+	TimerTick(1000, 0); // Offset timer by half to stagger spawns
 }
 
 void EffectChaosRain::OnTick()
