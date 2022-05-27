@@ -257,6 +257,7 @@ void ChaosMod::ActivateEffect(Effect* effect)
 	}
 	else
 	{
+		this->displayedEffects.push_back(effect);
 		this->activeEffects.push_back(effect);
 	}
 }
