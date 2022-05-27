@@ -253,6 +253,7 @@ void ChaosMod::ActivateEffect(Effect* effect)
 	
 	if (effect->bIsMeta)
 	{
+		this->displayedEffects.insert(displayedEffects.begin(), effect);
 		this->activeEffects.insert(activeEffects.begin(), effect);
 	}
 	else
