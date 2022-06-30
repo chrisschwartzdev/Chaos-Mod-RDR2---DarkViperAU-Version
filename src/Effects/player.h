@@ -38,7 +38,7 @@ public:
 	EffectGivePlayerMoney()
 	{
 		ID = "give_player_money";
-		name = "Give 300$ to Player";
+		name = "Give $300 to Player";
 		bTimed = false;
 	}
 	
