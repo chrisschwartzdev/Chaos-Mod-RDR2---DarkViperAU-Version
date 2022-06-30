@@ -1847,7 +1847,7 @@ void EffectSetFroggyWeather::OnDeactivate()
 
 void MetaEffectCanoeTime::OnActivate()
 {
-	canoes.clear();
+	OnDeactivate();
 }
 
 void MetaEffectCanoeTime::OnDeactivate()
@@ -1886,6 +1886,15 @@ void MetaEffectCanoeTime::OnTick()
 		if (ENTITY::DOES_ENTITY_EXIST(canoe))
 		{
 			ChaosMod::vehsSet.insert(canoe);
+		}
+
+		// Prevent canoe overload
+		for (int i = 0; i < canoes.size() && canoes.size() > 15; i++) {
+			if (ENTITY::DOES_ENTITY_EXIST(canoe) && !PED::IS_PED_IN_VEHICLE(PLAYER::PLAYER_PED_ID(), canoes[i], false))
+			{
+				VEHICLE::DELETE_VEHICLE(&canoe);
+			}
+			canoes.erase(canoes.begin() + i);
 		}
 	}
 

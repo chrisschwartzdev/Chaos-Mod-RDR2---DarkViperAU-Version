@@ -454,7 +454,8 @@ void IEffectSkinChange::OnActivate()
 		invoke<Void>(0x5337B721C51883A9, playerPed, 1, 0);
 	}
 	
-	SetPlayerModel(this->skinToSet, &oldSkin1, &oldSkin2);
+	auto modelName = skinToSet[rand() % skinToSet.size()];
+	SetPlayerModel(modelName, & oldSkin1, & oldSkin2);
 }
 
 void IEffectSkinChange::OnDeactivate()
@@ -1035,19 +1036,6 @@ void EffectEyeDisorder::OnDeactivate()
 
 void EffectBirdSkin::OnActivate()
 {
-	static std::vector<const char*> birds = {"A_C_BlueJay_01", "A_C_Cardinal_01", "A_C_CarolinaParakeet_01",
-											 "A_C_CedarWaxwing_01", "A_C_Chicken_01", "A_C_Cormorant_01",
-											 "A_C_CraneWhooping_01", "A_C_Crow_01", "A_C_Duck_01", "A_C_Eagle_01",
-											 "A_C_Egret_01", "A_C_Hawk_01", "A_C_Heron_01", "A_C_Loon_01", "A_C_Owl_01",
-											 "A_C_Parrot_01", "A_C_Pelican_01", "A_C_Pheasant_01", "A_C_Pigeon",
-											 "A_C_PrairieChicken_01", "A_C_Quail_01", "A_C_Raven_01",
-											 "A_C_RedFootedBooby_01", "A_C_Rooster_01", "A_C_RoseateSpoonbill_01",
-											 "A_C_Seagull_01", "A_C_TurkeyWild_01", "A_C_Vulture_01",
-											 "A_C_Woodpecker_01", "A_C_Woodpecker_02"};
-	
-	auto modelName = birds[rand() % birds.size()];
-	this->skinToSet = modelName;
-	
 	IEffectSkinChange::OnActivate();
 	
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
