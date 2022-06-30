@@ -924,7 +924,7 @@ void ChaosMod::InitEffects()
 				  new EffectHonorBad(), new EffectHonorReset(), new EffectSpawnShireHorse(), new EffectAltTab(),
 				  new EffectPlayerSleep(), new EffectPlayerIsMinion(), new EffectTeleportToWaypoint(),
 				  new EffectRemoveWeaponFromEveryone(), new EffectUndeadNightmare(), new EffectBloodTrails(),
-				  new EffectDetachWheels(), new EffectExplosiveWeapons(), new EffectSetFoggyWeather(),
+				  new EffectDetachWheels(), new EffectExplosiveWeapons(), new EffectSetFoggyWeather(), new EffectSetFroggyWeather(),
 				  new EffectGhostTown(), new EffectSpawnDogCompanion(), new EffectSpawnCatCompanion(),
 				  new EffectSetPedsIntoPlayerVehicle(), new EffectSetRandomWalkStyle(), new EffectTeleportWeapons(),
 				  new EffectGiveSniperRifle(), new EffectGiveDynamite(), new EffectThrowingKnives(),

@@ -784,6 +784,27 @@ private:
 	std::vector<Vehicle> vehs;
 };
 
+class EffectSetFroggyWeather : public Effect
+{
+public:
+	EffectSetFroggyWeather()
+	{
+		ID = "set_froggy_weather";
+		name = "Set Froggy Weather";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	std::vector<Ped> peds;
+};
+
 
 /** Meta */
 

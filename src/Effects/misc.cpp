@@ -1793,6 +1793,58 @@ void EffectChaosRain::OnDeactivate()
 	peds.clear();
 }
 
+void EffectSetFroggyWeather::OnActivate()
+{
+	OnDeactivate();
+}
+
+void EffectSetFroggyWeather::OnTick()
+{
+	if (TimerTick(1000))
+	{
+		Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+		Vector3 vec = GetRandomCoordAroundPlayer(float(rand() % 20));
+
+		static std::vector<const char*> models = {
+			"A_C_FrogBull_01",
+			"A_C_Toad_01"
+		};
+
+		static Hash model = GET_HASH(models[rand() % models.size()]);
+
+		Ped ped = SpawnPedAroundPlayer(model, false, false);
+
+		ENTITY::SET_ENTITY_COORDS(ped, vec.x, vec.y, vec.z + 35.0f, false, false, false, false);
+
+		ENTITY::SET_ENTITY_INVINCIBLE(ped, true);
+
+		PED::SET_PED_TO_RAGDOLL(ped, 10000, 10000, 0, true, true, false);
+
+		PED::_SET_PED_RAGDOLL_BLOCKING_FLAGS(ped, 512);
+
+		ENTITY::SET_ENTITY_VELOCITY(ped, 0.0f, 0.0f, -50.0f);
+
+		peds.push_back(ped);
+
+		invoke<Void>(0x22B0D0E37CCB840D, ped, playerPed, 5000.0f, -1.0f, 0, 3.0f, 0);
+	}
+}
+
+void EffectSetFroggyWeather::OnDeactivate()
+{
+	for (auto ped : peds)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			ChaosMod::pedsSet.erase(ped);
+			PED::DELETE_PED(&ped);
+		}
+	}
+
+	peds.clear();
+}
+
 void MetaEffectCanoeTime::OnActivate()
 {
 	canoes.clear();
