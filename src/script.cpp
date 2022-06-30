@@ -239,9 +239,10 @@ void ChaosMod::ActivateEffect(Effect* effect)
 		return;
 	}
 	
+	effect->ActivationTime = GetTickCount();
+
 	if (effect->bTimed)
 	{
-		effect->ActivationTime = GetTickCount();
 		effect->DeactivationTime = effect->ActivationTime + (effect->EffectDuration * 1000);
 		effect->DisplayTime = effect->DeactivationTime;
 	}
@@ -249,9 +250,6 @@ void ChaosMod::ActivateEffect(Effect* effect)
 	{
 		effect->DisplayTime = effect->ActivationTime + (config.effectDisplayTime * 1000);
 	}
-
-	std::string logStr = "Display time for " + effect->ID + ": " + std::to_string(effect->DisplayTime - effect->ActivationTime);
-	LogToFile(logStr.c_str());
 	
 	prevActivatedEffect = effect;
 	
