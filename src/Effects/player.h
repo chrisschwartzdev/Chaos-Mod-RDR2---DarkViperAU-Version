@@ -362,7 +362,7 @@ public:
 	
 	virtual void OnDeactivate() override;
 	
-	const char* skinToSet = "A_C_COW";
+	std::vector<const char*> skinToSet = { "A_C_COW" };
 private:
 	uint64_t oldSkin1{};
 	uint64_t oldSkin2{};
@@ -376,7 +376,7 @@ public:
 	{
 		ID = "cow_skin";
 		name = "Player Is a Cow";
-		skinToSet = "A_C_COW";
+		skinToSet = { "A_C_COW", "A_C_Bull_01" };
 	}
 };
 
@@ -387,7 +387,7 @@ public:
 	{
 		ID = "dwarf_skin";
 		name = "Player Is a Dwarf";
-		skinToSet = "CS_Magnifico";
+		skinToSet = { "CS_Magnifico" };
 	}
 };
 
@@ -398,7 +398,7 @@ public:
 	{
 		ID = "pig_skin";
 		name = "Player Is a Pig";
-		skinToSet = "A_C_Pig_01";
+		skinToSet = { "A_C_Pig_01", "A_C_Boar_01", "A_C_BoarLegendary_01" };
 	}
 	
 	virtual void OnActivate() override;
@@ -411,7 +411,7 @@ public:
 	{
 		ID = "rat_skin";
 		name = "Player Is a Rat";
-		skinToSet = "A_C_Rat_01";
+		skinToSet = { "A_C_Rat_01" };
 	}
 };
 
@@ -422,7 +422,7 @@ public:
 	{
 		ID = "turtle_skin";
 		name = "Player Is a Turtle";
-		skinToSet = "A_C_TurtleSnapping_01";
+		skinToSet = { "A_C_TurtleSnapping_01", "A_C_TurtleSea_01" };
 		EffectDuration = 40;
 	}
 };
@@ -838,7 +838,45 @@ public:
 	{
 		ID = "bird_skin";
 		name = "Player Is a Bird";
-		skinToSet = "A_C_BlueJay_01";
+		skinToSet = {
+			"A_C_BlueJay_01",
+			"A_C_CaliforniaCondor_01",
+			"A_C_Cardinal_01",
+			"A_C_CarolinaParakeet_01",
+			"A_C_CedarWaxwing_01",
+			"A_C_Chicken_01",
+			"A_C_Cormorant_01",
+			"A_C_CraneWhooping_01",
+			"A_C_Crow_01",
+			"A_C_Duck_01",
+			"A_C_EAGLE_01",
+			"A_C_Eagle_01",
+			"A_C_Egret_01",
+			"A_C_GooseCanada_01",
+			"A_C_Hawk_01",
+			"A_C_Heron_01",
+			"A_C_Loon_01",
+			"A_C_Oriole_01",
+			"A_C_Owl_01",
+			"A_C_Parrot_01",
+			"A_C_Pelican_01",
+			"A_C_Pheasant_01",
+			"A_C_Pigeon",
+			"A_C_PrairieChicken_01",
+			"A_C_Quail_01",
+			"A_C_Raven_01",
+			"A_C_RedFootedBooby_01",
+			"A_C_Robin_01",
+			"A_C_Rooster_01",
+			"A_C_RoseateSpoonbill_01",
+			"A_C_Seagull_01",
+			"A_C_Turkey_01",
+			"A_C_Turkey_02",
+			"A_C_TurkeyWild_01",
+			"A_C_Vulture_01",
+			"A_C_Woodpecker_01",
+			"A_C_Woodpecker_02"
+		};
 	}
 	
 	virtual void OnActivate() override;
