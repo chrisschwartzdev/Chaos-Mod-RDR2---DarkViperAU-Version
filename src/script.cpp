@@ -243,9 +243,15 @@ void ChaosMod::ActivateEffect(Effect* effect)
 	{
 		effect->ActivationTime = GetTickCount();
 		effect->DeactivationTime = effect->ActivationTime + (effect->EffectDuration * 1000);
+		effect->DisplayTime = effect->DeactivationTime;
 	}
-	
-	effect->DisplayTime = effect->ActivationTime + (config.effectDisplayTime * 1000);
+	else
+	{
+		effect->DisplayTime = effect->ActivationTime + (config.effectDisplayTime * 1000);
+	}
+
+	std::string logStr = "Display time for " + effect->ID + ": " + std::to_string(effect->DisplayTime - effect->ActivationTime);
+	LogToFile(logStr.c_str());
 	
 	prevActivatedEffect = effect;
 	
@@ -742,7 +748,7 @@ void ChaosMod::DrawUI()
 		auto* effect = displayedEffects[i];
 		if (effect)
 		{
-			if (GetTickCount() >= max(effect->DisplayTime, effect->DeactivationTime))
+			if (GetTickCount() >= effect->DisplayTime)
 			{
 				displayedEffects.erase(displayedEffects.begin() + i);
 				i--;
