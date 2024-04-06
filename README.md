@@ -2,7 +2,7 @@
    <img src="https://i.imgur.com/uXrlAQW.png" alt="Chaos Mod RDR">
 </p>
 
-# Chaos Mod RDR
+# Chaos Mod RDR2 with additional effects for DarkViperAU Livestream
 This mod for **Red Dead Redemption 2** activates a random gameplay effect every 45 seconds. This effect can make it harder for you to play, help you, or just be neutral.
 
 You can enable **Twitch Integration** and your viewers will be able to vote for effects.
