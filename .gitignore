@@ -435,3 +435,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Non-source dependencies and headers
+thirdparty/rdr2_sdk/
