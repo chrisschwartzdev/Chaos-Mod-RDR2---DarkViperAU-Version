@@ -2141,3 +2141,78 @@ void EffectSpawnCompanionDutch::OnActivate()
 	WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 9999, true, 0x2cd419dc);
 	WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
 }
+
+void EffectSpawnKillerBunnyHorde::OnActivate()
+{
+	Effect::OnActivate();
+	
+	player = PLAYER::PLAYER_PED_ID();
+	rabbitSkinModel = GAMEPLAY::GET_HASH_KEY((char*) "A_C_Rabbit_01");
+}
+
+void EffectSpawnKillerBunnyHorde::OnTick()
+{
+	constexpr int maxRabbits = 10;
+	for (int i = 0; i < maxRabbits - rabbits.size(); i++)
+	{
+		Vector3 position = GetRandomCoordInRange(ENTITY::GET_ENTITY_COORDS(player, true, 0), 30);
+		Ped rabbit = PED::CREATE_PED(rabbitSkinModel, position.x, position.y, position.z, 0.0f, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(rabbit, true);
+		PED::SET_PED_HEARING_RANGE(rabbit, 10000.0f);
+
+		// attempt to get the rabbits to not flee... (they still seem to flee in some circumstances)
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 58, true);
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 5, true);
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 38, true);
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 68, true);
+		
+		if (ENTITY::DOES_ENTITY_EXIST(rabbit))
+			ChaosMod::pedsSet.insert(rabbit);
+		
+		MarkPedAsEnemy(rabbit);
+		rabbits.insert(rabbit);
+	}
+	
+	if (GAMEPLAY::GET_GAME_TIMER() < lastDamageTick + 2000)
+		return;
+	
+	auto it = rabbits.begin();
+	while (it != rabbits.end())
+	{
+		Ped rabbit = *it;
+		Vector3 vec = ENTITY::GET_ENTITY_COORDS(player, true, 0);
+		Vector3 vec2 = ENTITY::GET_ENTITY_COORDS(rabbit, true, 0);
+		float distance = GetDistance3D(vec, vec2);
+		if (distance < 3.0f)
+		{
+			PED::APPLY_DAMAGE_TO_PED(player, 30, true, 0, 0);
+			AUDIO::PLAY_PAIN(player, 1, 0, 0, 0);
+			
+			static auto animDict = const_cast<char*>("mech_melee@unarmed@_male@_ambient@_healthy@_variations");
+			static auto animName = const_cast<char*>("att_hitreact_stepback_v2");
+			AI::TASK_PLAY_ANIM(player, animDict, animName, 8.0f, 8.0f, -1, 32, 1, false, false, false, 0, 0);
+			lastDamageTick = GAMEPLAY::GET_GAME_TIMER();
+			break;
+		}
+		if (PED::IS_PED_DEAD_OR_DYING(rabbit, 0) || distance > 100.0f)
+		{
+			PED::DELETE_PED(&rabbit);
+			it = rabbits.erase(it);
+		}
+		std::advance(it, 1);
+	}
+}
+
+void EffectSpawnKillerBunnyHorde::OnDeactivate()
+{
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(rabbitSkinModel);
+	
+	auto it = rabbits.begin();
+	Ped rabbit = 0;
+	while (it != rabbits.end())
+	{
+		rabbit = *it;
+		PED::DELETE_PED(&rabbit);
+		std::advance(it, 1);
+	}
+}

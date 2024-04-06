@@ -822,6 +822,28 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectSpawnKillerBunnyHorde : public Effect
+{
+public:
+	EffectSpawnKillerBunnyHorde()
+	{
+		ID = "spawn_killer_bunny_horde";
+		name = "Wabbit Season";
+		bTimed = true;
+		EffectDuration = 60;
+	}
+	
+	virtual void OnActivate() override;
+	virtual void OnTick() override;
+	virtual void OnDeactivate() override;
+	
+private:
+	std::set <Ped> rabbits;
+	Ped player;
+	int lastDamageTick;
+	Hash rabbitSkinModel;
+};
+
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 
