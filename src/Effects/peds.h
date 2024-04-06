@@ -793,6 +793,19 @@ private:
 	Ped micahPed;
 };
 
+class EffectSpawnCompanionDutch : public Effect
+{
+public:
+	EffectSpawnCompanionDutch()
+	{
+		ID = "spawn_companion_dutch";
+		name = "Have Faith In Dutch";
+		bTimed = false;
+	}
+	
+	virtual void OnActivate() override;
+};
+
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 
