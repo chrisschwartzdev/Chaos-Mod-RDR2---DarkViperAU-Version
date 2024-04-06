@@ -65,19 +65,19 @@
     <ClInclude Include="src\script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\rdr2_sdk\inc\enums.h">
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\enums.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\rdr2_sdk\inc\main.h">
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\main.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\rdr2_sdk\inc\nativeCaller.h">
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\nativeCaller.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\rdr2_sdk\inc\natives.h">
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\natives.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\rdr2_sdk\inc\types.h">
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\types.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="src\Effects\effect.h">
