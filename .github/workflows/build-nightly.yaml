@@ -11,6 +11,8 @@ jobs:
           submodules: recursive
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
       - name: Fetch RDR2 SDK
         run: |
           curl.exe -L -o rdr2_sdk.zip -H "Referer: http://dev-c.com/rdr2/scripthookrdr2/" http://dev-c.com/files/ScriptHookRDR2_SDK_1.0.1207.73.zip
@@ -20,8 +22,21 @@ jobs:
           Remove-Item .\rdr2_sdk.zip
       - name: Build Solution
         run: msbuild
+      - name: Build ChaosModRDRTwitch.exe
+        run: |
+          cd src/Twitch
+          npm ci
+          npm run build
+          npm run pkg
+      - name: Copy artifacts
+        run: |
+          mkdir out
+          mkdir out/ChaosMod
+          cp src/Twitch/bin/ChaosModRDRTwitch.exe out/ChaosMod/
+          cp bin/Release/ChaosMod.asi out/
+          cp res/config.json out/ChaosMod/
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ChaosMod
-          path: "./bin/Release"   
+          path: "./out"   
