@@ -11,7 +11,7 @@ You can find a list of effects **[here](https://docs.google.com/spreadsheets/d/1
 
 ## Installation
 - Install **[Script Hook RDR2](http://www.dev-c.com/rdr2/scripthookrdr2/)**.
-- Download the latest mod version from the **[Releases page](https://github.com/clixff/ChaosModRDR/releases)**.
+- Download the latest mod version from the **[Releases page](https://github.com/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/releases)** OR fetch the latest **[nightly build](https://nightly.link/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/workflows/build-nightly.yaml/master?preview)**.
 - Extract all files from the archive to the **game directory**. 
 - Press **F7** in the game to *enable / disable* the mod. Mod is tested on game versions **1.0.1311.23** and **1.0.1436.28**.
 ## Twitch integration
@@ -51,8 +51,10 @@ Don't forget to press **F7** in game when you have made changes.
 
 **F12** — instakill player character (useful when the game breaks)
 
-
-
+## Development
+### Setup RDR2 Script Hook SDK
+1. Download the **[SDK](http://dev-c.com/rdr2/scripthookrdr2/)**
+2. Extract it to `thirdparty/rdr2_sdk`
 
 ## FAQ
 **Q**: **How to change the time between activation of effects?**
@@ -77,19 +79,10 @@ Don't forget to press **F7** in game when you have made changes.
 
 **Q**: **I stream on my separate PC, how do I get the OBS poll overlay to work there?**
 
-**A**: Download the **[latest version](https://github.com/clixff/ChaosModRDR/releases/latest)** of mod (at least **1.2.1**). Set the **local_ip** parameter in the config file to **false**. Find your **private IP**, for example in the Windows Network Settings. Then replace *127.0.0.1* with your **private IP** in the OBS browser source. It may look like **192.168.0.64:9148**.
+**A**: Download the **[latest version](https://github.com/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/releases)** of mod (at least **1.2.1**). Set the **local_ip** parameter in the config file to **false**. Find your **private IP**, for example in the Windows Network Settings. Then replace *127.0.0.1* with your **private IP** in the OBS browser source. It may look like **192.168.0.64:9148**.
 
 **Q**: **My viewers are receiving the warning message "Your message was not sent because it is identical to the previous one you sent"**
 
-**A**: Download the **[latest version](https://github.com/clixff/ChaosModRDR/releases/latest)** of mod (at least **1.2.1**). Set the **max_options** parameter in the config file to **8**. Now the options in the poll will be **1-4** and **5-8**.
-
-**Q**: **I need additional help**
-
-**A**: Add me on Discord (*zoidman#6344*) if you need help with the mod
+**A**: Download the **[latest version](https://github.com/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/releases)** of mod (at least **1.2.1**). Set the **max_options** parameter in the config file to **8**. Now the options in the poll will be **1-4** and **5-8**.
 
 
-## Suggestions and bug reports
-You can suggest an effect for this mod or send a bug report on the **[Issues page](https://github.com/clixff/ChaosModRDR/issues/new/choose)**.
-
-## Mirrors
-**[NexusMods](https://www.nexusmods.com/reddeadredemption2/mods/1269)**
