@@ -2124,3 +2124,20 @@ void EffectSpawnGrieferCougar::OnActivate()
 
 	MarkPedAsEnemy(ped);
 }
+
+void EffectSpawnCompanionDutch::OnActivate()
+{
+	Effect::OnActivate();
+	
+	static Hash model = GET_HASH("CS_Dutch");
+	
+	Ped ped = SpawnPedAroundPlayer(model, false, false);
+	
+	MarkPedAsCompanion(ped);
+	
+	RemoveAllPedWeapons(ped);
+	
+	static Hash weaponHash = GAMEPLAY::GET_HASH_KEY((char*) "WEAPON_REVOLVER_SCHOFIELD");
+	WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 9999, true, 0x2cd419dc);
+	WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+}

@@ -805,7 +805,20 @@ public:
 		name = "Spawn Griefer Cougar";
 		bTimed = false;
 	}
+	
+	virtual void OnActivate() override;
+};
 
+class EffectSpawnCompanionDutch : public Effect
+{
+public:
+	EffectSpawnCompanionDutch()
+	{
+		ID = "spawn_companion_dutch";
+		name = "Have Faith In Dutch";
+		bTimed = false;
+	}
+	
 	virtual void OnActivate() override;
 };
 
