@@ -1,0 +1,27 @@
+﻿name: Build nightly artifact
+on: 
+  push:
+    branches: master
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+      - name: Fetch RDR2 SDK
+        run: |
+          curl.exe -L -o rdr2_sdk.zip -H "Referer: http://dev-c.com/rdr2/scripthookrdr2/" http://dev-c.com/files/ScriptHookRDR2_SDK_1.0.1207.73.zip
+      - name: Extract RDR2 SDK
+        run: |
+          Expand-Archive -Force .\rdr2_sdk.zip thirdparty/rdr2_sdk
+          Remove-Item .\rdr2_sdk.zip
+      - name: Build Solution
+        run: msbuild
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChaosMod
+          path: "./bin/Release"   
