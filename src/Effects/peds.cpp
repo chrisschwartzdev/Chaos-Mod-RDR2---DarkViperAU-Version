@@ -2113,3 +2113,15 @@ void EffectSpawnExtremeEvilMicah::OnTick()
 	
 	FIRE::ADD_EXPLOSION(vec.x, vec.y, vec.z, 27, 1.0f, true, false, 1.0f);
 }
+
+void EffectSpawnGrieferCougar::OnActivate()
+{
+	auto modelName = "A_C_Cougar_01";
+
+	Ped ped = SpawnPedAroundPlayer(GET_HASH(modelName), false, false);
+
+	ENTITY::SET_ENTITY_MAX_HEALTH(ped, 1000);
+	ENTITY::SET_ENTITY_HEALTH(ped, 1000, 0);
+
+	MarkPedAsEnemy(ped);
+}
