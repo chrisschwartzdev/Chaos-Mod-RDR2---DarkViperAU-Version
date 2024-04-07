@@ -818,6 +818,20 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectTestSound : public Effect
+{
+public:
+	EffectTestSound()
+	{
+		ID = "test_sound";
+		name = "Test Sound";
+		bTimed = false;
+		soundFile = "fail";
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 /** Meta */
 

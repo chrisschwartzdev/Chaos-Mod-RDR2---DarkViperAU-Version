@@ -7,3 +7,6 @@
 [submodule "thirdparty/websocketpp"]
 	path = thirdparty/websocketpp
 	url = https://github.com/zaphoyd/websocketpp.git
+[submodule "thirdparty/sfml"]
+	path = thirdparty/sfml
+	url = https://github.com/SFML/SFML.git

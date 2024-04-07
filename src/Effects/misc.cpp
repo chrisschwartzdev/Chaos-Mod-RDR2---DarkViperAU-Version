@@ -2,6 +2,7 @@
 #include "vehs.h"
 #include "peds.h"
 #include "../script.h"
+#include "../Misc/soundmanager.h"
 
 
 Entity SpawnObject(Hash model)
@@ -1890,6 +1891,12 @@ void EffectReplaceEnemiesWithFish::OnActivate()
 		PED::DELETE_PED(&ped);
 	}
 }
+
+void EffectTestSound::OnActivate()
+{
+	SoundManager::PlaySound(soundFile);
+}
+
 
 
 void MetaEffectCanoeTime::OnActivate()

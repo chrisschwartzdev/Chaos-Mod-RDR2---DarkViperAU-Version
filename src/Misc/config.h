@@ -21,6 +21,7 @@ struct ConfigEffect
 	bool bEnabled = true;
 	uint32_t duration = 0;
 	uint32_t chance = 1;
+	std::string soundFile;
 };
 
 class Config

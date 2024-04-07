@@ -70,6 +70,7 @@ public:
 	std::string name = "";
 	
 	bool bTimed = false;
+	std::string soundFile = "";
 	
 	/** In seconds */
 	uint32_t EffectDuration = 0;

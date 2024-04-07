@@ -7,6 +7,8 @@
 #include <filesystem>
 #include <fstream>
 
+#include "Misc/soundmanager.h"
+
 ChaosMod* ChaosMod::Singleton = nullptr;
 std::mutex ChaosMod::globalMutex = std::mutex();
 uint32_t ChaosMod::LastTick = 0;
@@ -359,6 +361,7 @@ void ChaosMod::Main()
 	InitWeaponHashes();
 	InitWeatherHashes();
 	InitEffects();
+	SoundManager::Initialize();
 	
 	ChaosMod::globalMutex.lock();
 	
