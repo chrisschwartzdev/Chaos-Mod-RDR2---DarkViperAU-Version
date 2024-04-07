@@ -1962,6 +1962,38 @@ void EffectReplaceEnemiesWithFish::OnActivate()
 	}
 }
 
+void EffectUTurn::OnActivate()
+{
+	auto ProcessPed = [](Ped ped)
+	{
+		auto FlipEntityHeading = [](Entity entity)
+		{
+			auto newHeading = fmod(180.0f + ENTITY::GET_ENTITY_HEADING(entity), 360.0f);
+			ENTITY::SET_ENTITY_HEADING(entity, newHeading);
+		};
+		
+		if (PED::IS_PED_ON_MOUNT(ped))
+			invoke<Void>(0xA09CFD29100F06C3, PED::GET_MOUNT(ped), 6, 0, 0);
+		else if (PED::IS_PED_IN_ANY_VEHICLE(ped, true))
+		{
+			auto vehicle = PED::GET_VEHICLE_PED_IS_IN(ped, false);
+			FlipEntityHeading(vehicle);
+		}
+		else
+			FlipEntityHeading(ped);
+	};
+
+	auto player = PLAYER::PLAYER_PED_ID();
+	ProcessPed(player);
+
+	auto nearbyPeds = GetNearbyPeds(100);
+	for (auto ped : nearbyPeds)
+	{
+		ProcessPed(ped);
+	}
+}
+
+
 void MetaEffectCanoeTime::OnActivate()
 {
 	OnDeactivate();

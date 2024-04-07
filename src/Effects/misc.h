@@ -842,6 +842,19 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectUTurn : public Effect
+{
+public:
+	EffectUTurn()
+	{
+		ID = "uturn";
+		name = "U Turn";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 /** Meta */
 
