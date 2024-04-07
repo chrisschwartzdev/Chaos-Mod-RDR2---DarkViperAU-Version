@@ -844,6 +844,19 @@ private:
 	Hash rabbitSkinModel;
 };
 
+class EffectSpawnUncleArmy : public Effect
+{
+public:
+	EffectSpawnUncleArmy()
+	{
+		ID = "spawn_uncle_army";
+		name = "Spawn Uncle Army";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 
