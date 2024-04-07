@@ -1845,6 +1845,77 @@ void EffectSetFroggyWeather::OnDeactivate()
 	peds.clear();
 }
 
+void EffectRandomGravity::OnActivate()
+{
+	Effect::OnActivate();
+	auto nearbyPeds = GetNearbyPeds(100);
+	entities.clear();
+
+	nearbyPeds.push_back(PLAYER::PLAYER_PED_ID());
+
+	for (auto ped : nearbyPeds)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			FixEntityInCutscene(ped);
+			PED::SET_PED_TO_RAGDOLL(ped, 20000, 20000, 0, true, true, false);
+		}
+	}
+
+	currentGravity = rand() % gravity.size();
+}
+
+void EffectRandomGravity::OnTick()
+{
+	Effect::OnTick();
+	if (TimerTick(1000))
+	{
+		entities.clear();
+		auto nearbyPeds = GetNearbyPeds(45);
+		auto nearbyVehs = GetNearbyVehs(45);
+		auto nearbyProps = GetNearbyProps(45);
+
+		for (auto ped : nearbyPeds)
+		{
+			entities.insert(ped);
+		}
+
+		for (auto veh : nearbyVehs)
+		{
+			entities.insert(veh);
+		}
+
+		for (auto prop : nearbyProps)
+		{
+			ENTITY::SET_ENTITY_DYNAMIC(prop, true);
+			ENTITY::SET_ENTITY_HAS_GRAVITY(prop, true);
+			entities.insert(prop);
+		}
+
+
+		entities.insert(PLAYER::PLAYER_PED_ID());
+	}
+
+	// Random Gravity every 2 seconds
+	if (TimerTick(2000, 1)) {
+		currentGravity = rand() % gravity.size();
+	}
+
+	for (auto entity : entities)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(entity))
+		{
+			if (ENTITY::IS_ENTITY_A_PED(entity))
+			{
+				PED::SET_PED_TO_RAGDOLL(entity, 3000, 3000, 0, true, true, false);
+			}
+			ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(entity, 0, gravity[currentGravity].x, 
+				gravity[currentGravity].y, gravity[currentGravity].z, false, false, true, false);
+		}
+	}
+
+}
+
 void MetaEffectCanoeTime::OnActivate()
 {
 	OnDeactivate();
