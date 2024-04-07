@@ -1916,6 +1916,52 @@ void EffectRandomGravity::OnTick()
 
 }
 
+void EffectReplaceEnemiesWithFish::OnActivate()
+{
+	static std::vector<const char*> models = { "a_c_fishbluegil_01_ms", "a_c_fishbullheadcat_01_ms", "a_c_fishchainpickerel_01_ms",
+												"a_c_fishchannelcatfish_01_lg", "a_c_fishlargemouthbass_01_ms", "a_c_fishlongnosegar_01_lg",
+												"a_c_fishmuskie_01_lg", "a_c_fishnorthernpike_01_lg", "a_c_fishperch_01_ms",
+												"a_c_fishrainbowtrout_01_ms", "a_c_fishredfinpickerel_01_ms", "a_c_fishrockbass_01_ms",
+												"a_c_fishsalmonsockeye_01_ms", "a_c_fishsmallmouthbass_01_ms"};
+	
+	auto playerPed = PLAYER::PLAYER_PED_ID();
+	auto nearbyPeds = GetNearbyPeds(100);
+	
+	for (auto ped : nearbyPeds)
+	{
+		if (!ENTITY::DOES_ENTITY_EXIST(ped))
+			continue;
+		
+		int rel = PED::GET_RELATIONSHIP_BETWEEN_PEDS(ped, playerPed);
+		
+		/** continue if ped is not an enemy  */
+		if (rel != 5 && rel != 4)
+			continue;
+		
+		auto pos = ENTITY::GET_ENTITY_COORDS(ped, true, 0);
+		pos.y += 1.6f;
+		auto heading = ENTITY::GET_ENTITY_HEADING(ped);
+		
+		auto modelName = (char*)models[rand() % models.size()];
+		auto skinModel = GAMEPLAY::GET_HASH_KEY(modelName);
+		LoadModel(skinModel);
+
+		if (!STREAMING::HAS_MODEL_LOADED(skinModel))
+			WAIT(0);
+		
+		Ped fish = PED::CREATE_PED(skinModel, pos.x, pos.y, pos.z, heading, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(fish, true);
+		PED::SET_PED_HEARING_RANGE(fish, 10000.0f);
+		ENTITY::SET_ENTITY_AS_MISSION_ENTITY(fish, false, false);
+		if (ENTITY::DOES_ENTITY_EXIST(fish))
+			ChaosMod::pedsSet.insert(fish);
+		
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(skinModel);
+		MarkPedAsEnemy(fish);
+		PED::DELETE_PED(&ped);
+	}
+}
+
 void MetaEffectCanoeTime::OnActivate()
 {
 	OnDeactivate();

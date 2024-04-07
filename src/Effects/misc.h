@@ -829,6 +829,19 @@ private:
 	int currentGravity;
 };
 
+class EffectReplaceEnemiesWithFish : public Effect
+{
+public:
+	EffectReplaceEnemiesWithFish()
+	{
+		ID = "turn_all_enemies_into_fish";
+		name = "You sir, are a fish.";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 /** Meta */
 
@@ -883,7 +896,6 @@ public:
 
 private:
 	std::vector<Vehicle> canoes;
-
 };
 
 
