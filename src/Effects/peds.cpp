@@ -2116,6 +2116,8 @@ void EffectSpawnExtremeEvilMicah::OnTick()
 
 void EffectSpawnGrieferCougar::OnActivate()
 {
+	Effect::OnActivate();
+
 	auto modelName = "A_C_Cougar_01";
 
 	Ped ped = SpawnPedAroundPlayer(GET_HASH(modelName), false, false);
