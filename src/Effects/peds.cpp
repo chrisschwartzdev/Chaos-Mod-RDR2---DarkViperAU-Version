@@ -2205,3 +2205,38 @@ void EffectSpawnKillerBunnyHorde::OnDeactivate()
 		std::advance(it, 1);
 	}
 }
+
+void EffectSpawnUncleArmy::OnActivate()
+{
+	Effect::OnActivate();
+	
+	static auto model = GET_HASH("CS_Uncle");
+
+	for (int i = 0; i < 10; i++)
+	{
+		Ped ped = SpawnPedAroundPlayer(model, false, false);
+		
+		MarkPedAsEnemy(ped);
+		WEAPON::REMOVE_ALL_PED_WEAPONS(ped, false, 0);
+
+		// need to remove these specific weapons from uncle because he will always spawn with them
+		auto specificWeapons = {"weapon_revolver_schofield_uncle", "weapon_shotgun_doublebarrel_uncle",
+													"weapon_melee_knife_uncle"};
+
+		for(auto weapon : specificWeapons)
+		{
+			auto weaponHash = GET_HASH(weapon);
+			WEAPON::REMOVE_WEAPON_FROM_PED(ped, weaponHash, false, 0xF77DE93D);
+		}
+		
+		// REMOVE_ALL_PED_AMMO
+		invoke<Void>(0x1B83C0DEEBCBB214, ped);
+		
+		static Hash weaponHash = GET_HASH("WEAPON_UNARMED");
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 9999, true, 0x2cd419dc);
+		WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+
+		ENTITY::SET_ENTITY_MAX_HEALTH(ped, 1);
+		ENTITY::SET_ENTITY_HEALTH(ped, 1, 0);
+	}
+}
