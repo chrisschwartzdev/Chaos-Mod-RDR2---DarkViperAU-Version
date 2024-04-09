@@ -960,7 +960,7 @@ void ChaosMod::InitEffects()
 				  new EffectEveryoneIsLenny(), new EffectShadesOfGray(), new EffectPotatoMode(),
 				  new EffectSpawnExtremeEvilMicah(), new EffectOilWagonsRain(), new EffectTownTooSmall(),
 				  new EffectChaosRain(), new EffectSpawnCompanionDutch(), new EffectSpawnKillerBunnyHorde(), new EffectReplaceEnemiesWithFish(),
-				  new EffectSpawnUncleArmy()};
+				  new EffectSpawnUncleArmy(), new EffectSpawnCompanionUncle()};
 	
 	EffectsMap.clear();
 	

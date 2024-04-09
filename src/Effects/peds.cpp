@@ -2241,3 +2241,11 @@ void EffectSpawnUncleArmy::OnActivate()
 		ENTITY::SET_ENTITY_HEALTH(ped, 1, 0);
 	}
 }
+
+void EffectSpawnCompanionUncle::OnActivate()
+{
+	static auto model = GET_HASH("CS_Uncle");
+	Ped ped = SpawnPedAroundPlayer(model, false, false);
+	MarkPedAsCompanion(ped);
+}
+
