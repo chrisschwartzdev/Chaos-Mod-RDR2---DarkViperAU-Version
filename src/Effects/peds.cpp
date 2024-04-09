@@ -106,7 +106,7 @@ void MarkPedAsCompanion(Ped ped)
 	PED::SET_PED_CONFIG_FLAG(ped, 130, 0);
 }
 
-void MarkPedAsEnemy(Ped ped)
+void MarkPedAsEnemy(Ped ped, bool hideBlip = false)
 {
 	static std::vector <Hash> groups = {GET_HASH("PLAYER"), 0x8A33CDCF, // Civ Male
 										0x3220F762, // Civ Female
@@ -135,9 +135,12 @@ void MarkPedAsEnemy(Ped ped)
 	
 	AI::TASK_COMBAT_PED(ped, PLAYER::PLAYER_PED_ID(), 0, 16);
 
-	// add enemy blip
-	static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
-	RADAR::_0x23F74C2FDA6E7C61(blipHash, ped);
+	if (!hideBlip)
+	{
+		// add enemy blip
+		static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
+		RADAR::_0x23F74C2FDA6E7C61(blipHash, ped);
+	}
 }
 
 void FixEntityInCutscene(Entity entity)
