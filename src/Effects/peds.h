@@ -870,6 +870,19 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectSpawnCompanionPredator : public Effect
+{
+public:
+	EffectSpawnCompanionPredator()
+	{
+		ID = "spawn_companion_predator";
+		name = "Spawn Companion Predator";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 

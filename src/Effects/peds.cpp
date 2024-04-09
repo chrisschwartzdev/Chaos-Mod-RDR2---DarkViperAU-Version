@@ -2260,3 +2260,33 @@ void EffectSpawnCompanionUncle::OnActivate()
 	MarkPedAsCompanion(ped);
 }
 
+void EffectSpawnCompanionPredator::OnActivate()
+{
+	static std::vector models = {"A_C_Alligator_01", "A_C_Bear_01", "A_C_Cougar_01", "A_C_LionMangy_01",
+											  "A_C_Panther_01", "A_C_Wolf" };
+	
+	std::map<const char*, std::set < uint32_t>>
+	disabledOutfits;
+	
+	disabledOutfits.emplace("A_C_Bear_01", std::set<uint32_t>({9, 10}));
+	
+	auto modelName = models[rand() % models.size()];
+	
+	Ped ped = SpawnPedAroundPlayer(GET_HASH(modelName), false, false);
+	
+	uint32_t maxOutfits = PED::_0x10C70A515BC03707(ped);
+	
+	uint32_t randOutfit = rand() % maxOutfits;
+	
+	if (disabledOutfits.contains(modelName))
+	{
+		if (disabledOutfits[modelName].contains(randOutfit))
+		{
+			randOutfit = 0;
+		}
+	}
+	
+	invoke<Void>(0x77FF8D35EEC6BBC4, ped, randOutfit, false);
+	
+	MarkPedAsCompanion(ped);
+}
