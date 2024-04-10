@@ -106,7 +106,7 @@ void MarkPedAsCompanion(Ped ped)
 	PED::SET_PED_CONFIG_FLAG(ped, 130, 0);
 }
 
-void MarkPedAsEnemy(Ped ped)
+void MarkPedAsEnemy(Ped ped, bool hideBlip = false)
 {
 	static std::vector <Hash> groups = {GET_HASH("PLAYER"), 0x8A33CDCF, // Civ Male
 										0x3220F762, // Civ Female
@@ -134,6 +134,13 @@ void MarkPedAsEnemy(Ped ped)
 	PED::SET_PED_COMBAT_ATTRIBUTES(ped, 3, true);
 	
 	AI::TASK_COMBAT_PED(ped, PLAYER::PLAYER_PED_ID(), 0, 16);
+
+	if (!hideBlip)
+	{
+		// add enemy blip
+		static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
+		RADAR::_0x23F74C2FDA6E7C61(blipHash, ped);
+	}
 }
 
 void FixEntityInCutscene(Entity entity)
@@ -879,11 +886,6 @@ void EffectUndeadNightmare::OnActivate()
 		
 		/** BF_CanUseVehicles */
 		PED::SET_PED_COMBAT_ATTRIBUTES(zombie, 1, false);
-		
-		static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
-		
-		/** BLIP_ADD_FOR_ENTITY */
-		Blip blip = RADAR::_0x23F74C2FDA6E7C61(blipHash, zombie);
 	}
 }
 
@@ -1753,11 +1755,6 @@ void EffectNearbyPedIsEnemy::OnActivate()
 	}
 	
 	MarkPedAsEnemy(ped);
-	
-	static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
-	
-	/** BLIP_ADD_FOR_ENTITY */
-	Blip blip = RADAR::_0x23F74C2FDA6E7C61(blipHash, ped);
 }
 
 void EffectExplosiveCombat::OnActivate()
