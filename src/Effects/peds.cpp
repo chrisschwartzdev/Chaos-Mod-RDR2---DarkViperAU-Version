@@ -106,7 +106,7 @@ void MarkPedAsCompanion(Ped ped)
 	PED::SET_PED_CONFIG_FLAG(ped, 130, 0);
 }
 
-void MarkPedAsEnemy(Ped ped, bool hideBlip = false)
+void MarkPedAsEnemy(Ped ped, bool hideBlip)
 {
 	static std::vector <Hash> groups = {GET_HASH("PLAYER"), 0x8A33CDCF, // Civ Male
 										0x3220F762, // Civ Female
