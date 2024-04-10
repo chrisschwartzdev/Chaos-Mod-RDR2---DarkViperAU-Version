@@ -793,6 +793,22 @@ private:
 	Ped micahPed;
 };
 
+class EffectSpawnGrieferCougar: public Effect
+{
+public:
+	EffectSpawnGrieferCougar()
+	{
+		// For now it's only spawn the cougar and won't despawn it
+		// like "Spawn Extreme Evil Micah" 
+		// may be change to timed effect later?
+		ID = "spawn_griefer_cougar";
+		name = "Spawn Griefer Cougar";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 

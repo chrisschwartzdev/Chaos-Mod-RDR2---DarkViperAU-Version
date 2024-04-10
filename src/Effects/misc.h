@@ -805,6 +805,30 @@ private:
 	std::vector<Ped> peds;
 };
 
+class EffectRandomGravity : public Effect
+{
+public:
+	EffectRandomGravity()
+	{
+		ID = "random_gravity";
+		name = "Random Gravity";
+		bTimed = true;
+		EffectDuration = 20;
+		currentGravity = 0;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+private:
+	// For now it's just 6 directions of gravity. 
+	std::vector<Vector3> gravity = {{50.0f,0.0f,0.0f}, {0.0f,50.0f,0.0f}, {0.0f,0.0f,50.0f}, 
+		{-50.0f,0.0f,0.0f}, {0.0f,-50.0f,0.0f}, {0.0f,0.0f,-50.0f}};
+	std::set <Entity> entities;
+	int currentGravity;
+};
+
 
 /** Meta */
 
