@@ -802,6 +802,6 @@ void RemoveAllPedWeapons(Ped ped);
 
 void MarkPedAsCompanion(Ped ped);
 
-void MarkPedAsEnemy(Ped ped);
+void MarkPedAsEnemy(Ped ped, bool hideBlip = false);
 
 void FixEntityInCutscene(Entity entity);
