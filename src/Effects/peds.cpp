@@ -2147,7 +2147,8 @@ void EffectSpawnKillerBunnyHorde::OnActivate()
 	Effect::OnActivate();
 	
 	player = PLAYER::PLAYER_PED_ID();
-	rabbitSkinModel = GAMEPLAY::GET_HASH_KEY((char*) "A_C_Rabbit_01");
+	rabbitSkinModel = GET_HASH("A_C_Rabbit_01");
+	LoadModel(rabbitSkinModel);
 }
 
 void EffectSpawnKillerBunnyHorde::OnTick()
@@ -2222,7 +2223,6 @@ void EffectSpawnUncleArmy::OnActivate()
 	Effect::OnActivate();
 	
 	static auto model = GET_HASH("CS_Uncle");
-	static auto player = PLAYER::PLAYER_PED_ID();
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -2289,4 +2289,33 @@ void EffectSpawnCompanionPredator::OnActivate()
 	invoke<Void>(0x77FF8D35EEC6BBC4, ped, randOutfit, false);
 	
 	MarkPedAsCompanion(ped);
+}
+
+void EffectSpawnNativeAmbush::OnActivate()
+{
+	static std::vector models = {"A_M_M_WAPWARRIORS_01", "A_F_O_WAPTOWNFOLK_01"};
+	static auto player = PLAYER::PLAYER_PED_ID();
+	
+	for (int i = 0; i <= 6; i++)
+	{
+		auto modelName = GET_HASH(models[rand() % models.size()]);
+		LoadModel(modelName);
+		
+		auto spawnPosition = GetRandomCoordInRange(ENTITY::GET_ENTITY_COORDS(player, true, 0), 30);
+		float groundZ = spawnPosition.z;
+		GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(spawnPosition.x, spawnPosition.y, spawnPosition.z, &groundZ, false);
+		
+		auto ped = PED::CREATE_PED(modelName, spawnPosition.x, spawnPosition.y, groundZ, 0.0f, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(ped, true);
+		PED::SET_PED_HEARING_RANGE(ped, 10000.0f);
+
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+			ChaosMod::pedsSet.insert(ped);
+		
+		auto weaponHash = GET_HASH("WEAPON_BOW");
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 100, true, 0x2cd419dc);
+		WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+		
+		MarkPedAsEnemy(ped);
+	}
 }

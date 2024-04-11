@@ -883,6 +883,19 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectSpawnNativeAmbush : public Effect
+{
+public:
+	EffectSpawnNativeAmbush()
+	{
+		ID = "spawn_native_ambush";
+		name = "Native Ambush";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 
