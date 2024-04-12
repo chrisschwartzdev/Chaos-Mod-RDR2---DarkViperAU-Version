@@ -959,7 +959,33 @@ void ChaosMod::InitEffects()
 				  new EffectSpawnRandomVeh(), new EffectHorsesAreDonkeys(), new EffectSpawnTwitchViewer(),
 				  new EffectEveryoneIsLenny(), new EffectShadesOfGray(), new EffectPotatoMode(),
 				  new EffectSpawnExtremeEvilMicah(), new EffectOilWagonsRain(), new EffectTownTooSmall(),
-				  new EffectChaosRain(), new EffectSpawnGrieferCougar, new EffectRandomGravity()};
+				  new EffectChaosRain(), new EffectSpawnGrieferCougar, new EffectRandomGravity(), new EffectInfiniteAmmo(), 
+				  new EffectTeleportToSky(), new EffectArthurHataway(), new EffectSpawnRandomLegendaryAnimalBearExcluded(),
+				  new EffectSuperRunAndJump(), new EffectBlackHole(), new EffectHuntingTime(), new EffectRedneckRage(), new EffectWhatIsThat(),
+				  new EffectRainbowEverything(),new EffectFullyClean(), new EffectForcefield(), new EffectNothing(),
+				  new EffectPortalGuns(), new EffectCantStopJumping(), new EffectTeleportAFewMeters(),
+				  new EffectSetPlayerMaxStats(), new EffectSetPlayerMidStats(), new EffectSetPlayerMinStats(),
+				  new EffectBoop(), new EffectOneBulletReload(), new EffectExtremeSnow(), new EffectHotHorses(),
+			      new EffectLumbago(), new EffectFakeCrash(), new EffectSpawnEvilClone(), new EffectEveryoneLosesTheirGun(),
+				  new EffectMinimumDamage(), new EffectNeverWanted(), new EffectTriggerFinger(), new EffectKnifeOnly(),
+				  new EffectExplosiveMelee(), new EffectWeatherChangeOnKill(), new EffectTurnIntoAGiant(), new EffectWinnieThePooh(),
+				  new EffectMaritime(), new EffectDecideOnOutfit(),
+				  new EffectTurnHorsesIntoDogs(), new EffectHorseDiesAndResurrects(), new EffectDoggoGun(), new EffectSnakeRain(),
+				  new EffectSnakeCage(), new EffectShootHorses(), new EffectRevengeIsAFoolsGame(), new EffectFullyDirty(),
+				  new EffectScrawnyNag(), new EffectWilliamsRedemption(), new EffectTrot(),
+				  new EffectGiveOneRandomWeaponForEachSlot(), new EffectHillBillyTurf(), new EffectPonziScheme(), new EffectRandomClothing(),
+				  new EffectExplosiveAmmo(), new EffectFakeMoney(), new EffectIHaveAPlan(), new EffectThisIsntTahiti(),
+				  new EffectTenXMovementSpeedOnFoot(), new EffectFastestInTheWest(), new EffectGrandTheftHorses(), new EffectAllExplosives(),
+				  new EffectSwapPlaces(),new EffectPaino(), new EffectWalkOnWater(),
+				  new EffectTrain(), new EffectBackgroundWar(),
+				  new EffectSpawnNightFolk(), new EffectGoldRush(),new EffectCampingTime(), new EffectSpawnCannon(), new EffectRockyRain(),
+				  new EffectCantDismountHorse(), new EffectAnimalsRunAwayFromPlayer(), new EffectSpawnJohnCompanion(), new EffectRainingFish(),
+				  new EffectFireRain(), new EffectBurningMicahOnHorse(), new EffectDeathRidesUponAWhiteHorse(), new EffectAimbot(),
+				  new EffectDisableDeadeye(), new EffectShootRandomProp(), new EffectSpawnSwatTeam(),
+				  new EffectHotAirBalloonMountainDavey(), new EffectVampire(), new EffectFakeDeath(), new EffectFakeFakeDeath(), new EffectSmokeGun(),
+				  new EffectRandomStrangerEncounter(), new EffectNoBeardAndHair, new EffectFullBeardAndHair(), new EffectYeeYeeHaircut()
+	
+	};
 	
 	EffectsMap.clear();
 	
@@ -1261,8 +1287,18 @@ void ChaosMod::StartWSServer()
 	StartNodeProcess();
 }
 
+#pragma warning(disable : 4996)
+
 std::vector<Effect*> ChaosMod::GenerateEffectsWithChances(uint32_t maxEffects)
 {
+	static bool doOnce{}; 
+
+	if (!doOnce) {
+		AllocConsole();
+		freopen("CONOUT$", "w", stdout);
+		doOnce = true;
+	}
+
 	std::vector<Effect*> effects;
 
 	if (IsEffectActive("canoe_time"))
@@ -1307,6 +1343,8 @@ std::vector<Effect*> ChaosMod::GenerateEffectsWithChances(uint32_t maxEffects)
 		
 		ConfigEffect configEffect = config.effects[effectIndex];
 		
+		std::cout << "Effect id: " << configEffect.id << "\n";
+
 		auto* effect = EffectsMap[configEffect.id];
 		
 		if (effect)
