@@ -435,3 +435,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Non-source dependencies and headers
+thirdparty/rdr2_sdk/
+
+.idea/**
+!.idea/.idea.ChaosMod/.idea/codeStyles/**
+!.idea/.idea.ChaosMod/.idea/inspectionProfiles/**
+!.idea/.idea.ChaosMod/.idea/runConfigurations/**

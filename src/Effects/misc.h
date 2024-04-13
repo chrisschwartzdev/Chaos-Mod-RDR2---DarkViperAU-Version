@@ -17,7 +17,7 @@ public:
 		name = "Spawn Hotchkiss cannon";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -31,12 +31,14 @@ public:
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
+
 private:
-	std::vector<Entity> props;
-	std::vector<Vector3> oldPropsCoords;
+	std::vector <Entity> props;
+	std::vector <Vector3> oldPropsCoords;
 };
 
 
@@ -50,11 +52,11 @@ public:
 		bTimed = true;
 		EffectDuration = 45;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
 };
-
 
 
 class EffectThunderstorm : public Effect
@@ -67,8 +69,9 @@ public:
 		bTimed = true;
 		EffectDuration = 45;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
 };
 
@@ -82,16 +85,17 @@ public:
 		bTimed = true;
 		EffectDuration = 45;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
-
+	
 	virtual void OnTick() override;
-
+	
 	void SetScale(float scale);
 
 private:
-	std::set<Ped> giantPeds;
+	std::set <Ped> giantPeds;
 };
 
 class EffectAllPedsWannaKillPlayer : public Effect
@@ -104,10 +108,11 @@ public:
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
-
+	
 	virtual void OnTick() override;
 };
 
@@ -121,7 +126,7 @@ public:
 		name = "Ragdoll Everyone";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -134,7 +139,7 @@ public:
 		name = "Launch Nearby Peds Up";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -148,12 +153,16 @@ public:
 		bTimed = true;
 		EffectDuration = 10;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnTick() override;
-private:
 
-	std::set<Entity> entities;
+	virtual void OnDeactivate() override;
+
+private:
+	
+	std::set <Entity> entities;
 };
 
 class EffectDoomsday : public Effect
@@ -166,15 +175,17 @@ public:
 		bTimed = true;
 		EffectDuration = 20;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
-
+	
 	virtual void OnTick() override;
+
 private:
 	Vector3 randomDirection;
-
-	std::set<Entity> entities;
+	
+	std::set <Entity> entities;
 };
 
 class EffectPlayIntro : public Effect
@@ -187,8 +198,9 @@ public:
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
 };
 
@@ -201,7 +213,7 @@ public:
 		name = "Set Time to Morning";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -214,7 +226,7 @@ public:
 		name = "Set Time to Night";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -227,7 +239,7 @@ public:
 		name = "Set Random Time of Day";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -240,7 +252,7 @@ public:
 		name = "Set Random Weather";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -253,7 +265,7 @@ public:
 		name = "Set Sunny Weather";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -266,7 +278,7 @@ public:
 		name = "Set Rainy Weather";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -280,9 +292,9 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnDeactivate() override;
-
+	
 	virtual void OnTick() override;
 };
 
@@ -296,11 +308,12 @@ public:
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	virtual void OnTick() override;
-private:
 
-	std::set<Entity> entities;
+private:
+	
+	std::set <Entity> entities;
 };
 
 class EffectEveryoneIsInvincible : public Effect
@@ -313,12 +326,14 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnDeactivate() override;
+	
 	virtual void OnTick() override;
-private:
 
-	std::set<Entity> entities;
+private:
+	
+	std::set <Entity> entities;
 };
 
 /** Original code by ChaosModV contributors */
@@ -332,10 +347,13 @@ public:
 		bTimed = true;
 		EffectDuration = 15;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
+	
 	virtual void OnTick() override;
+
 private:
 	Camera cam;
 };
@@ -349,7 +367,7 @@ public:
 		name = "Ignite Nearby Peds";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -362,7 +380,7 @@ public:
 		name = "Lightning In a Few Meters";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -375,7 +393,7 @@ public:
 		name = "Kill Enemy with Lightning";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -388,7 +406,7 @@ public:
 		name = "Alt + Tab";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -401,7 +419,7 @@ public:
 		name = "Remove Weapons From Everyone";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -414,7 +432,7 @@ public:
 		name = "Set Foggy Weather";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -429,12 +447,15 @@ public:
 		bTimed = true;
 		EffectDuration = 20;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
+	
 	virtual void OnTick() override;
+
 private:
-	std::set<Entity> entities;
+	std::set <Entity> entities;
 };
 
 
@@ -448,10 +469,13 @@ public:
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnTick() override;
+	
 	virtual void OnDeactivate() override;
+
 private:
 	Object ufo;
 	float heading = 0.0f;
@@ -468,13 +492,13 @@ public:
 		bTimed = true;
 		EffectDuration = 20;
 	}
-
+	
 	virtual void OnActivate() override;
-
+	
 	virtual void OnTick() override;
 
 private:
-	std::set<Entity> entities;
+	std::set <Entity> entities;
 };
 
 
@@ -495,33 +519,35 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
-
+	
 	virtual void OnTick() override;
 
 private:
-	std::set<Ped> peds;
-
-	std::set<Ped> pigs;
-
-	std::vector<EntityVelocity> pigsVelocity;
+	std::set <Ped> peds;
+	
+	std::set <Ped> pigs;
+	
+	std::vector <EntityVelocity> pigsVelocity;
 };
 
 class IEffectGamespeed : public Effect
 {
 public:
-
+	
 	IEffectGamespeed()
 	{
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	float timeToSet = 1.0f;
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
 };
 
@@ -529,33 +555,33 @@ public:
 class EffectGamespeedx02 : public IEffectGamespeed
 {
 public:
-
+	
 	EffectGamespeedx02()
 	{
 		ID = "gamespeed_02";
 		name = "x0.2 Gamespeed";
 		timeToSet = 0.2f;
-
+		
 	}
 };
 
 class EffectGamespeedx05 : public IEffectGamespeed
 {
 public:
-
+	
 	EffectGamespeedx05()
 	{
 		ID = "gamespeed_05";
 		name = "x0.5 Gamespeed";
 		timeToSet = 0.5f;
-
+		
 	}
 };
 
 class EffectRainingPigs : public Effect
 {
 public:
-
+	
 	EffectRainingPigs()
 	{
 		ID = "raining_pigs";
@@ -563,13 +589,15 @@ public:
 		bTimed = true;
 		EffectDuration = 25;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnTick() override;
+	
 	virtual void OnDeactivate() override;
 
 private:
-	std::vector<Ped> pigs;
+	std::vector <Ped> pigs;
 };
 
 class EffectRainbow : public Effect
@@ -582,8 +610,9 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
 };
 
@@ -596,7 +625,7 @@ public:
 		name = "Give Everyone A Rifle";
 		bTimed = false;
 	}
-
+	
 	virtual void OnActivate() override;
 };
 
@@ -610,10 +639,13 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnTick() override;
+	
 	virtual void OnDeactivate() override;
+
 private:
 	float totalSeconds = 0;
 };
@@ -628,7 +660,7 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnTick() override;
 };
 
@@ -638,16 +670,18 @@ public:
 	EffectInsaneGravity()
 	{
 		ID = "insane_gravity";
-		name = "Insane Graivty";
+		name = "Insane Gravity";
 		bTimed = true;
 		EffectDuration = 20;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnTick() override;
-private:
 
-	std::set<Entity> entities;
+private:
+	
+	std::set <Entity> entities;
 };
 
 class EffectUpsideDownCamera : public Effect
@@ -660,10 +694,13 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
-
+	
 	virtual void OnActivate() override;
+	
 	virtual void OnDeactivate() override;
+	
 	virtual void OnTick() override;
+
 private:
 	Camera cam;
 };
@@ -679,12 +716,185 @@ public:
 		bTimed = true;
 		EffectDuration = 30;
 	}
+	
+	virtual void OnActivate() override;
+	
+	virtual void OnTick() override;
+	
+	virtual void OnDeactivate() override;
+
+private:
+	std::set <Ped> peds;
+};
+
+class EffectShadesOfGray : public Effect
+{
+public:
+	EffectShadesOfGray()
+	{
+		ID = "shades_of_gray";
+		name = "Shades Of Gray";
+		bTimed = true;
+		EffectDuration = 20;
+	}
+	
+	virtual void OnTick() override;
+	
+	virtual void OnDeactivate() override;
+};
+
+class EffectPotatoMode : public Effect
+{
+public:
+	EffectPotatoMode()
+	{
+		ID = "potato_mode";
+		name = "Potato Mode";
+		bTimed = true;
+		EffectDuration = 25;
+	}
+	
+	virtual void OnActivate() override;
+	
+	virtual void OnTick() override;
+	
+	virtual void OnDeactivate() override;
+
+private:
+	std::set <Ped> peds;
+};
+
+class EffectChaosRain : public Effect
+{
+public:
+	EffectChaosRain()
+	{
+		ID = "chaos_rain";
+		name = "Chaos Rain";
+		bTimed = true;
+		EffectDuration = 30;
+	}
 
 	virtual void OnActivate() override;
+
 	virtual void OnTick() override;
+
 	virtual void OnDeactivate() override;
+
 private:
-	std::set<Ped> peds;
+	std::vector<Ped> peds;
+	std::vector<Vehicle> vehs;
+};
+
+class EffectSetFroggyWeather : public Effect
+{
+public:
+	EffectSetFroggyWeather()
+	{
+		ID = "set_froggy_weather";
+		name = "Set Froggy Weather";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	std::vector<Ped> peds;
+};
+
+class EffectSlowWorldFor5Seconds : public Effect
+{
+public:
+	EffectSlowWorldFor5Seconds()
+	{
+		ID = "slow_world_for_5_seconds";
+		name = "Slow Everything To A Crawl";
+		bTimed = true;
+		EffectDuration = 5;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	std::set<Ped> frozenPeds = {};
+};
+
+class EffectOldWestNoir : public Effect
+{
+public:
+	EffectOldWestNoir()
+	{
+		ID = "old_west_noir";
+		name = "Old West Noir";
+		bTimed = true;
+		EffectDuration = 90;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+	
+	virtual void OnDeactivate() override;
+
+private:
+	const char* oldNoirFilter = "PhotoMode_FilterModern07";
+
+	const float lerpSpeed = 0.0005f;
+	
+	float oldWestNoirStrength = 0.0f;	
+};
+
+class EffectRandomGravity : public Effect
+{
+public:
+	EffectRandomGravity()
+	{
+		ID = "random_gravity";
+		name = "Random Gravity";
+		bTimed = true;
+		EffectDuration = 20;
+		currentGravity = 0;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+private:
+	// For now it's just 6 directions of gravity.
+	std::vector<Vector3> gravity = {{50.0f,0.0f,0.0f}, {0.0f,50.0f,0.0f}, {0.0f,0.0f,50.0f},
+		{-50.0f,0.0f,0.0f}, {0.0f,-50.0f,0.0f}, {0.0f,0.0f,-50.0f}};
+	std::set <Entity> entities;
+	int currentGravity;
+};
+
+class EffectTreeHugger : public Effect
+{
+public :
+	EffectTreeHugger()
+	{
+		ID = "tree_hugger";
+		name = "Tree Hugger";
+		bTimed = true;
+		EffectDuration = 10;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	Object spawnedTree;
+
+	char* hugAnimDict = (char*) "script_re@campfire_massacre";
+	char* hugAnimName = (char*) "hug_man";
 };
 
 /** Meta */
@@ -712,8 +922,43 @@ public:
 	}
 };
 
-std::vector<Entity> GetNearbyProps(int32_t Max);
+class MetaEffectDoubleSubs : public MetaEffect
+{
+public:
+	MetaEffectDoubleSubs()
+	{
+		ID = "double_subs";
+		name = "Double Subs";
+		EffectDuration = 180;
+	}
+};
 
-void PlayAmbientSpeech(const char* voiceDict, const char* voiceSpeech, Ped ped, uint32_t speechID = 0, bool bSetEntity = false);
+class MetaEffectCanoeTime : public MetaEffect
+{
+public:
+	MetaEffectCanoeTime()
+	{
+		ID = "canoe_time";
+		name = "Canoe Time";
+		EffectDuration = 180;
+	}
+
+	virtual void OnActivate() override;
+	virtual void OnDeactivate() override;
+
+	virtual void OnTick() override;
+
+private:
+	std::vector<Vehicle> canoes;
+
+};
+
+
+std::vector <Entity> GetNearbyProps(int32_t Max);
+
+void PlayAmbientSpeech(const char* voiceDict, const char* voiceSpeech, Ped ped, uint32_t speechID = 0,
+					   bool bSetEntity = false);
+
 Vector3 GetRandomCoordInRange(Vector3 vec, float distance);
+
 Vector3 GetRandomCoordAroundPlayer(float distance, bool bUseVelocity = true);

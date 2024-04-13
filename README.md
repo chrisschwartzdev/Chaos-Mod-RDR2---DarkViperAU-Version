@@ -2,7 +2,7 @@
    <img src="https://i.imgur.com/uXrlAQW.png" alt="Chaos Mod RDR">
 </p>
 
-# Chaos Mod RDR
+# Chaos Mod RDR2 with additional effects for DarkViperAU Livestream
 This mod for **Red Dead Redemption 2** activates a random gameplay effect every 45 seconds. This effect can make it harder for you to play, help you, or just be neutral.
 
 You can enable **Twitch Integration** and your viewers will be able to vote for effects.
@@ -11,7 +11,7 @@ You can find a list of effects **[here](https://docs.google.com/spreadsheets/d/1
 
 ## Installation
 - Install **[Script Hook RDR2](http://www.dev-c.com/rdr2/scripthookrdr2/)**.
-- Download the latest mod version from the **[Releases page](https://github.com/clixff/ChaosModRDR/releases)**.
+- Download the latest mod version from the **[Releases page](https://github.com/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/releases)** OR fetch the latest **[nightly build](https://nightly.link/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/workflows/build-nightly.yaml/master?preview)**.
 - Extract all files from the archive to the **game directory**. 
 - Press **F7** in the game to *enable / disable* the mod. Mod is tested on game versions **1.0.1311.23** and **1.0.1436.28**.
 ## Twitch integration
@@ -49,12 +49,48 @@ Don't forget to press **F7** in game when you have made changes.
 
 **F10** — test any effect. **Arrows** to navigate, **Enter** to activate.
 
-## Suggestions and bug reports
-You can suggest an effect for this mod or send a bug report on the **[Issues page](https://github.com/clixff/ChaosModRDR/issues/new/choose)**.
+**F12** — instakill player character (useful when the game breaks)
 
-## Mirrors
-**[NexusMods](https://www.nexusmods.com/reddeadredemption2/mods/1269)**
+## Development
+### Setup RDR2 Script Hook SDK
+1. Download the **[SDK](http://dev-c.com/rdr2/scripthookrdr2/)**
+2. Extract it to `thirdparty/rdr2_sdk`
 
-## Known issues
-- If mod crashes after reloading savegame or starting a new game, try pressing **F11** in game. After this you can reload your savegame or start new game.
-- If Twitch integration doesn't work, try run game as administrator and authorize Twitch access again.
+### Build Twitch Intergration Component
+The twitch intergration component are in src/Twitch. To build it, do the following:
+1. Download and install Node.js if you haven't https://nodejs.org/en/download/
+2. Open the folder (src/Twitch) in Visual Studio Code
+3. Open Terminal in VSCode, run command "npm install -g pkg" and "npm install -g typescript" to install required dependencies
+4. After commands finished, open any .ts file in src/core, find any errored out module (e.g. config.ts). Hover on any errored out import module name(e.g. 'fs') and click on "Fix Problem" then "install <module name>". It will create "node_modules" and install all needed modules into it in /Twitch
+5. Click "Run and Debug" on the side bar of VSCode, click on "Show all automatic debug configurations", then select "Node.js.." then "Run script: pkg". If everything's working, after some time you will find "ChaosModRDRTwitch.exe" in src/Twitch/bin/
+
+## FAQ
+**Q**: **How to change the time between activation of effects?**
+
+**A**: Change the **interval** parameter in the config file.
+
+**Q**: **My Twitch viewers can't vote for effects**
+
+**A**: Check if the **token** parameter in the config file is not empty. If it's empty, restart the game as administrator and repeat steps in the **Twitch integration** guide.
+
+**Q**: **The game crashes when I load a savegame or start a new game with Twitch enabled**
+
+**A**: Press **F11**, the Twitch module will be temporarily disabled, and then reload your savegame or start new game after this.
+
+**Q**: **The game is softlocked or broken**
+
+**A**: Press **F12**, this hotkey will kill your character and it helps sometimes when the game is broken.
+
+**Q**: **Characters are not spawning in the game**
+
+**A**: The game has character limit of **150**. When you press **F7** to disable the mod, old spawned characters will be destroyed. Or leave a big town.
+
+**Q**: **I stream on my separate PC, how do I get the OBS poll overlay to work there?**
+
+**A**: Download the **[latest version](https://github.com/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/releases)** of mod (at least **1.2.1**). Set the **local_ip** parameter in the config file to **false**. Find your **private IP**, for example in the Windows Network Settings. Then replace *127.0.0.1* with your **private IP** in the OBS browser source. It may look like **192.168.0.64:9148**.
+
+**Q**: **My viewers are receiving the warning message "Your message was not sent because it is identical to the previous one you sent"**
+
+**A**: Download the **[latest version](https://github.com/darkviperau/Chaos-Mod-RDR2---DarkViperAU-Version/releases)** of mod (at least **1.2.1**). Set the **max_options** parameter in the config file to **8**. Now the options in the poll will be **1-4** and **5-8**.
+
+

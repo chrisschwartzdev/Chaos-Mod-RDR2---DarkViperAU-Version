@@ -1,0 +1,1198 @@
+{
+	"interval": 45,
+	"votingDuration": 25,
+	"twitch": false,
+	"token": "",
+	"local_ip": true,
+	"max_options": 4,
+	"metaInterval": 1800,
+	"meta": [
+		{
+			"id": "total_chaos",
+			"name": "Total Chaos",
+			"enabled": true,
+			"duration": 180
+		},
+		{
+			"id": "combo_time",
+			"name": "Combo Time",
+			"enabled": true,
+			"duration": 180
+		}
+	],
+	"controls": {
+		"activate": 118,
+		"toggleEffects": 119,
+		"testEffect": 121,
+		"disableTwitch": 122,
+		"instakill": 123
+	},
+	"effects": [
+		{
+			"id": "spawn_soldier",
+			"name": "Spawn Soldier Companion",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "spawn_jon",
+			"name": "Spawn Drunkard Jon",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_lenny",
+			"name": "Spawn Companion Lenny",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "spawn_chicken",
+			"name": "Spawn Chicken Companion",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "kidnapping",
+			"name": "Pig Farmers Kidnap Player",
+			"enabled": true,
+			"chance": 5,
+			"duration": 15
+		},
+		{
+			"id": "spawn_horse",
+			"name": "Spawn Horse",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "spawn_shire_horse",
+			"name": "Spawn Shire Horse",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "spawn_mule",
+			"name": "Spawn Mule",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_donkey",
+			"name": "Spawn Donkey",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "spawn_mini_donkey",
+			"name": "Spawn Mini Donkey",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "spawn_giant_donkey",
+			"name": "Spawn Giant Donkey",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "spawn_serial_killer",
+			"name": "Spawn Serial Killer",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_vampire",
+			"name": "Spawn Vampire",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_giant_cop",
+			"name": "Spawn Giant Cop",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_skeleton",
+			"name": "Spawn Angry Skeleton",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_dwarf",
+			"name": "Spawn Angry Dwarf",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_bertram",
+			"name": "Spawn Companion Bertram",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "spawn_frozen_couple",
+			"name": "Spawn Frozen Couple",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_robot",
+			"name": "Spawn Robot Companion",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "lasso_guy",
+			"name": "Spawn Lasso Guy",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "skyrim_intro",
+			"name": "You're Finally Awake",
+			"enabled": true,
+			"chance": 4,
+			"duration": 20
+		},
+		{
+			"id": "parrot_companion",
+			"name": "Spawn Parrot Companion",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "launch_player_up",
+			"name": "Launch Player Up",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "to_the_stars",
+			"name": "To The Stars",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "give_player_money",
+			"name": "Give 300$ to Player",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "bankruptcy",
+			"name": "Bankruptcy",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "give_rifle",
+			"name": "Give a Rifle to Player",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "give_revolver",
+			"name": "Give a Revolver to Player",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "no_ammo",
+			"name": "No ammo",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "remove_all_weapons",
+			"name": "Remove All Player Weapons",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "honor_good",
+			"name": "Set Good Honor",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "honor_bad",
+			"name": "Set Bad Honor",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "honor_reset",
+			"name": "Reset Player's Honor",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "drop_weapon",
+			"name": "Drop current weapon",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "heal_player",
+			"name": "Heal Player",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "almost_dead",
+			"name": "Almost Dead",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "restore_stamina",
+			"name": "Restore Player Stamina",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "ragdoll",
+			"name": "Ragdoll",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "give_random_weapon",
+			"name": "Give Random Weapon",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "set_drunk",
+			"name": "Player is Drunk",
+			"enabled": true,
+			"chance": 6,
+			"duration": 25
+		},
+		{
+			"id": "clear_pursuit",
+			"name": "Stop Pursuit",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "increase_bounty",
+			"name": "Increase Bounty for Player",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "remove_current_vehicle",
+			"name": "Remove Current Vehicle",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "give_lasso",
+			"name": "Give Lasso to Player",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "ignite_player",
+			"name": "Ignite Player",
+			"enabled": true,
+			"chance": 1
+		},
+		{
+			"id": "kickflip",
+			"name": "Kickflip",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "lightning_weapons",
+			"name": "Lightning Weapons",
+			"enabled": true,
+			"chance": 8,
+			"duration": 25
+		},
+		{
+			"id": "cow_skin",
+			"name": "Player Is a Cow",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "dwarf_skin",
+			"name": "Player Is a Dwarf",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "pig_skin",
+			"name": "Player Is a Pig",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "rat_skin",
+			"name": "Player Is a Rat",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "turtle_skin",
+			"name": "Player Is a Turtle",
+			"enabled": true,
+			"chance": 5,
+			"duration": 40
+		},
+		{
+			"id": "spawn_hotchkiss_cannon",
+			"name": "Spawn Hotchkiss Cannon",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "teleport_everyithing",
+			"name": "Teleport Everything To Player",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "snowstorm",
+			"name": "Snowstorm",
+			"enabled": true,
+			"chance": 8,
+			"duration": 45
+		},
+		{
+			"id": "thunderstorm",
+			"name": "Thunderstorm",
+			"enabled": true,
+			"chance": 6,
+			"duration": 45
+		},
+		{
+			"id": "giant_peds",
+			"name": "All Peds Are Giants",
+			"enabled": true,
+			"chance": 7,
+			"duration": 45
+		},
+		{
+			"id": "peds_wanna_kill_player",
+			"name": "Peds Wanna Kill Player",
+			"enabled": true,
+			"chance": 2,
+			"duration": 25
+		},
+		{
+			"id": "ragdoll_everyone",
+			"name": "Ragdoll Everyone",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "launch_peds_up",
+			"name": "Launch Nearby Peds Up",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "inverted_gravity",
+			"name": "Inverted Gravity",
+			"enabled": true,
+			"chance": 4,
+			"duration": 10
+		},
+		{
+			"id": "doomsday",
+			"name": "Doomsday",
+			"enabled": true,
+			"chance": 2,
+			"duration": 20
+		},
+		{
+			"id": "play_intro",
+			"name": "Play Game Intro",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "set_time_morning",
+			"name": "Set Time to Morning",
+			"enabled": true,
+			"chance": 10
+		},
+		{
+			"id": "set_time_night",
+			"name": "Set Time to Night",
+			"enabled": true,
+			"chance": 10
+		},
+		{
+			"id": "set_random_time",
+			"name": "Set Random Time of Day",
+			"enabled": true,
+			"chance": 10
+		},
+		{
+			"id": "set_random_weather",
+			"name": "Set Random Weather",
+			"enabled": true,
+			"chance": 10
+		},
+		{
+			"id": "set_sunny_weather",
+			"name": "Set Sunny Weather",
+			"enabled": true,
+			"chance": 10
+		},
+		{
+			"id": "set_rainy_weather",
+			"name": "Set Rainy Weather",
+			"enabled": true,
+			"chance": 10
+		},
+		{
+			"id": "rapid_weather",
+			"name": "Rapid Weather Changing",
+			"enabled": true,
+			"chance": 8,
+			"duration": 30
+		},
+		{
+			"id": "darthquake",
+			"name": "Earthquake",
+			"enabled": true,
+			"chance": 2,
+			"duration": 20
+		},
+		{
+			"id": "invincible_everyone",
+			"name": "Everyone is Invincible",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "fov_120",
+			"name": "FOV 120",
+			"enabled": true,
+			"chance": 6,
+			"duration": 15
+		},
+		{
+			"id": "ignite_nearby_peds",
+			"name": "Ignite Nearby Peds",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "lightning_once",
+			"name": "Lightning In a Few Meters",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "lightning_enemy",
+			"name": "Kill Enemy with Lightning",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "spawn_wagon",
+			"name": "Spawn Coach",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "flip_vehs",
+			"name": "Flip All Vehicles",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "minecart_rain",
+			"name": "Minecart Rain",
+			"enabled": true,
+			"chance": 8,
+			"duration": 30
+		},
+		{
+			"id": "full_acceleration",
+			"name": "Full Acceleration",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "everyone_exits_vehs",
+			"name": "Everyone Exits Their Vehicles",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "set_to_random_veh",
+			"name": "Set Player Into Random Nearby Vehicle",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "spawn_balloon",
+			"name": "Spawn Hot Air Balloon",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "ignite_wagon",
+			"name": "Ignite Player's Wagon",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "spawn_canoe",
+			"name": "Spawn Canoe",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "horses_rain",
+			"name": "Horses Rain",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "ignite_nearby_wagons",
+			"name": "Ignite Nearby Wagons",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "alt_tab",
+			"name": "Alt + Tab",
+			"enabled": true,
+			"chance": 1
+		},
+		{
+			"id": "player_sleep",
+			"name": "I Need Some Sleep",
+			"enabled": true,
+			"chance": 2,
+			"duration": 15
+		},
+		{
+			"id": "player_minion",
+			"name": "Player Is Minion",
+			"enabled": true,
+			"chance": 6,
+			"duration": 30
+		},
+		{
+			"id": "tp_to_waypoint",
+			"name": "Teleport To Waypoint",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "remove_weapons_everyone",
+			"name": "Remove Weapons From Everyone",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "undead_nightmare",
+			"name": "Undead Nightmare",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "explosive_weapons",
+			"name": "Explosive Weapons",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "blood_trails",
+			"name": "Blood Trails",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "detach_wheels",
+			"name": "Detach Wheels From Player's Veh",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "set_foggy_weather",
+			"name": "Set Foggy Weather",
+			"enabled": true,
+			"chance": 8
+		},
+		{
+			"id": "ghost_town",
+			"name": "Ghost Town",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "spawn_dog_companion",
+			"name": "Spawn Dog Companion",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_cat_companion",
+			"name": "Spawn Cat Companion",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "set_peds_into_player_veh",
+			"name": "Teleport Peds Into Player's Veh",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "random_walk_style",
+			"name": "Set Random Walk Style",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "teleport_weapons",
+			"name": "Teleporting Ammo",
+			"enabled": true,
+			"chance": 5,
+			"duration": 25
+		},
+		{
+			"id": "give_sniper_rifle",
+			"name": "Give a Sniper Rifle To Player",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "give_dynamite",
+			"name": "Give a Dynamite To Player",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "give_knives",
+			"name": "Give Throwing Knives To Player",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "spawn_bear_companion",
+			"name": "Spawn Bear Companion",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "tp_few_meters",
+			"name": "Teleport Player a Few Meters",
+			"enabled": true,
+			"chance": 7
+		},
+		{
+			"id": "blacking_out",
+			"name": "Blacking Out",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "random_clothes",
+			"name": "Set Random Clothes",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "spawn_angry_corpse",
+			"name": "Spawn Angry Corpse",
+			"enabled": true,
+			"chance": 6
+		},
+		{
+			"id": "fast_players_wagon",
+			"name": "Set Nitro On Player's Wagon",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "spawn_angry_caveman",
+			"name": "Spawn Angry Caveman",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_angry_twin",
+			"name": "Spawn Angry Twin",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "most_wanted",
+			"name": "Most Wanted",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "spawn_ufo",
+			"name": "Spawn UFO",
+			"enabled": true,
+			"chance": 4,
+			"duration": 25
+		},
+		{
+			"id": "gravity_field",
+			"name": "Gravity Field",
+			"enabled": true,
+			"chance": 2,
+			"duration": 20
+		},
+		{
+			"id": "pig_weapons",
+			"name": "Pig Weapons",
+			"enabled": true,
+			"chance": 4,
+			"duration": 30
+		},
+		{
+			"id": "spawn_angry_cowboy",
+			"name": "Spawn Angry Cowboy",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_undead_boss",
+			"name": "Spawn Undead Boss",
+			"enabled": true,
+			"chance": 1
+		},
+		{
+			"id": "spawn_greifer_micah",
+			"name": "Spawn Griefer Micah",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "winter_outfit",
+			"name": "Set Winter Outfit",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "gamespeed_02",
+			"name": "x0.2 Gamespeed",
+			"enabled": true,
+			"duration": 25,
+			"chance": 4
+		},
+		{
+			"id": "gamespeed_05",
+			"name": "x0.5 Gamespeed",
+			"enabled": true,
+			"duration": 25,
+			"chance": 4
+		},
+		{
+			"id": "super_jump",
+			"name": "Super Jump",
+			"enabled": true,
+			"duration": 30,
+			"chance": 6
+		},
+		{
+			"id": "disable_left_right",
+			"name": "Disable Left & Right Movements",
+			"enabled": true,
+			"duration": 25,
+			"chance": 3
+		},
+		{
+			"id": "disable_forward_backward",
+			"name": "Disable Forward & Backward Movements",
+			"enabled": true,
+			"duration": 25,
+			"chance": 3
+		},
+		{
+			"id": "disable_movements",
+			"name": "Disable All Movements",
+			"enabled": true,
+			"duration": 20,
+			"chance": 2
+		},
+		{
+			"id": "disable_sprint_jump",
+			"name": "Disable Sprint & Jump",
+			"enabled": true,
+			"duration": 25,
+			"chance": 3
+		},
+		{
+			"id": "disable_attack",
+			"name": "Disable Attack Button",
+			"enabled": true,
+			"duration": 20,
+			"chance": 3
+		},
+		{
+			"id": "disable_aiming",
+			"name": "Disable Aiming",
+			"enabled": true,
+			"duration": 20,
+			"chance": 3
+		},
+		{
+			"id": "random_wheels_detaching",
+			"name": "Random Wheels Detaching",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "raining_pigs",
+			"name": "It's Raining Pigs",
+			"enabled": true,
+			"duration": 25,
+			"chance": 3
+		},
+		{
+			"id": "random_honor",
+			"name": "Random Honor Change",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "dutch_steals_veh",
+			"name": "Dutch Steals Player's Veh",
+			"enabled": true,
+			"duration": 20,
+			"chance": 4
+		},
+		{
+			"id": "spawn_predator",
+			"name": "Spawn Predator",
+			"enabled": true,
+			"chance": 1
+		},
+		{
+			"id": "invert_velocity",
+			"name": "Invert And Increase Current Velocity",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "increase_velocity",
+			"name": "Increase Current Velocity",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "bunnyhop",
+			"name": "Bunny Hop",
+			"enabled": true,
+			"duration": 20,
+			"chance": 4
+		},
+		{
+			"id": "eye_disorder",
+			"name": "Eye Disorder",
+			"enabled": true,
+			"duration": 20,
+			"chance": 5
+		},
+		{
+			"id": "peds_bhop",
+			"name": "Peds Can't Stop Bunny Hopping",
+			"enabled": true,
+			"duration": 25,
+			"chance": 6
+		},
+		{
+			"id": "peds_spin",
+			"name": "Spinning Peds",
+			"enabled": true,
+			"duration": 30,
+			"chance": 6
+		},
+		{
+			"id": "bird_skin",
+			"name": "Player Is a Bird",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "body_swap",
+			"name": "Body Swap",
+			"enabled": true,
+			"chance": 3,
+			"duration": 30
+		},
+		{
+			"id": "clone_enemy",
+			"name": "Clone Random Enemy",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "peds_follow_player",
+			"name": "Peds Follow Player",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "peds_fleeing",
+			"name": "Nearby Peds Are Fleeing",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "player_spin",
+			"name": "Spin",
+			"enabled": true,
+			"chance": 5,
+			"duration": 20
+		},
+		{
+			"id": "rainbow",
+			"name": "Rainbow In The Sky",
+			"enabled": true,
+			"chance": 4,
+			"duration": 30
+		},
+		{
+			"id": "lose_weight",
+			"name": "Player Loses Weight",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "gain_weight",
+			"name": "Player Gains Weight",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "random_hat",
+			"name": "Set Random Hat",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "gravity_gun",
+			"name": "Gravity Gun",
+			"enabled": true,
+			"duration": 30,
+			"chance": 5
+		},
+		{
+			"id": "heal_nearby_peds",
+			"name": "Heal Nearby Peds",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "revive_dead_peds",
+			"name": "Revive Dead Peds",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_tommy",
+			"name": "Spawn Angry Tommy",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "disable_dead_eye",
+			"name": "Disable Dead Eye",
+			"enabled": true,
+			"duration": 30,
+			"chance": 5
+		},
+		{
+			"id": "party_time",
+			"name": "Party Time",
+			"enabled": true,
+			"duration": 25,
+			"chance": 5
+		},
+		{
+			"id": "random_velocity",
+			"name": "Set Random Velocity",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "explode_nearby_peds",
+			"name": "Explode Nearby Peds",
+			"enabled": true,
+			"chance": 2
+		},
+		{
+			"id": "nearby_ped_is_companion",
+			"name": "Nearby Ped Is Player's Companion",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "everyone_ragdolls_when_shot",
+			"name": "Everyone Ragdolls When Shot",
+			"enabled": true,
+			"chance": 6,
+			"duration": 30
+		},
+		{
+			"id": "nearby_ped_is_enemy",
+			"name": "Nearby Ped Is Player's Enemy",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "explosive_combat",
+			"name": "Explosive Combat",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "give_everyone_rifle",
+			"name": "Give Everyone A Rifle",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "timelapse",
+			"name": "Timelapse",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "no_hud",
+			"name": "No HUD",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "first_person",
+			"name": "First Person",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "top_down_camera",
+			"name": "Top Down Camera",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "agitate_horse",
+			"name": "Agitate Player's Horse",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "spawn_odriscolls",
+			"name": "Spawn O'Driscoll Boys",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "insane_gravity",
+			"name": "Insane Graivty",
+			"enabled": true,
+			"chance": 3,
+			"duration": 20
+		},
+		{
+			"id": "upside_down_camera",
+			"name": "Upside Down Camera",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "one_hit_ko",
+			"name": "One Hit KO",
+			"enabled": true,
+			"chance": 5,
+			"duration": 30
+		},
+		{
+			"id": "bandito_kidnaps",
+			"name": "Bandito Kidnaps Player",
+			"enabled": true,
+			"chance": 3
+		},
+		{
+			"id": "tp_to_random",
+			"name": "Teleport To Random Location",
+			"enabled": true,
+			"chance": 1
+		},
+		{
+			"id": "fake_teleport",
+			"name": "Fake Teleport",
+			"enabled": true,
+			"duration": 20,
+			"chance": 1
+		},
+		{
+			"id": "spawn_random_veh",
+			"name": "Spawn Random Vehicle",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "horses_are_donkeys",
+			"name": "Every Horse Is A Donkey",
+			"enabled": true,
+			"chance": 4
+		},
+		{
+			"id": "spawn_twitch_viewer",
+			"name": "Spawn Random Twitch Viewer",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "everyone_is_lenny",
+			"name": "Nearby Peds Are Lenny",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "shades_of_gray",
+			"name": "Shades Of Gray",
+			"enabled": true,
+			"chance": 5
+		},
+		{
+			"id": "potato_mode",
+			"name": "Potato Mode",
+			"enabled": true,
+			"chance": 5
+		}
+	]
+}
