@@ -1127,70 +1127,72 @@ void EffectGravityField::OnTick()
 {
 	Effect::OnTick();
 	
-	if (TimerTick(1000))
-	{
-		entities.clear();
+	// Code mainly from GTA5 Chaos Mod's Gravity Sphere effect
+
+	entities.clear();
+	auto peds = GetNearbyPeds(30);
+	auto vehs = GetNearbyVehs(30);
+	auto props = GetNearbyProps(30);
 		
-		auto peds = GetNearbyPeds(30);
-		auto vehs = GetNearbyVehs(30);
-		auto props = GetNearbyProps(20);
-		
-		
-		for (auto ped : peds)
-		{
-			if (!PED::IS_PED_RAGDOLL(ped))
-			{
-				FixEntityInCutscene(ped);
-			}
-			PED::SET_PED_TO_RAGDOLL(ped, 2000, 2000, 0, true, true, false);
-			entities.insert(ped);
-		}
-		
-		for (auto veh : vehs)
-		{
-			entities.insert(veh);
-		}
-		
-		for (auto prop : props)
-		{
-			ENTITY::SET_ENTITY_DYNAMIC(prop, true);
-			ENTITY::SET_ENTITY_HAS_GRAVITY(prop, true);
-			entities.insert(prop);
-		}
+	for (auto ped : peds)
+	{		
+		entities.insert(ped);
 	}
-	
+		
+	for (auto veh : vehs)
+	{
+		entities.insert(veh);
+	}
+		
+	for (auto prop : props)
+	{
+		ENTITY::SET_ENTITY_DYNAMIC(prop, true);
+		ENTITY::SET_ENTITY_HAS_GRAVITY(prop, true);
+		entities.insert(prop);
+	}
+
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
 	
-	Vector3 vec1 = ENTITY::GET_ENTITY_COORDS(playerPed, true, 0);
-	vec1.z += 1.0f;
+	Vector3 playerPos = ENTITY::GET_ENTITY_COORDS(playerPed, true, 0);
+	Vector3 playerVel = ENTITY::GET_ENTITY_VELOCITY(playerPed, 0);
+	Vector3 constSpeed; constSpeed.x = 0; constSpeed.y = 0; constSpeed.z = 0;
+
+	if (TimerTick(1500)) {
+		constSpeed.x = GetRandomFloat(-2.0f, 2.0f);
+		constSpeed.y = GetRandomFloat(-2.0f, 2.0f);
+		constSpeed.z = GetRandomFloat(-0.3f, 2.0f);
+	}
 	
 	for (auto entity : entities)
 	{
+		float startDistance = 25.0f;
+		float sphereRadius = 10.0f;
 		if (!ENTITY::DOES_ENTITY_EXIST(entity))
 		{
 			continue;
 		}
 		
-		Vector3 vec2 = ENTITY::GET_ENTITY_COORDS(entity, true, 0);
-		
-		Vector3 diff = vec1;
-		diff.x -= vec2.x;
-		diff.y -= vec2.y;
-		diff.z -= vec2.z;
-		
-		const float squareSum = (diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z);
-		const float length = sqrt(squareSum);
-		diff.x /= length;
-		diff.y /= length;
-		diff.z /= length;
-		
-		const float gravityForce = 70.0f;
-		
-		diff.x *= gravityForce;
-		diff.y *= gravityForce;
-		diff.z *= gravityForce;
-		
-		ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(entity, 0, diff.x, diff.y, diff.z, false, false, true, false);
+		Vector3 entityPos = ENTITY::GET_ENTITY_COORDS(entity, true, 0);
+		float distance = GetDistance3D(entityPos, playerPos);
+
+		if (distance < startDistance) {
+			if (ENTITY::IS_ENTITY_A_PED(entity) && !PED::IS_PED_RAGDOLL(entity)) {
+				PED::SET_PED_TO_RAGDOLL(entity, 5000, 5000, 0, true, true, false);
+			}
+
+			Vector3 force = entityPos - playerPos;
+
+			if (distance < sphereRadius * .9f) {
+				ENTITY::SET_ENTITY_VELOCITY(entity, playerVel.x, playerVel.y, playerVel.z);
+				ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(entity, 0, force.x, force.y, force.z, false, false, true, false);
+			}
+			else if (distance > sphereRadius * 1.1f) {
+				ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(entity, 0, force.x * -1.f, force.y * -1.f, force.z * -1.f, false, false, true, false);
+			}
+			else {
+				ENTITY::SET_ENTITY_VELOCITY(entity, playerVel.x + constSpeed.x, playerVel.y + constSpeed.y, playerVel.z + constSpeed.z);
+			}
+		}
 	}
 }
 

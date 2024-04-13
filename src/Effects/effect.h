@@ -111,3 +111,58 @@ public:
 public:
 	bool bEnabled = true;
 };
+
+static Vector3 operator + (Vector3 a, Vector3 b)
+{
+	return Vector3{ a.x + b.x, a.y + b.y, a.z + b.z };
+}
+
+static Vector3 operator - (Vector3 a, Vector3 b)
+{
+	return Vector3{ a.x - b.x, a.y - b.y, a.z - b.z };
+}
+
+static Vector3 operator * (Vector3 a, int b)
+{
+	return Vector3{ a.x * b, a.y * b, a.z * b };
+}
+
+static Vector3 operator * (int a, Vector3 b)
+{
+	return Vector3{ a * b.x, a * b.y, a * b.z };
+}
+
+static Vector3 operator * (Vector3 a, float b)
+{
+	return Vector3{ a.x * b, a.y * b, a.z * b };
+}
+
+static Vector3 operator * (float a, Vector3 b)
+{
+	return Vector3{ a * b.x, a * b.y, a * b.z };
+}
+
+static float Vector3Length(Vector3 vec)
+{
+	return sqrtf(powf(vec.x, 2) + powf(vec.y, 2) + powf(vec.z, 2));
+}
+
+static float Vector3Distance(Vector3 a, Vector3 b)
+{
+	return Vector3Length(a - b);
+}
+
+static Vector3 Vector3Normalize(Vector3 a)
+{
+	const float len = Vector3Length(a);
+	return Vector3{ a.x / (len + FLT_MIN) , a.y / (len + FLT_MIN), a.z / (len + FLT_MIN) };
+}
+
+static float Vector3Dot(Vector3 a, Vector3 b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+static float GetRandomFloat(float min, float max) {
+	return min + (rand() / RAND_MAX) * (max - min);
+}
