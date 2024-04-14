@@ -106,7 +106,7 @@ void MarkPedAsCompanion(Ped ped)
 	PED::SET_PED_CONFIG_FLAG(ped, 130, 0);
 }
 
-void MarkPedAsEnemy(Ped ped)
+void MarkPedAsEnemy(Ped ped, bool hideBlip)
 {
 	static std::vector <Hash> groups = {GET_HASH("PLAYER"), 0x8A33CDCF, // Civ Male
 										0x3220F762, // Civ Female
@@ -134,6 +134,19 @@ void MarkPedAsEnemy(Ped ped)
 	PED::SET_PED_COMBAT_ATTRIBUTES(ped, 3, true);
 	
 	AI::TASK_COMBAT_PED(ped, PLAYER::PLAYER_PED_ID(), 0, 16);
+
+	if (!hideBlip)
+	{
+		// add enemy blip
+		static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
+		RADAR::_0x23F74C2FDA6E7C61(blipHash, ped);
+	}
+}
+
+void SetPedScale(Ped ped, float scale)
+{
+	// _SET_PED_SCALE
+	PED::_0x25ACFC650B65C538(ped, scale);
 }
 
 void FixEntityInCutscene(Entity entity)
@@ -879,11 +892,6 @@ void EffectUndeadNightmare::OnActivate()
 		
 		/** BF_CanUseVehicles */
 		PED::SET_PED_COMBAT_ATTRIBUTES(zombie, 1, false);
-		
-		static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
-		
-		/** BLIP_ADD_FOR_ENTITY */
-		Blip blip = RADAR::_0x23F74C2FDA6E7C61(blipHash, zombie);
 	}
 }
 
@@ -1753,11 +1761,6 @@ void EffectNearbyPedIsEnemy::OnActivate()
 	}
 	
 	MarkPedAsEnemy(ped);
-	
-	static Hash blipHash = GET_HASH("BLIP_STYLE_ENEMY");
-	
-	/** BLIP_ADD_FOR_ENTITY */
-	Blip blip = RADAR::_0x23F74C2FDA6E7C61(blipHash, ped);
 }
 
 void EffectExplosiveCombat::OnActivate()
@@ -2112,4 +2115,377 @@ void EffectSpawnExtremeEvilMicah::OnTick()
 	lastVec = vec;
 	
 	FIRE::ADD_EXPLOSION(vec.x, vec.y, vec.z, 27, 1.0f, true, false, 1.0f);
+}
+
+void EffectBabyHorses::OnTick()
+{
+	if (!TimerTick(1000))
+	{
+		// add a 1000ms delay between ticks, there's no need to check every frame
+		return;
+	}
+
+	auto nearbyPeds = GetNearbyPeds(75);
+
+	for (auto ped : nearbyPeds)
+	{
+		if (effectedHorses.contains(ped))
+		{
+			continue;
+		}
+
+		Hash pedModel = ENTITY::GET_ENTITY_MODEL(ped);
+
+		bool bModelIsHorse = invoke<bool>(0x772A1969F649E902, pedModel);
+
+		if (!bModelIsHorse)
+		{
+			continue;
+		}
+
+		SetPedScale(ped, 0.5f);
+		effectedHorses.insert(ped);
+	}
+}
+
+void EffectBabyHorses::OnDeactivate()
+{
+	Effect::OnDeactivate();
+	
+	for (auto ped : effectedHorses)
+	{
+		// reset back to normal scale
+		SetPedScale(ped, 1.0f);
+	}
+
+	effectedHorses.clear();
+}
+
+void ISetAllPlayerHorseStatsEffect::OnActivate()
+{
+	Effect::OnActivate();
+	
+	Player player = PLAYER::PLAYER_ID();
+
+	// _0x46FA0AE18F4C7FA9 = _GET_ACTIVE_HORSE_FOR_PLAYER
+	Ped playerHorse = PLAYER::_0x46FA0AE18F4C7FA9(player);
+
+	if (!ENTITY::DOES_ENTITY_EXIST(playerHorse))
+	{
+		// _0xD3F7445CEA2E5035 = _GET_TEMP_PLAYER_HORSE
+		// we don't have an active horse, so see if we have a temporary one
+		playerHorse = PLAYER::_0xD3F7445CEA2E5035(player);
+	}
+
+	if (!ENTITY::DOES_ENTITY_EXIST(playerHorse))
+	{
+		return;
+	}
+
+	static std::vector attributeIndexes = {0, 1, 7};
+	
+	for (int attributeIndex : attributeIndexes)
+	{
+		const int max = ATTRIBUTE::_0x704674A0535A471D(playerHorse, attributeIndex);
+	
+		int newAttribute = max * statAmountMultiplier;
+
+		// _0x09A59688C26D88DF = SET_ATTRIBUTE_POINTS
+		ATTRIBUTE::_0x09A59688C26D88DF(playerHorse, attributeIndex, 0);
+		
+		// _0x75415EE0CB583760 = ADD_ATTRIBUTE_POINTS
+		ATTRIBUTE::_0x75415EE0CB583760(playerHorse, attributeIndex, 0);
+		
+		// _0x5DA12E025D47D4E5 = SET_ATTRIBUTE_BASE_RANK
+		ATTRIBUTE::_0x5DA12E025D47D4E5(playerHorse, attributeIndex, newAttribute);
+		
+		// _0x920F9488BD115EFB = SET_ATTRIBUTE_BONUS_RANK
+		ATTRIBUTE::_0x920F9488BD115EFB(playerHorse, attributeIndex, 0);
+
+		if (attributeIndex == 7)
+		{
+			// _SET_MOUNT_BONDING_LEVEL
+			PED::_0xA69899995997A63B(playerHorse, newAttribute);
+		}
+	}
+}
+
+void EffectHorseMagnet::OnActivate()
+{
+	Effect::OnActivate();
+	
+	Player player = PLAYER::PLAYER_ID();
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	
+	// _0x46FA0AE18F4C7FA9 = _GET_ACTIVE_HORSE_FOR_PLAYER
+	Ped playerHorse = PLAYER::_0x46FA0AE18F4C7FA9(player);
+
+	if (!ENTITY::DOES_ENTITY_EXIST(playerHorse))
+	{
+		// _0xD3F7445CEA2E5035 = _GET_TEMP_PLAYER_HORSE
+		// we don't have an active horse, so see if we have a temporary one
+		playerHorse = PLAYER::_0xD3F7445CEA2E5035(player);
+	}
+	
+	excludedPeds.insert(playerHorse);
+	excludedPeds.insert(playerPed);
+	
+	if (PED::IS_PED_ON_MOUNT(playerPed))
+	{
+		Ped mountedHorse = PED::GET_MOUNT(playerPed);
+
+		if (!excludedPeds.contains(mountedHorse))
+		{
+			excludedPeds.insert(mountedHorse);
+		}
+	}
+}
+
+void EffectHorseMagnet::OnTick()
+{
+	if (!TimerTick(2500))
+	{
+		return;
+	}
+
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	int* worldPeds = new int[150];
+	
+	int found = worldGetAllPeds(worldPeds, 150);
+	
+	for (int32_t i = 0; i < found; i++)
+	{
+		Ped ped = worldPeds[i];
+
+		if (!ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			continue;
+		}
+		
+		if (excludedPeds.contains(ped))
+		{
+			continue;
+		}
+		
+		Hash pedModel = ENTITY::GET_ENTITY_MODEL(ped);
+
+		bool bModelIsHorse = invoke<bool>(0x772A1969F649E902, pedModel);
+
+		if (!bModelIsHorse)
+		{
+			continue;
+		}
+
+		// _IS_MOUNT_SEAT_FREE
+		if (PED::_0xAAB0FE202E9FC9F0(ped, -1))
+		{
+			// _GET_RIDER_OF_MOUNT
+			Ped driver = PED::_0xB676EFDA03DADA52(ped, false);
+			AI::TASK_GO_TO_ENTITY(driver, playerPed, -1, 1.0f, 2.5f, 0, 0);
+			PED::SET_PED_KEEP_TASK(driver, true);
+			pedsEffectedByMagnet.insert(ped);
+		}
+
+		AI::TASK_GO_TO_ENTITY(ped, playerPed, -1, 1.0f, 2.5f, 0, 0);
+		PED::SET_PED_KEEP_TASK(ped, true);
+
+		pedsEffectedByMagnet.insert(ped);
+	}
+
+	delete[] worldPeds;
+}
+
+void EffectHorseMagnet::OnDeactivate()
+{
+	Effect::OnDeactivate();
+	
+	for (auto ped : pedsEffectedByMagnet)
+	{
+		AI::CLEAR_PED_TASKS(ped, 1, 1);
+		PED::SET_PED_KEEP_TASK(ped, false);
+	}
+
+	pedsEffectedByMagnet.clear();
+	excludedPeds.clear();
+}
+
+void EffectHorseLosesAllStamina::OnActivate()
+{
+	Effect::OnActivate();
+	
+	Player player = PLAYER::PLAYER_ID();
+	Ped playerPed = PLAYER::PLAYER_PED_ID();	
+
+	// get moutned horse
+	Ped playerHorse;
+
+	if (PED::IS_PED_ON_MOUNT(playerPed))
+	{
+		playerHorse = PED::GET_MOUNT(playerPed);
+	}
+	else
+	{
+		// _0x46FA0AE18F4C7FA9 = _GET_ACTIVE_HORSE_FOR_PLAYER
+		playerHorse = PLAYER::_0x46FA0AE18F4C7FA9(player);
+	}
+
+	if (!ENTITY::DOES_ENTITY_EXIST(playerHorse))
+	{
+		playerHorse = PLAYER::_0xD3F7445CEA2E5035(player);
+	}
+
+	if (!ENTITY::DOES_ENTITY_EXIST(playerHorse))
+	{
+		return;
+	}
+
+	// _CHANGE_PED_STAMINA
+	PED::_0xC3D4B754C0E86B9E(playerHorse, -1000.0f);
+}
+
+void EffectFightingGhosts::OnActivate()
+{
+	Effect::OnActivate();
+	
+	ghostModelHash = GET_HASH("CS_AberdeenPigFarmer");
+
+	for (int i = 0; i < 5; i++)
+	{
+		SpawnGhost();
+	}
+}
+
+void EffectFightingGhosts::OnTick()
+{
+	if (!TimerTick(5000))
+	{
+		return;
+	}
+
+	Vector3 playerLocation = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, 0);
+
+	auto it = ghostPeds.begin();
+	while (it != ghostPeds.end())
+	{
+		Ped ghost = *it;
+
+		if (!ENTITY::DOES_ENTITY_EXIST(ghost))
+		{
+			it = ghostPeds.erase(it);
+			SpawnGhost();
+			continue;
+		}
+
+		if (PED::IS_PED_DEAD_OR_DYING(ghost, false))
+		{
+			PED::DELETE_PED(&ghost);
+			it = ghostPeds.erase(it);
+			SpawnGhost();
+			continue;
+		}
+
+		const float distance = GetDistance3D(playerLocation, ENTITY::GET_ENTITY_COORDS(ghost, true, 0));
+
+		if (distance <= maxDistanceFromPlayer)
+		{
+			++it;
+			continue;
+		}
+
+		PED::DELETE_PED(&ghost);
+		it = ghostPeds.erase(it);
+		SpawnGhost();
+	}
+}
+
+void EffectFightingGhosts::OnDeactivate()
+{
+	for (auto ghost : ghostPeds)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(ghost))
+		{
+			PED::DELETE_PED(&ghost);
+		}
+	}
+	
+	ghostPeds.clear();
+}
+
+void EffectFightingGhosts::SpawnGhost()
+{
+	Ped ghost = SpawnPedAroundPlayer(ghostModelHash);
+
+	Vector3 spawnPosition = GetRandomCoordAroundPlayer(4.0f, false);
+	
+	float groundZ = spawnPosition.z;
+	GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(spawnPosition.x, spawnPosition.y, spawnPosition.z, &groundZ, false);
+	
+	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(ghost, spawnPosition.x, spawnPosition.y, groundZ, 0, 0, 0);
+	
+	WEAPON::REMOVE_ALL_PED_WEAPONS(ghost, true, true);
+	ENTITY::SET_ENTITY_VISIBLE(ghost, false);
+	PED::_0xFD6943B6DF77E449(ghost, false); // SET_PED_CAN_BE_LASSOED
+	
+	PED::SET_PED_MAX_HEALTH(ghost, 500);
+	ENTITY::SET_ENTITY_HEALTH(ghost, 500, 0);
+
+	// disable fleeing
+	PED::SET_PED_COMBAT_ATTRIBUTES(ghost, 17, false);
+	PED::SET_PED_COMBAT_ATTRIBUTES(ghost, 58, true);
+	PED::SET_PED_COMBAT_ATTRIBUTES(ghost, 78, true);
+	
+	MarkPedAsEnemy(ghost, true);
+	
+	ghostPeds.insert(ghost);
+}
+
+void EffectGunslingerDuel::OnActivate()
+{
+	Effect::OnActivate();
+	
+	// get a random model from the array
+	const Hash gunSlingerModel = GET_HASH(gunSlingerModels[rand() % gunSlingerModels.size()]);
+
+	const Ped gunSlingerPed = SpawnPedAroundPlayer(gunSlingerModel);
+
+	// get a random position around the player to set the position of the gunslinger
+	const Vector3 spawnPosition = GetRandomCoordAroundPlayer(30.0f, false);
+
+	float groundZ = spawnPosition.z;
+	GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(spawnPosition.x, spawnPosition.y, spawnPosition.z, &groundZ, false);
+
+	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(gunSlingerPed, spawnPosition.x, spawnPosition.y, groundZ, 0, 0, 0);
+
+	const Hash weaponHash = GET_HASH("WEAPON_REVOLVER_CATTLEMAN");
+
+	WEAPON::_0x5E3BDDBCB83F3D84(gunSlingerPed, weaponHash, 999, true, false, 0, false, 0.5f, 1.0f, 0, true, 0.0f, false);
+
+	PED::SET_PED_MAX_HEALTH(gunSlingerPed, 200);
+	ENTITY::SET_ENTITY_HEALTH(gunSlingerPed, 200, 0);
+
+	// disable fleeing of the gunslinger
+	PED::SET_PED_COMBAT_ATTRIBUTES(gunSlingerPed, 17, false);
+	PED::SET_PED_COMBAT_ATTRIBUTES(gunSlingerPed, 58, true);
+	PED::SET_PED_COMBAT_ATTRIBUTES(gunSlingerPed, 78, true);
+
+	// make the gunslinger perfectly accurate, but only do half the damage for fairness
+	PED::SET_PED_ACCURACY(gunSlingerPed, 100);
+	PED::_0xD77AE48611B7B10A(gunSlingerPed, 0.5f); // SET_PED_TO_PLAYER_WEAPON_DAMAGE_MODIFIER
+	PED::SET_PED_HEARING_RANGE(gunSlingerPed, 10000.0f);
+
+	MarkPedAsEnemy(gunSlingerPed);
+}
+
+void EffectSpawnGrieferCougar::OnActivate()
+{
+	Effect::OnActivate();
+
+	auto modelName = "A_C_Cougar_01";
+
+	Ped ped = SpawnPedAroundPlayer(GET_HASH(modelName), false, false);
+
+	ENTITY::SET_ENTITY_MAX_HEALTH(ped, 1000);
+	ENTITY::SET_ENTITY_HEALTH(ped, 1000, 0);
+
+	MarkPedAsEnemy(ped);
 }

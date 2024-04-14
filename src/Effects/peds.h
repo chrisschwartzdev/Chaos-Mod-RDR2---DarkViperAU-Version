@@ -793,6 +793,176 @@ private:
 	Ped micahPed;
 };
 
+class EffectBabyHorses : public Effect
+{
+public:
+	EffectBabyHorses()
+	{
+		ID = "baby_horses";
+		name = "Horses Tiny";
+		bTimed = true;
+		EffectDuration = 45;
+	}
+
+	virtual void OnTick() override;
+	
+	virtual void OnDeactivate() override;
+	
+private:
+	// the horses that are effected by this effect
+	std::set <Ped> effectedHorses;
+};
+
+class ISetAllPlayerHorseStatsEffect : public Effect
+{
+public :
+	ISetAllPlayerHorseStatsEffect()
+	{
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+
+protected:
+	// the amount to set all the horses stats to (0.0f - 1.0f)
+	float statAmountMultiplier = 0.0f;
+};
+
+class EffectSetAllPlayerHorseStatsToMax : public ISetAllPlayerHorseStatsEffect
+{
+public:
+	EffectSetAllPlayerHorseStatsToMax()
+	{
+		ID = "set_all_player_horse_stats_to_max";
+		name = "Set Player Horse Stats To Max";
+		statAmountMultiplier = 1.0f;
+	}
+};
+
+class EffectSetAllPlayerHorseStatsToMin : public ISetAllPlayerHorseStatsEffect
+{
+public:
+	EffectSetAllPlayerHorseStatsToMin()
+	{
+		ID = "set_all_player_horse_stats_to_min";
+		name = "Set Player Horse Stats To Min";
+		statAmountMultiplier = 0.0f;
+	}
+};
+
+class EffectSetAllPlayerHorseStatsToHalf : public ISetAllPlayerHorseStatsEffect
+{
+public:
+	EffectSetAllPlayerHorseStatsToHalf()
+	{
+		ID = "set_all_player_horse_stats_to_half";
+		name = "Set Player Horse Stats To Half";
+		statAmountMultiplier = 0.5f;
+	}
+};
+
+class EffectHorseMagnet : public Effect
+{
+public:
+	EffectHorseMagnet()
+	{
+		ID = "horse_magnet";
+		name = "Horse Magnet";
+		bTimed = true;
+		EffectDuration = 60;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	std::set <Ped> excludedPeds;
+	std::set <Ped> pedsEffectedByMagnet;
+};
+
+class EffectHorseLosesAllStamina : public Effect
+{
+public:
+	EffectHorseLosesAllStamina()
+	{
+		ID = "horse_loses_all_stamina";
+		name = "Can't Teach A Horse To Drink";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnGrieferCougar: public Effect
+{
+public:
+	EffectSpawnGrieferCougar()
+	{
+		// For now it's only spawn the cougar and won't despawn it
+		// like "Spawn Extreme Evil Micah"
+		// may be change to timed effect later?
+		ID = "spawn_griefer_cougar";
+		name = "Spawn Griefer Cougar";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectFightingGhosts : public Effect
+{
+public:
+	EffectFightingGhosts()
+	{
+		ID = "fighting_ghosts";
+		name = "Fighting Ghosts";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	// the maximum number of ghosts that can be spawned at once
+	const int maxGhosts = 5;
+
+	// the maximum distance from the player the ghosts can be, if they are further away they will be deleted
+	const float maxDistanceFromPlayer = 500.0f;
+
+	// the ghosts that are currently spawned
+	std::set<Ped> ghostPeds;
+
+	// the model hash of the ghost ped
+	Hash ghostModelHash;
+
+	// internal function to spawn a ghost
+	void SpawnGhost();
+};
+
+class EffectGunslingerDuel : public Effect
+{
+public:
+	EffectGunslingerDuel()
+	{
+		ID = "gunslinger_duel";
+		name = "Gunslinger Duel";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+
+private:
+	inline static std::vector<const char*> gunSlingerModels = {"CS_famousgunslinger_01", "CS_famousgunslinger_02"
+											"CS_famousgunslinger_03", "CS_famousgunslinger_04",
+											"CS_famousgunslinger_05", "CS_famousgunslinger_06"};
+};
 
 std::vector <Ped> GetNearbyPeds(int32_t Max);
 
@@ -802,6 +972,8 @@ void RemoveAllPedWeapons(Ped ped);
 
 void MarkPedAsCompanion(Ped ped);
 
-void MarkPedAsEnemy(Ped ped);
+void MarkPedAsEnemy(Ped ped, bool hideBlip = false);
+
+void SetPedScale(Ped ped, float scale);
 
 void FixEntityInCutscene(Entity entity);

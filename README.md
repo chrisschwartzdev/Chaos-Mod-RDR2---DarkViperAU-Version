@@ -56,6 +56,14 @@ Don't forget to press **F7** in game when you have made changes.
 1. Download the **[SDK](http://dev-c.com/rdr2/scripthookrdr2/)**
 2. Extract it to `thirdparty/rdr2_sdk`
 
+### Build Twitch Intergration Component
+The twitch intergration component are in src/Twitch. To build it, do the following:
+1. Download and install Node.js if you haven't https://nodejs.org/en/download/
+2. Open the folder (src/Twitch) in Visual Studio Code
+3. Open Terminal in VSCode, run command "npm install -g pkg" and "npm install -g typescript" to install required dependencies
+4. After commands finished, open any .ts file in src/core, find any errored out module (e.g. config.ts). Hover on any errored out import module name(e.g. 'fs') and click on "Fix Problem" then "install <module name>". It will create "node_modules" and install all needed modules into it in /Twitch
+5. Click "Run and Debug" on the side bar of VSCode, click on "Show all automatic debug configurations", then select "Node.js.." then "Run script: pkg". If everything's working, after some time you will find "ChaosModRDRTwitch.exe" in src/Twitch/bin/
+
 ## FAQ
 **Q**: **How to change the time between activation of effects?**
 

@@ -496,6 +496,25 @@ void EffectInvertedGravity::OnTick()
 	}
 }
 
+void EffectInvertedGravity::OnDeactivate()
+{
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	if (!PED::IS_PED_FALLING(playerPed))
+	{
+		return;
+	}
+	
+	ENTITY::SET_ENTITY_INVINCIBLE(playerPed, true);
+
+	while (PED::IS_PED_FALLING(playerPed))
+	{
+		WAIT(0);
+	}
+
+	ENTITY::SET_ENTITY_INVINCIBLE(playerPed, false);
+}
+
 
 void EffectDoomsday::OnActivate()
 {
@@ -1843,6 +1862,268 @@ void EffectSetFroggyWeather::OnDeactivate()
 	}
 
 	peds.clear();
+}
+
+void EffectSlowWorldFor5Seconds::OnActivate()
+{
+	Effect::OnActivate();
+	
+	int* worldPeds = new int[150];
+	int found = worldGetAllPeds(worldPeds, 150);
+
+	for (int32_t i = 0; i < found; i++)
+	{
+		Ped ped = worldPeds[i];
+
+		if (!ENTITY::DOES_ENTITY_EXIST(ped) || PED::IS_PED_DEAD_OR_DYING(ped, true))
+		{
+			continue;
+		}
+
+		ENTITY::FREEZE_ENTITY_POSITION(ped, true);
+		ENTITY::SET_ENTITY_INVINCIBLE(ped, true);
+
+		frozenPeds.insert(ped);
+	}
+
+	delete[] worldPeds;
+	
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	if (!frozenPeds.contains(playerPed))
+	{
+		ENTITY::FREEZE_ENTITY_POSITION(playerPed, true);
+		ENTITY::SET_ENTITY_INVINCIBLE(playerPed, true);
+		frozenPeds.insert(playerPed);
+	}
+
+	if (PED::IS_PED_ON_MOUNT(playerPed))
+	{
+		Ped mountedPed = PED::GET_MOUNT(playerPed);
+
+		if (!frozenPeds.contains(mountedPed))
+		{
+			ENTITY::FREEZE_ENTITY_POSITION(mountedPed, true);
+			ENTITY::SET_ENTITY_INVINCIBLE(mountedPed, true);
+			frozenPeds.insert(mountedPed);
+		}
+	}
+	
+	GAMEPLAY::SET_TIME_SCALE(0.0f);
+}
+
+void EffectSlowWorldFor5Seconds::OnDeactivate()
+{
+	Effect::OnDeactivate();
+	
+	for (Ped ped : frozenPeds)
+	{
+		if (!ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			continue;
+		}
+		
+		ENTITY::FREEZE_ENTITY_POSITION(ped, false);
+		ENTITY::SET_ENTITY_INVINCIBLE(ped, false);
+	}
+
+	frozenPeds.clear();
+	GAMEPLAY::SET_TIME_SCALE(1.0f);
+}
+
+void EffectOldWestNoir::OnActivate()
+{
+	Effect::OnActivate();
+
+	// _ANIMPOSTFX_PRELOAD_POSTFX
+	invoke<Void>(0x5199405EABFBD7F0, oldNoirFilter);
+
+	// _ANIMPOSTFX_HAS_LOADED
+	while (invoke<BOOL>(0xBF2DD155B2ADCD0A, oldNoirFilter))
+	{
+		WAIT(0);
+	}
+
+	oldWestNoirStrength = 0.0f;
+}
+
+void EffectOldWestNoir::OnDeactivate()
+{
+	Effect::OnDeactivate();
+
+	// ANIMPOSTFX_STOP
+	invoke<Void>(0xB4FD7446BAB2F394, oldNoirFilter);
+
+	// _ANIMPOSTFX_SET_TO_UNLOAD
+	invoke<Void>(0x37D7BDBA89F13959, oldNoirFilter);
+}
+
+void EffectOldWestNoir::OnTick()
+{
+	// ANIMPOSTFX_IS_RUNNING
+	if (!invoke<BOOL>(0x4A123E85D7C4CA0B, oldNoirFilter))
+	{
+		// ANIMPOSTFX_PLAY
+		invoke<Void>(0x4102732DF6B4005F, oldNoirFilter);
+
+		// _ANIMPOSTFX_SET_STRENGTH
+		invoke<Void>(0xCAB4DD2D5B2B7246, oldNoirFilter, 0.0f);
+
+		oldWestNoirStrength = 0.0f;
+	}
+
+	if (oldWestNoirStrength > 1.0f)
+	{
+		return;
+	}
+	
+	oldWestNoirStrength += ChaosMod::GetDeltaTime() * lerpSpeed;
+
+	if (oldWestNoirStrength > 1.0f)
+	{
+		oldWestNoirStrength = 1.0f;
+	}
+
+	// _ANIMPOSTFX_SET_STRENGTH
+	invoke<Void>(0xCAB4DD2D5B2B7246, oldNoirFilter, oldWestNoirStrength);
+}
+
+void EffectTreeHugger::OnActivate()
+{
+	Effect::OnActivate();
+	
+	const Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	if (PED::IS_PED_ON_MOUNT(playerPed))
+	{
+		// _REMOVE_PED_FROM_MOUNT
+		invoke<Void>(0x5337B721C51883A9, playerPed, 0, 0);
+	}
+
+	Hash equippedWeaponHash = 0;
+	Hash unarmedHash = GET_HASH("WEAPON_UNARMED");
+
+	WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &equippedWeaponHash, 0, 0, 0);
+	
+	if (equippedWeaponHash != unarmedHash)
+	{
+		WEAPON::SET_CURRENT_PED_WEAPON(playerPed, unarmedHash, true, 0, 0, 0);
+	}
+	
+	STREAMING::REQUEST_ANIM_DICT(hugAnimDict);
+	
+	while (!STREAMING::HAS_ANIM_DICT_LOADED(hugAnimDict))
+	{
+		WAIT(0);
+	}
+
+	AI::TASK_PLAY_ANIM(playerPed, hugAnimDict, hugAnimName, 3.0f, -3.0f, -1, 9, 0, false, false, false, (Any*) "", 0);
+
+	STREAMING::REMOVE_ANIM_DICT(hugAnimDict);
+	
+	spawnedTree = SpawnObject(GET_HASH("p_cs_treefallen01x"));
+	
+	if (!ENTITY::DOES_ENTITY_EXIST(spawnedTree))
+	{
+		return;
+	}
+
+	ENTITY::FREEZE_ENTITY_POSITION(spawnedTree, true);
+	ENTITY::SET_ENTITY_HAS_GRAVITY(spawnedTree, false);
+
+	ENTITY::ATTACH_ENTITY_TO_ENTITY(spawnedTree, playerPed, -1,
+		0.0f, 0.75f, 0.0f, 0.0f, 90.0f, 0.0f,
+		false, false, false, false, 0, true, false, false
+	);
+}
+
+void EffectTreeHugger::OnDeactivate()
+{
+	Effect::OnDeactivate();
+	
+	ENTITY::SET_ENTITY_AS_MISSION_ENTITY(spawnedTree, false, false);
+	
+	OBJECT::DELETE_OBJECT(&spawnedTree);
+	
+	spawnedTree = 0;
+
+	const Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	if (ENTITY::IS_ENTITY_PLAYING_ANIM(playerPed, hugAnimDict, hugAnimName, 1))
+	{
+		AI::STOP_ANIM_TASK(playerPed, hugAnimDict, hugAnimName, 0.0f);
+	}
+}
+
+void EffectRandomGravity::OnActivate()
+{
+	Effect::OnActivate();
+	auto nearbyPeds = GetNearbyPeds(100);
+	entities.clear();
+
+	nearbyPeds.push_back(PLAYER::PLAYER_PED_ID());
+
+	for (auto ped : nearbyPeds)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			FixEntityInCutscene(ped);
+			PED::SET_PED_TO_RAGDOLL(ped, 20000, 20000, 0, true, true, false);
+		}
+	}
+
+	currentGravity = rand() % gravity.size();
+}
+
+void EffectRandomGravity::OnTick()
+{
+	Effect::OnTick();
+	if (TimerTick(1000))
+	{
+		entities.clear();
+		auto nearbyPeds = GetNearbyPeds(45);
+		auto nearbyVehs = GetNearbyVehs(45);
+		auto nearbyProps = GetNearbyProps(45);
+
+		for (auto ped : nearbyPeds)
+		{
+			entities.insert(ped);
+		}
+
+		for (auto veh : nearbyVehs)
+		{
+			entities.insert(veh);
+		}
+
+		for (auto prop : nearbyProps)
+		{
+			ENTITY::SET_ENTITY_DYNAMIC(prop, true);
+			ENTITY::SET_ENTITY_HAS_GRAVITY(prop, true);
+			entities.insert(prop);
+		}
+
+
+		entities.insert(PLAYER::PLAYER_PED_ID());
+	}
+
+	// Random Gravity every 2 seconds
+	if (TimerTick(2000, 1)) {
+		currentGravity = rand() % gravity.size();
+	}
+
+	for (auto entity : entities)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(entity))
+		{
+			if (ENTITY::IS_ENTITY_A_PED(entity))
+			{
+				PED::SET_PED_TO_RAGDOLL(entity, 3000, 3000, 0, true, true, false);
+			}
+			ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(entity, 0, gravity[currentGravity].x, 
+				gravity[currentGravity].y, gravity[currentGravity].z, false, false, true, false);
+		}
+	}
+
 }
 
 void MetaEffectCanoeTime::OnActivate()
