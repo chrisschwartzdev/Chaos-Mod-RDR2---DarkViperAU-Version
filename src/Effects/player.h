@@ -1,6 +1,7 @@
 #pragma once
 
 #include "effect.h"
+#include <set>
 
 void TeleportPlayerTo(float X, float Y, float Z);
 
@@ -1103,6 +1104,66 @@ private:
 	void TeleportToOldCoord();
 };
 
+class EffectPinkertonProtection : public Effect
+{
+public:
+	EffectPinkertonProtection()
+	{
+		ID = "pinkerton_protection";
+		name = "Pinkerton Protection";
+		bTimed = true;
+		EffectDuration = 60;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	// the total number of Pinkerton agents that can be spawned
+	const int maxPinkertonPeds = 20;
+
+	// the radius around the player in which Pinkerton agents will orbit around
+	const float orbitRadius = 3.5f;
+
+	// the time it takes for the Pinkerton agents to complete a full orbit around the player
+	const float fullOrbitTime = 3.0f;
+
+	// whether we should start the orbiting process - true normally after all Pinkerton agents have been spawned
+	bool bStartOrbit = false;
+
+	float lastOrbitTick = 0.0f;
+
+	std::set<Ped> pinkertonPeds = {};
+
+	static float DegreesToRadians(float degrees);
+};
+
+class EffectCantTieShoes : public Effect
+{
+public:
+	EffectCantTieShoes()
+	{
+		ID = "cant_tie_shoes";
+		name = "Can't Tie Shoes";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	// the player must be running for at-least 2 seconds before we can ragdoll them
+	const float runTimeUntilRagdoll = 2.0f;
+
+	bool isRunning = false;
+	float lastRunTick = 0.0f;
+};
+
 class EffectInfiniteAmmo : public Effect
 {
 public:
@@ -1183,6 +1244,19 @@ public:
 	}
 
 	virtual void OnTick() override;
+};
+
+class EffectAnonymousBenefactor : public Effect
+{
+public :
+	EffectAnonymousBenefactor()
+	{
+		ID = "anonymous_benefactor";
+		name = "Anonymous Benefactor";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
 };
 
 class EffectHuntingTime : public Effect
@@ -1590,6 +1664,19 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectLetsTakeALook : public Effect
+{
+public:
+	EffectLetsTakeALook()
+	{
+		ID = "lets_take_a_look";
+		name = "Let's Take A Look";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 class EffectDecideOnOutfit : public Effect
 {
 public:
@@ -1604,7 +1691,6 @@ public:
 	virtual void OnTick() override;
 };
 
-
 class EffectMaritime : public Effect
 {
 public:
@@ -1612,6 +1698,19 @@ public:
 	{
 		ID = "maritime";
 		name = "Maritime";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectTeleportToTumbleweed : public Effect
+{
+	public :
+		EffectTeleportToTumbleweed()
+	{
+		ID = "tp_to_tumbleweed";
+		name = "Teleport To Tumbleweed";
 		bTimed = false;
 	}
 
@@ -1646,6 +1745,19 @@ public:
 	virtual void OnActivate() override;
 };
 
+class EffectTeleportToClosestTrainStation : public Effect
+{
+public:
+	EffectTeleportToClosestTrainStation()
+	{
+		ID = "tp_to_train_station";
+		name = "Teleport To Closest Train Station";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
 class EffectHorseDiesAndResurrects : public Effect
 {
 public:
@@ -1653,6 +1765,19 @@ public:
 	{
 		ID = "horse_dies_and_resurrects";
 		name = "Horse Dies And Resurrects";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectTeleportToTallestMountain : public Effect
+{
+public:
+	EffectTeleportToTallestMountain()
+	{
+		ID = "tp_to_tallest_mountain";
+		name = "Country Roads Take Me Home";
 		bTimed = false;
 	}
 
@@ -1808,6 +1933,20 @@ public:
 	virtual void OnActivate() override;
 };
 
+class IEffectSetAllWeaponDirtLevel : public Effect
+{
+public:
+	IEffectSetAllWeaponDirtLevel()
+	{
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+
+protected:
+	float dirtLevel = 0;
+};
+
 class EffectHillBillyTurf : public Effect
 {
 public:
@@ -1819,6 +1958,30 @@ public:
 	}
 
 	virtual void OnActivate() override;
+};
+
+class EffectCleanAllWeapons : public IEffectSetAllWeaponDirtLevel
+{
+public:
+	EffectCleanAllWeapons()
+	{
+		ID = "clean_all_weapons";
+		name = "All Players Weapons Are Clean";
+		bTimed = false;
+		dirtLevel = 0;
+	}
+};
+
+class EffectDirtyAllWeapons : public IEffectSetAllWeaponDirtLevel
+{
+public:
+	EffectDirtyAllWeapons()
+	{
+		ID = "dirty_all_weapons";
+		name = "All Players Weapons Are Dirty";
+		bTimed = false;
+		dirtLevel = 1.0f;
+	}
 };
 
 class EffectPonziScheme : public Effect

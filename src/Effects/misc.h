@@ -158,6 +158,8 @@ public:
 	
 	virtual void OnTick() override;
 
+	virtual void OnDeactivate() override;
+
 private:
 	
 	std::set <Entity> entities;
@@ -805,6 +807,50 @@ private:
 	std::vector<Ped> peds;
 };
 
+class EffectSlowWorldFor5Seconds : public Effect
+{
+public:
+	EffectSlowWorldFor5Seconds()
+	{
+		ID = "slow_world_for_5_seconds";
+		name = "Slow Everything To A Crawl";
+		bTimed = true;
+		EffectDuration = 5;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	std::set<Ped> frozenPeds = {};
+};
+
+class EffectOldWestNoir : public Effect
+{
+public:
+	EffectOldWestNoir()
+	{
+		ID = "old_west_noir";
+		name = "Old West Noir";
+		bTimed = true;
+		EffectDuration = 90;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnTick() override;
+	
+	virtual void OnDeactivate() override;
+
+private:
+	const char* oldNoirFilter = "PhotoMode_FilterModern07";
+
+	const float lerpSpeed = 0.0005f;
+	
+	float oldWestNoirStrength = 0.0f;	
+};
+
 class EffectRandomGravity : public Effect
 {
 public:
@@ -822,13 +868,34 @@ public:
 	virtual void OnTick() override;
 
 private:
-	// For now it's just 6 directions of gravity. 
-	std::vector<Vector3> gravity = {{50.0f,0.0f,0.0f}, {0.0f,50.0f,0.0f}, {0.0f,0.0f,50.0f}, 
+	// For now it's just 6 directions of gravity.
+	std::vector<Vector3> gravity = {{50.0f,0.0f,0.0f}, {0.0f,50.0f,0.0f}, {0.0f,0.0f,50.0f},
 		{-50.0f,0.0f,0.0f}, {0.0f,-50.0f,0.0f}, {0.0f,0.0f,-50.0f}};
 	std::set <Entity> entities;
 	int currentGravity;
 };
 
+class EffectTreeHugger : public Effect
+{
+public :
+	EffectTreeHugger()
+	{
+		ID = "tree_hugger";
+		name = "Tree Hugger";
+		bTimed = true;
+		EffectDuration = 10;
+	}
+
+	virtual void OnActivate() override;
+
+	virtual void OnDeactivate() override;
+
+private:
+	Object spawnedTree;
+
+	char* hugAnimDict = (char*) "script_re@campfire_massacre";
+	char* hugAnimName = (char*) "hug_man";
+};
 
 /** Meta */
 
