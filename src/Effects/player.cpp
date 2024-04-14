@@ -1625,6 +1625,265 @@ void EffectFakeTeleport::TeleportToOldCoord()
 	bTeleportedBack = true;
 }
 
+void EffectPinkertonProtection::OnActivate()
+{
+	Effect::OnActivate();
+	
+	Hash pinkertonModel = GET_HASH("CS_PinkertonGoon");
+
+	LoadModel(pinkertonModel);
+
+	Vector3 playerPosition = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, 0);
+
+	for (int i = 0; i < maxPinkertonPeds; i++)
+	{
+		// spawn the ped under the player, we'll re-position shortly
+		Ped ped = PED::CREATE_PED(pinkertonModel, playerPosition.x, playerPosition.y, playerPosition.z - 10, 0.0f, 1, 0, 0, 0);
+		DECORATOR::DECOR_SET_INT(ped, (char*)"honor_override", 0);
+		PED::SET_PED_HEARING_RANGE(ped, 10000.0f);
+		PED::SET_PED_VISIBLE(ped, true);
+		ENTITY::SET_ENTITY_INVINCIBLE(ped, true);
+		PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(ped, true);
+		PED::SET_PED_CAN_BE_TARGETTED(ped, false);
+		PED::_0xFD6943B6DF77E449(ped, false); // SET_PED_CAN_BE_LASSOED
+		ENTITY::SET_ENTITY_COLLISION(ped, false, false);
+
+		float angle = (i * fullOrbitTime);
+		Vector3 relativeOffset = ENTITY::GET_OFFSET_FROM_ENTITY_GIVEN_WORLD_COORDS(ped,
+			playerPosition.x + (orbitRadius * cos(angle)),
+			playerPosition.y + (orbitRadius * sin(angle)),
+			playerPosition.z
+		);
+
+		ENTITY::ATTACH_ENTITY_TO_ENTITY(ped, PLAYER::PLAYER_PED_ID(), -1, relativeOffset.x, relativeOffset.y, 0, 0.0f, 0.0f, 0.0f, false, false, false, true, 0, false, false, false);
+
+		pinkertonPeds.insert(ped);
+	}
+
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(pinkertonModel);
+	bStartOrbit = true;
+}
+
+void EffectPinkertonProtection::OnDeactivate()
+{
+	Effect::OnDeactivate();
+	
+	for (Ped ped : pinkertonPeds)
+	{
+		PED::DELETE_PED(&ped);
+	}
+
+	pinkertonPeds.clear();
+	lastOrbitTick = 0;
+	bStartOrbit = false;
+}
+
+void EffectPinkertonProtection::OnTick()
+{
+	if (!bStartOrbit)
+	{
+		return;
+	}
+
+	float deltaTimeSeconds = ChaosMod::GetDeltaTimeSeconds();
+	float angleIncrementPerSecond = 360.0f / fullOrbitTime;
+	lastOrbitTick += deltaTimeSeconds;
+
+	// cached player ped for attaching the pinkerton's to the player
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	// the index of the pinkerton ped we're currently updating
+	int index = 0;
+
+	for (auto ped : pinkertonPeds)
+	{
+		// calculate the angle for this ped based on the index, the max number of peds, and the time that has passed
+		float angle = (index * 360.0f / maxPinkertonPeds) + (angleIncrementPerSecond * lastOrbitTick);
+		angle = fmod(angle, 360.0f);
+
+		const float angleRadians = DegreesToRadians(angle);
+
+		if (ENTITY::IS_ENTITY_ATTACHED_TO_ANY_PED(ped))
+		{
+			// go to detach before re-attaching
+			ENTITY::DETACH_ENTITY(ped, true, true);
+		}
+
+		const Vector3 relativeOffset = {orbitRadius * cos(angleRadians), orbitRadius * sin(angleRadians), 0.0f};
+
+		// calculate the heading based on our orbit angle, so we can face outwards
+		float heading = angle - 90.0f;
+
+		ENTITY::ATTACH_ENTITY_TO_ENTITY(ped, playerPed, -1, relativeOffset.x, relativeOffset.y, relativeOffset.z, 0.0f, 0.0f, heading, false, false, false, true, 0, true, false, false);
+
+		index++;
+	}
+}
+
+float EffectPinkertonProtection::DegreesToRadians(const float degrees)
+{
+	return degrees * (M_PI / 180.0f);
+}
+
+void EffectCantTieShoes::OnTick()
+{
+	if (!TimerTick(1000))
+	{
+		// we only need to do this really every 1 second, no point in doing it every tick
+		return;
+	}
+
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+	if (!PED::IS_PED_ON_FOOT(playerPed))
+	{
+		// if the player is not on foot, we don't want to ragdoll them
+		return;
+	}
+	
+	if (PED::IS_PED_ON_MOUNT(playerPed) || ENTITY::IS_ENTITY_IN_WATER(playerPed) || PED::IS_PED_RAGDOLL(playerPed))
+	{
+		// if the player is on a mount, ragdolled or in water, we don't want to ragdoll them
+		return;
+	}
+
+	if (!AI::IS_PED_RUNNING(playerPed) && !AI::IS_PED_SPRINTING(playerPed))
+	{
+		isRunning = false;
+		lastRunTick = 0;
+		
+		// if the player is not running or sprinting, we don't want to ragdoll them
+		return;
+	}
+
+	if (!isRunning)
+	{
+		isRunning = true;
+		lastRunTick = GAMEPLAY::GET_GAME_TIMER();
+	}
+
+	if (GAMEPLAY::GET_GAME_TIMER() <  lastRunTick + runTimeUntilRagdoll)
+	{
+		// we haven't been running long enough yet
+		return;
+	}
+	
+	PED::SET_PED_TO_RAGDOLL(playerPed, 1000, 1000, 0, true, true, false);
+
+	isRunning = false;
+	lastRunTick = 0;
+}
+
+void EffectCantTieShoes::OnDeactivate()
+{
+	Effect::OnDeactivate();
+	
+	isRunning = false;
+	lastRunTick = 0;
+}
+
+void EffectAnonymousBenefactor::OnActivate()
+{
+	Effect::OnActivate();
+	
+	PURSUIT::CLEAR_CURRENT_PURSUIT();
+	// CLEAR_BOUNTY
+	PURSUIT::_0xC76F252371150D9A(PLAYER::PLAYER_ID());
+}
+
+void EffectLetsTakeALook::OnActivate()
+{
+	Effect::OnActivate();
+	
+	const Ped playerPed = PLAYER::PLAYER_PED_ID();
+	const Hash binoculars = GET_HASH("WEAPON_KIT_BINOCULARS");
+	
+	if (!WEAPON::HAS_PED_GOT_WEAPON(playerPed, binoculars, false, false))
+	{
+		WEAPON::_0x5E3BDDBCB83F3D84(playerPed, binoculars, 0, true, false, 0, false, 0.5f, 1.0f, 0, true, 0.0f, false);
+	}
+	
+	WEAPON::SET_CURRENT_PED_WEAPON(playerPed, binoculars, true, 0, false, false);
+}
+
+void EffectTeleportToTumbleweed::OnActivate()
+{
+	TeleportPlayerTo(-5517.375f, -2936.821f, -2.219434f);
+}
+
+void EffectTeleportToClosestTrainStation::OnActivate()
+{
+	Effect::OnActivate();
+	
+	// all train station locations in the game as far as I know - There may be a few that I've missed.
+	static std::vector <Vector3> tranStationLocations = {
+		{-162.851669f, 637.130676f, 114.032166f}, {1526.370972f, 446.802460f, 90.680817f},
+		{1226.998901f, -1303.240967f, 76.905373f}, {2755.241455f, -1418.824585f, 46.207653f},
+		{2941.989502f, 1272.032349f, 44.635502f}, {-1305.211548f, 405.365326f, 95.383690f},
+		{583.828186f, 1684.504639f, 187.670303f}, {-332.960846f, -351.889771f, 88.037399f},
+		{-4345.784668f, -3086.569092f, -10.832883f}, {-1097.591187f, -579.141418f, 82.410767f}
+	};
+	
+	Vector3 playerPosition = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, 0);
+	Vector3 closest = {0.0f, 0.0f, 0.0f};
+
+	float closestDistance = FLT_MAX;
+
+	for (Vector3 location : tranStationLocations)
+	{
+		float distance = GetDistance3D(playerPosition, location);
+
+		if (distance < closestDistance)
+		{
+			closestDistance = distance;
+			closest = location;
+		}
+	}
+
+	if (closest.x == 0.0f && closest.y == 0.0f && closest.z == 0.0f)
+	{
+		// we didn't find a closest location, so we can't teleport the player
+		// this should never happen, but just in case
+		return;
+	}
+
+	TeleportPlayerTo(closest.x, closest.y, closest.z);
+}
+
+void EffectTeleportToTallestMountain::OnActivate()
+{
+	Effect::OnActivate();
+	
+	TeleportPlayerTo(-1638.875854f, 1220.375366f, 351.646667f);
+}
+
+void IEffectSetAllWeaponDirtLevel::OnActivate()
+{
+	Effect::OnActivate();
+	
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	
+	Hash equippedWeapon;
+	WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &equippedWeapon, 0, 0, 0);
+
+	for (Hash weaponHash : WeaponHashes)
+	{
+		if (!WEAPON::_0xF29A186ED428B552(playerPed, weaponHash))
+		{
+			// _0xF29A186ED428B552 = IS_PED_CARRYING_WEAPON
+			// if we aren't carrying it on our person then don't set the dirt level
+			continue;
+		}
+
+		WEAPON::SET_CURRENT_PED_WEAPON(playerPed, weaponHash, true, 0, false, false);
+
+		int weaponObjectIndex = ENTITY::GET_OBJECT_INDEX_FROM_ENTITY_INDEX(WEAPON::GET_CURRENT_PED_WEAPON_ENTITY_INDEX(playerPed, 0));
+		WEAPON::_0x812CE61DEBCAB948(weaponObjectIndex, dirtLevel, false);
+	}
+	
+	WEAPON::SET_CURRENT_PED_WEAPON(playerPed, equippedWeapon, true, 0, false, false);
+}
+
 void EffectInfiniteAmmo::OnTick() {
 	auto const playerPed = PLAYER::PLAYER_PED_ID();
 
