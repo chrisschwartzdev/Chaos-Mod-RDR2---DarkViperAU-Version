@@ -1539,23 +1539,41 @@ void EffectAgitateHorse::OnActivate()
 
 void EffectTpRandomLocation::OnActivate()
 {
-	static std::vector <std::vector<float>> coords = {{-301.0f,  790.0f,   119.0f}, /** Valentine */
-													  {-1303.0f, 395.0f,   96.0f}, /** Wallace station */
-													  {-1790.0f, -372.5f,  160.0f}, /** Strawberry */
-													  {2432.8f,  -1216.0f, 46.0f}, /** Saint Denis */
-													  {1526.5f,  431.0f,   91.0f}, /** Emerald Station */
-													  {1264.4f,  -1311.0f, 77.0f}, /** Rhoads */
-													  {2958.6f,  518.0f,   45.0f}, /** Van Horn */
-													  {2927.0f,  1325.9f,  44.0f} /** Annesburg */
+	// True random won't work because collision mesh won't be loaded
+	// so we cannot find the correct ground z value.
+	// Just add more random locations for now
+	// Pick a random location
+	static std::vector <std::vector<float>> coords = { {-301.0f,  790.0f,   119.0f}, /** Valentine */
+											{-1303.0f, 395.0f,   96.0f}, /** Wallace station */
+											{-1790.0f, -372.5f,  160.0f}, /** Strawberry */
+											{2432.8f,  -1216.0f, 46.0f}, /** Saint Denis */
+											{1526.5f,  431.0f,   91.0f}, /** Emerald Station */
+											{1264.4f,  -1311.0f, 77.0f}, /** Rhoads */
+											{2958.6f,  518.0f,   45.0f}, /** Van Horn */
+											{2927.0f,  1325.9f,  44.0f}, /** Annesburg */
+											// Random location coordinates from https://www.rdr2mods.com/wiki/pages/list-of-rdr2-teleports/
+											{2849.29, -1203.04, 47.69}, //Saint Denis Fence	
+											{1997.57, -4499.80, 41.77}, //Guarma
+											{-3665.94, -2612.44, -14.08}, //Armadillo
+											{-5517.37, -2936.82, -2.21}, //Tumbleweed
+											{-4352.89, -3052.94, -11.10}, //Mercer Station
+											{361.91, 1461.29, 179.19}, //Fort Wallace
+											{-1504.35, 1246.98, 313.68}, //Mount Hagen
+											{1977.03, 1782.97, 191.95}, //Ambarino Sign
+											{2811.51, 1350.15, 71.40}, //Annesburg Mines
+											{2520.08, -1250.08, 50.04}, //Park Gazebo (Dominos)
+											{2792.43, -1176.04, 47.94}, //Doyle's Tavern
+											{-2370.17, -1595.12, 154.09}, //Tanner's Reach
+											{571.46, 1709.60, 187.55} //Grizzlies Train Station
 	};
-	
+
 	auto randomCoord = coords[rand() % coords.size()];
-	
+
 	if (randomCoord.size() != 3)
 	{
 		return;
 	}
-	
+
 	TeleportPlayerTo(randomCoord[0], randomCoord[1], randomCoord[2]);
 }
 

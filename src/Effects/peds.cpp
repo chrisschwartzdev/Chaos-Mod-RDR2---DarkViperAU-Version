@@ -2484,8 +2484,8 @@ void EffectSpawnGrieferCougar::OnActivate()
 
 	Ped ped = SpawnPedAroundPlayer(GET_HASH(modelName), false, false);
 
-	ENTITY::SET_ENTITY_MAX_HEALTH(ped, 1000);
-	ENTITY::SET_ENTITY_HEALTH(ped, 1000, 0);
+	ENTITY::SET_ENTITY_MAX_HEALTH(ped, 4000);
+	ENTITY::SET_ENTITY_HEALTH(ped, 4000, 0);
 
 	MarkPedAsEnemy(ped);
 }
