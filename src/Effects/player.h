@@ -2540,3 +2540,262 @@ public:
 
 	virtual void OnActivate() override;
 };
+
+class FlyingHorses : public Effect
+{
+public:
+	FlyingHorses()
+	{
+		ID = "flying_horses";
+		name = "Flying Horses";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class SlightlyOffAim : public Effect
+{
+public:
+	SlightlyOffAim()
+	{
+		ID = "slightly_off_aim";
+		name = "Slightly Off Aim";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class HeadshotOnly : public Effect
+{
+public:
+	HeadshotOnly()
+	{
+		ID = "headshot_only";
+		name = "Headshot Only";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class FakeDeathScreen : public Effect
+{
+public:
+	FakeDeathScreen()
+	{
+		ID = "fake_death_screen";
+		name = "Fake Death Screen";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class SpawnAllLegendaryAnimalsNearby : public Effect
+{
+public:
+	SpawnAllLegendaryAnimalsNearby()
+	{
+		ID = "spawn_all_legendary_animals_nearby";
+		name = "Spawn All Legendary Animals Nearby";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class JustMyPlayerIsInvincible : public Effect
+{
+public:
+	JustMyPlayerIsInvincible()
+	{
+		ID = "just_my_player_is_invincible";
+		name = "Just My Player Is Invincible";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+	virtual void OnDeactivate() override;
+};
+
+class EveryKillCausesRandomWeather : public Effect
+{
+public:
+	EveryKillCausesRandomWeather()
+	{
+		ID = "every_kill_causes_random_weather";
+		name = "Every Kill Causes Random Weather";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class Pacifist : public Effect
+{
+public:
+	Pacifist()
+	{
+		ID = "pacifist";
+		name = "Pacifist";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class VehiclesDisappearOnImpact : public Effect
+{
+public:
+	VehiclesDisappearOnImpact()
+	{
+		ID = "vehicles_disappear_on_impact";
+		name = "Vehicles Disappear On Impact";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class NeedForSpeed : public Effect
+{
+public:
+	NeedForSpeed()
+	{
+		ID = "need_for_speed";
+		name = "Need For Speed";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class WhatsTheBoostButton : public Effect
+{
+public:
+	WhatsTheBoostButton()
+	{
+		ID = "whats_the_boost_button";
+		name = "What's The Boost Button";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class RandomizePlayerClothes : public Effect
+{
+public:
+	RandomizePlayerClothes()
+	{
+		ID = "randomize_player_clothes";
+		name = "Randomize Player Clothes";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class RemoveJustArthursWeapons : public Effect
+{
+public:
+	RemoveJustArthursWeapons()
+	{
+		ID = "remove_just_arthurs_weapons";
+		name = "Remove Just Arthurs Weapons";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class SpawnCompanionAlligator : public Effect
+{
+public:
+	SpawnCompanionAlligator()
+	{
+		ID = "spawn_companion_alligator";
+		name = "Spawn Companion Alligator";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class GravitySphere : public Effect
+{
+public:
+	GravitySphere()
+	{
+		ID = "gravity_sphere";
+		name = "Gravity Sphere";
+		bTimed = true;
+		EffectDuration = 25;
+	}
+
+	virtual void OnTick() override;
+};
+
+class EveryoneIsBloody : public Effect
+{
+public:
+	EveryoneIsBloody()
+	{
+		ID = "everyone_is_bloody";
+		name = "Everyone Is Bloody";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class BeatTheTrain : public Effect
+{
+public:
+	BeatTheTrain()
+	{
+		ID = "beat_the_train";
+		name = "Beat The Train";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class MidasTouch : public Effect
+{
+public:
+	MidasTouch()
+	{
+		ID = "midas_touch";
+		name = "Midas Touch";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class CalmBoosting : public Effect
+{
+public:
+	CalmBoosting()
+	{
+		ID = "calm_boosting";
+		name = "Calm Boosting";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};

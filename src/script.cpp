@@ -991,7 +991,11 @@ void ChaosMod::InitEffects()
 				  new EffectSlowWorldFor5Seconds(), new EffectSetAllPlayerHorseStatsToMax(), new EffectSetAllPlayerHorseStatsToMin(),
 				  new EffectSetAllPlayerHorseStatsToHalf(), new EffectHorseMagnet(), new EffectFightingGhosts(),
 				  new EffectGunslingerDuel(), new EffectOldWestNoir(), new EffectHorseLosesAllStamina(),
-				  new EffectTreeHugger(),  new EffectChaosRain(),
+				  new EffectTreeHugger(),  new EffectChaosRain(), new FlyingHorses(),new SlightlyOffAim(), new HeadshotOnly(),
+				  new FakeDeathScreen(), new SpawnAllLegendaryAnimalsNearby(), new JustMyPlayerIsInvincible(), new EveryKillCausesRandomWeather(),
+				  new Pacifist(), new VehiclesDisappearOnImpact(), new NeedForSpeed(), new WhatsTheBoostButton(), new RandomizePlayerClothes(),
+				  new RemoveJustArthursWeapons(), new SpawnCompanionAlligator(), new GravitySphere(), new EveryoneIsBloody(), new CalmBoosting(),
+				  new MidasTouch()
 	
 	};
 

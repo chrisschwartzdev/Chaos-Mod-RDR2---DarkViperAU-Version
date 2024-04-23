@@ -3852,8 +3852,8 @@ void EffectFullBeardAndHair::OnActivate() {
 	auto const playerPed = PLAYER::PLAYER_PED_ID();
 
 	static std::array<std::pair<std::uint32_t, std::uint32_t>, 2> facialHair = {
-		std::make_pair(0x23E6F04A, 0x864B03AE), 
-		std::make_pair(0xEAD62A92, 0xECC8B25A) 
+		std::make_pair(0x23E6F04A, 0x864B03AE),
+		std::make_pair(0xEAD62A92, 0xECC8B25A)
 	};
 
 	for (auto const [model, component] : facialHair) {
@@ -3863,4 +3863,419 @@ void EffectFullBeardAndHair::OnActivate() {
 	}
 
 	PED::_UPDATE_PED_VARIATION(playerPed, 0, 1, 1, 1, false);
+}
+
+
+void FlyingHorses::OnActivate() {
+	static std::array<std::uint32_t, 105> horseModels = {
+		0xEA523E18, 0x69A37A7B, 0x8AF8EE20, 0xE52CB9B2, 0x6ADB82FE,
+		0x9BE270D3, 0xB57D0193, 0xED07737A, 0x0348B323, 0xE4AD6760,
+		0xE57FC660, 0x2A100154, 0x2C80A080, 0xC2B8CE6B, 0x7EF6A7DC,
+		0xC2A67972, 0x2405C422, 0xBC030D85, 0xA353367A, 0x88D6A59E,
+		0x05052866, 0x5933FD24, 0xA52D4FC0, 0xE7F3880C, 0x5DFCD1F9,
+		0xC8DA3400, 0xA3C3F4C6, 0x8739A629, 0xDA23037A, 0xDD04A33F,
+		0x37DD4055, 0x20C6D093, 0x28F9976A, 0x33598622, 0x5EF3CBDA,
+		0xAF2695EE, 0x970E1781, 0xDF55F5E6, 0x6B54E5D1, 0xAD14C46D,
+		0xD977CC20, 0xB998E803, 0x9E19AA66, 0xA762AEDD, 0x43F0DC62,
+		0xC132BAD0, 0xC7DE4819, 0xBF5D6994, 0xDDAE9AEA, 0x9997DF40,
+		0x3A5BC787, 0x68F5058D, 0x1165B6EB, 0xCF246898, 0x65A30467,
+		0x8EF089E3, 0xFB55A30A, 0x8504B2AA, 0xF1430568, 0xA5A0532E,
+		0xB49928F8, 0x78B24176, 0x651B47C7, 0xB0004639, 0xE6EE2A0B,
+		0xBB31267C, 0x790B9F4B, 0x4955CBE3, 0xC21AB789, 0xC0A1CE3D,
+		0x05C70C99, 0x30331B80, 0x36AE742C, 0xC97A99C6, 0xDC4D3F6B,
+		0x1C8CC068, 0xB9A41AA7, 0x029CBA4A, 0x7E4DF66E, 0x7FE4BEC5,
+		0x0660E640, 0xB4CA3CB2, 0x3F8A66B8, 0x0225752B, 0x2FD9844A,
+		0x9B099788, 0xA0A6C640, 0x3FE5B95B, 0x400B3937, 0xFAE16B63,
+		0x9C978CB3, 0x3E85EE41, 0x1A9FA880, 0xD4A3E715, 0x7E67718B,
+		0x8D4BE5DE, 0xE0A34BD3, 0x6EF6C345, 0x35A71C98, 0x4394FBA4,
+		0x6572D46D, 0xA06225BC, 0xF31B7859, 0xB6A7CE35, 0x23685521
+	};
+
+	auto const nearby = GetNearbyPeds(45);
+
+	for (auto const& ped : nearby) {
+		auto const pedModel = ENTITY::GET_ENTITY_MODEL(ped);
+
+		if (std::ranges::any_of(horseModels, [pedModel](const std::uint32_t hash) { return hash == pedModel; })) {
+			for (int _ : std::ranges::iota_view{ 0, 10 }) {
+				ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(ped, 1, 0.f, 40, 40.f, 0, 1, 1, 1);
+			}
+		}
+	}
+}
+
+void SlightlyOffAim::OnTick() {
+	static std::array<std::int32_t, 9> boneIds = {
+		0x5226, 52596, 33219, 53684, 10208, 36029, 6286, 65245, 35502
+	};
+
+	auto const playerId = PLAYER::PLAYER_ID();
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	std::int32_t entity{};
+	PLAYER::GET_ENTITY_PLAYER_IS_FREE_AIMING_AT(playerId, &entity);
+
+	std::int32_t lastDamagedBone{};
+	PED::GET_PED_LAST_DAMAGE_BONE(entity, &lastDamagedBone);
+
+	if (lastDamagedBone == 0) {
+		return;
+	}
+
+	auto const boneCoords = PED::GET_PED_BONE_COORDS(entity, lastDamagedBone, 0, 0, 0);
+	auto const coords = ENTITY::GET_OFFSET_FROM_ENTITY_GIVEN_WORLD_COORDS(playerPed, boneCoords.x, boneCoords.y, boneCoords.z);
+	auto const heading = GAMEPLAY::GET_HEADING_FROM_VECTOR_2D(coords.x, coords.y);
+
+	CAM::SET_GAMEPLAY_CAM_RELATIVE_HEADING(heading, 1.f);
+}
+
+void HeadshotOnly::OnTick() {
+	auto const peds = GetNearbyPeds(50);
+
+	for (auto const& ped : peds) {
+		auto const isHuman = PED::IS_PED_HUMAN(ped);
+
+		if (!isHuman) {
+			continue;
+		}
+
+		auto const isPedDying = PED::IS_PED_DEAD_OR_DYING(ped, 0);
+		if (isPedDying) {
+			continue;
+		}
+
+		ENTITY::SET_ENTITY_PROOFS(ped, 0, 1);
+
+		auto const maxHealth = ENTITY::GET_ENTITY_MAX_HEALTH(ped, 0);
+		ENTITY::SET_ENTITY_HEALTH(ped, maxHealth, 0);
+		PED::ADD_ARMOUR_TO_PED(ped, 100);
+
+		PED::SET_PED_CAN_RAGDOLL(ped, false);
+	}
+}
+
+void FakeDeathScreen::OnActivate() {
+
+	for (int _ : std::ranges::iota_view{ 0, 250 }) {
+		GRAPHICS::DRAW_RECT(0, 0, 10000, 10000, 0, 0, 0, 255, false, false);
+		DrawCenterText(const_cast<char*>("~COLOR_PLAYER_STATUS_NEGATIVE~LOL"), 960, 269);
+		WAIT(1);
+	}
+
+}
+
+void SpawnAllLegendaryAnimalsNearby::OnActivate() {
+	static std::array<std::uint32_t, 15> legendaryModels = { 0xDF251C39, 0x9770DD23, 0x2830CF33, 0xAA89BB8D, 0xB20D360D, 0xB91BAB89, 0xBB746741,0xC971C4C6, 0xE1884260, 0xAD02460F, 0xAA89BB8D, 0xE8CBC01C, 0xDECA9205, 0xD1641E60, 0xF8FC8F63 };
+
+	for (auto const& model : legendaryModels) {
+		std::random_device rd_0;
+		std::mt19937 gen_0(rd_0());
+		std::uniform_int_distribution<std::size_t> dist_0(-50, 50);
+
+		std::random_device rd_1;
+		std::mt19937 gen_1(rd_1());
+		std::uniform_int_distribution<std::size_t> dist_1(-50, 50);
+
+		auto const playerPed = PLAYER::PLAYER_PED_ID();
+		auto const location = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(playerPed, dist_0(gen_0), dist_1(gen_1), 0);
+
+		auto const animal = SpawnPedAroundPlayer(model, false, false);
+
+		ENTITY::SET_ENTITY_COORDS(animal, location.x, location.y, location.z, 0, 0, 0, 0);
+	}
+}
+
+void JustMyPlayerIsInvincible::OnActivate() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	ENTITY::SET_ENTITY_INVINCIBLE(playerPed, true);
+}
+
+void JustMyPlayerIsInvincible::OnDeactivate() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	ENTITY::SET_ENTITY_INVINCIBLE(playerPed, false);
+}
+
+void EveryKillCausesRandomWeather::OnTick() {
+	auto const playerId = PLAYER::PLAYER_ID();
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const isShooting = PED::IS_PED_SHOOTING(playerPed);
+
+	if (!isShooting) {
+		return;
+	}
+
+	Entity entity{};
+
+	PLAYER::GET_ENTITY_PLAYER_IS_FREE_AIMING_AT(playerId, &entity);
+
+	if (!entity) {
+		return;
+	}
+
+	auto const isPedDying = PED::IS_PED_DEAD_OR_DYING(entity, 1);
+	auto const isPedDying2 = PED::IS_PED_BEING_STEALTH_KILLED(entity);
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<std::size_t> dist(0, weatherHashes.size() - 1);
+
+	if (isPedDying || isPedDying2) {
+		auto const weatherHash = Effect::weatherHashes[dist(gen)];
+
+		GAMEPLAY::CLEAR_OVERRIDE_WEATHER();
+		GAMEPLAY::SET_WEATHER_TYPE(weatherHash, 0, 1, 0, 0.0, 0);
+		GAMEPLAY::CLEAR_WEATHER_TYPE_PERSIST();
+	}
+}
+
+void Pacifist::OnTick() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const isShooting = PED::IS_PED_SHOOTING(playerPed);
+
+	if (!isShooting) {
+		return;
+	}
+
+	Entity entity{};
+
+	PLAYER::GET_ENTITY_PLAYER_IS_FREE_AIMING_AT(PLAYER::PLAYER_ID(), &entity);
+
+	if (!entity) {
+		return;
+	}
+
+	auto const isPedDying = PED::IS_PED_DEAD_OR_DYING(entity, 1);
+
+	if (isPedDying) {
+		PED::APPLY_DAMAGE_TO_PED(playerPed, 1337, 0, 0, 0);
+	}
+}
+
+void VehiclesDisappearOnImpact::OnTick() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const isShooting = PED::IS_PED_SHOOTING(playerPed);
+
+	if (!isShooting) {
+		return;
+	}
+
+	Entity entity{};
+
+	PLAYER::GET_ENTITY_PLAYER_IS_FREE_AIMING_AT(playerPed, &entity);
+
+	auto const isVehicle = ENTITY::IS_ENTITY_A_VEHICLE(entity);
+
+	if (isVehicle) {
+		ENTITY::SET_ENTITY_AS_MISSION_ENTITY(entity, 0, 0);
+		ENTITY::DELETE_ENTITY(&entity);
+	}
+}
+
+void NeedForSpeed::OnTick() {
+	static constexpr auto MINIMUM_SPEED = 6.f;
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const isPlayerOnMount = PED::IS_PED_ON_MOUNT(playerPed);
+
+	if (!isPlayerOnMount) {
+		return;
+	}
+
+	auto const currentSpeed = ENTITY::GET_ENTITY_SPEED(playerPed);
+
+	auto const isPlayerAboveMinimumSpeed = currentSpeed > MINIMUM_SPEED;
+
+	if (isPlayerAboveMinimumSpeed) {
+		return;
+	}
+
+	auto const playerCoords = ENTITY::GET_ENTITY_COORDS(playerPed, true, false);
+
+	FIRE::ADD_EXPLOSION(playerCoords.x, playerCoords.y, playerCoords.z, 0, 1000.f, true, false, 1.f);
+}
+
+void WhatsTheBoostButton::OnTick() {
+	static constexpr const auto H = VK_F4;
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const playerVehicle = PED::IS_PED_ON_MOUNT(playerPed);
+
+	if (!playerVehicle) {
+		return;
+	}
+
+	auto const isEPreesed = GetAsyncKeyState(H);
+
+	if (isEPreesed) {
+		ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(playerVehicle, 1, 0, 10, 0, false, true, false, false);
+	}
+}
+
+void RandomizePlayerClothes::OnActivate() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	PED::SET_PED_RANDOM_COMPONENT_VARIATION(playerPed, 0);
+}
+
+void RemoveJustArthursWeapons::OnActivate() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	WEAPON::REMOVE_ALL_PED_WEAPONS(playerPed, false, true);
+}
+
+void SpawnCompanionAlligator::OnActivate() {
+	auto const static constexpr aligatorModel = 0xA0B33A7B;
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const playerCoords = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(playerPed, 0, 5, 0);
+	auto const aligator = SpawnPedAroundPlayer(aligatorModel, 0, 0);
+
+	MarkPedAsCompanion(aligator);
+
+	ENTITY::SET_ENTITY_COORDS(aligator, playerCoords.x, playerCoords.y, playerCoords.z, 0, 0, 0, 0);
+}
+
+void GravitySphere::OnTick() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	static auto const processEntity = [=](std::int32_t entity) -> void {
+		auto const pedCoors = ENTITY::GET_ENTITY_COORDS(playerPed, false, false);
+		auto const entityCoords = ENTITY::GET_ENTITY_COORDS(entity, false, false);
+
+		auto const distance = GAMEPLAY::GET_DISTANCE_BETWEEN_COORDS(
+			pedCoors.x, pedCoors.y, pedCoors.z,
+			entityCoords.x, entityCoords.y, entityCoords.z,
+			true
+		);
+
+		if (distance > 5.f) {
+			return;
+		}
+
+		auto const direction = Vector3(
+			pedCoors.x - entityCoords.x,
+			pedCoors.y - entityCoords.y,
+			pedCoors.z - entityCoords.z
+		);
+
+		auto const force = -5.f;
+
+		ENTITY::APPLY_FORCE_TO_ENTITY(
+			entity, 1,
+			direction.x * force, direction.y * force, direction.z,
+			0.f, 0.f, 0.f, 0,
+			false, true, true,
+			0, 0
+		);
+		};
+
+	auto const peds = GetNearbyPeds(50);
+	auto const props = GetNearbyProps(50);
+	auto const vehs = GetNearbyVehs(50);
+
+	for (auto const& prop : props) {
+		processEntity(prop);
+	}
+
+	for (auto const& veh : vehs) {
+		processEntity(veh);
+	}
+
+	for (auto const& ped : peds) {
+		processEntity(ped);
+	}
+}
+
+void EveryoneIsBloody::OnActivate() {
+	auto const peds = GetNearbyPeds(50);
+
+	for (auto const& ped : peds) {
+		auto const coords = ENTITY::GET_ENTITY_COORDS(ped, 0, 0);
+
+		GRAPHICS::CREATE_BLOOD_POOL_AT_PED(ped);
+		GRAPHICS::_ADD_BLOOD_TRAIL_SPLAT(coords.x, coords.y, coords.z);
+		GRAPHICS::_ADD_BLOOD_POOLS_FOR_PED_WITH_PARAMS(ped, 10.f, 5.f, 5.f);
+	}
+}
+
+void BeatTheTrain::OnActivate() {
+	auto const static trainModel = 0x55bf98f;
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const playerCoordsOffsetted = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(playerPed, 0, 0, 40.f);
+	auto const train = SpawnObject(trainModel);
+
+	for (auto const _ : std::ranges::iota_view{ 0, 20 }) {
+		ENTITY::SET_ENTITY_COORDS(train, playerCoordsOffsetted.x, playerCoordsOffsetted.y, playerCoordsOffsetted.z, 0, 0, 0, 0);
+		WAIT(1000);
+	}
+}
+
+void MidasTouch::OnTick() {
+	static auto constexpr const moneyModel = 0x5F9DA261;
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const isPedOnMont = PED::IS_PED_ON_MOUNT(playerPed);
+
+	if (isPedOnMont) {
+		WAIT(1000);
+	}
+
+	static auto const processEntity = [=](std::int32_t entity) -> void {
+		auto const pedCoors = ENTITY::GET_ENTITY_COORDS(playerPed, false, false);
+		auto const entityCoords = ENTITY::GET_ENTITY_COORDS(entity, false, false);
+		auto const entityModel = ENTITY::GET_ENTITY_MODEL(entity);
+		auto const touching = ENTITY::IS_ENTITY_TOUCHING_ENTITY(playerPed, entity);
+
+		if (!touching) {
+			return;
+		}
+
+		if (entityModel == moneyModel) {
+			return;
+		}
+
+		ENTITY::SET_ENTITY_AS_MISSION_ENTITY(entity, 0, 0);
+		ENTITY::SET_ENTITY_COORDS(entity, 0, 0, 0, 0, 0, 0, 0);
+		ENTITY::DELETE_ENTITY(&entity);
+
+		STREAMING::REQUEST_MODEL(moneyModel, true);
+		auto const money = OBJECT::CREATE_OBJECT(moneyModel, entityCoords.x, entityCoords.y, entityCoords.z, true, false, false, false, false);
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(moneyModel);
+
+		ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(money, 1, 0.f, 0.f, -20.f, 0, 1, 1, 1);
+		};
+
+	auto const peds = GetNearbyPeds(50);
+	auto const props = GetNearbyProps(50);
+	auto const vehs = GetNearbyVehs(50);
+
+	for (auto const& prop : props) {
+		processEntity(prop);
+	}
+
+	for (auto const& veh : vehs) {
+		processEntity(veh);
+	}
+
+	for (auto const& ped : peds) {
+		processEntity(ped);
+	}
+}
+
+void CalmBoosting::OnTick() {
+	auto const static constexpr INPUT_WHISTLE_HORSEBACK = 0xe7eb9185;
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const call = CONTROLS::IS_CONTROL_PRESSED(0, INPUT_WHISTLE_HORSEBACK);
+
+	if (!call) {
+		return;
+	}
+
+	auto const playerMount = PLAYER::GET_MOUNT_OWNED_BY_PLAYER(playerPed);
+	auto const coordsToGetTo = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(playerPed, 0, 10, 1);
+
+	ENTITY::SET_ENTITY_COORDS(playerMount, coordsToGetTo.x, coordsToGetTo.y, coordsToGetTo.z, 0, 0, 0, 0);
+	PLAYER::_0x09C28F828EE674FA(playerPed, 2.f, 2000);
 }
