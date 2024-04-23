@@ -829,6 +829,82 @@ private:
 	int currentGravity;
 };
 
+class EffectReplaceEnemiesWithFish : public Effect
+{
+public:
+	EffectReplaceEnemiesWithFish()
+	{
+		ID = "turn_all_enemies_into_fish";
+		name = "You sir, are a fish.";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectUTurn : public Effect
+{
+public:
+	EffectUTurn()
+	{
+		ID = "uturn";
+		name = "U Turn";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectNoGravity : public Effect
+{
+public:
+	EffectNoGravity()
+	{
+		ID = "no_gravity";
+		name = "No Gravity";
+		bTimed = true;
+		EffectDuration = 20;
+	}
+
+	virtual void OnActivate() override;
+	virtual void OnTick() override;
+	virtual void OnDeactivate() override;
+
+private:
+	std::set <Entity> entities;
+};
+
+class EffectFencedIn : public Effect
+{
+public:
+	EffectFencedIn()
+	{
+		ID = "fenced_in";
+		name = "Fenced In";
+		bTimed = true;
+		EffectDuration = 10;
+	}
+
+	virtual void OnActivate() override;
+	virtual void OnDeactivate() override;
+
+private:
+	std::set<Entity> spawnedFences;
+};
+
+class EffectWKeyStuck : public Effect
+{
+public:
+	EffectWKeyStuck()
+	{
+		ID = "w_key_stuck";
+		name = "Help, my W key is stuck!";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
 
 /** Meta */
 
@@ -883,7 +959,6 @@ public:
 
 private:
 	std::vector<Vehicle> canoes;
-
 };
 
 

@@ -959,7 +959,11 @@ void ChaosMod::InitEffects()
 				  new EffectSpawnRandomVeh(), new EffectHorsesAreDonkeys(), new EffectSpawnTwitchViewer(),
 				  new EffectEveryoneIsLenny(), new EffectShadesOfGray(), new EffectPotatoMode(),
 				  new EffectSpawnExtremeEvilMicah(), new EffectOilWagonsRain(), new EffectTownTooSmall(),
-				  new EffectChaosRain(), new EffectSpawnGrieferCougar, new EffectRandomGravity()};
+				  new EffectChaosRain(), new EffectSpawnGrieferCougar, new EffectRandomGravity(),
+				  new EffectSpawnCompanionDutch(), new EffectSpawnKillerBunnyHorde(), new EffectReplaceEnemiesWithFish(),
+				  new EffectSpawnUncleArmy(), new EffectSpawnCompanionUncle(), new EffectUTurn(), new EffectSpawnCompanionPredator(),
+				  new EffectSpawnNativeAmbush(), new EffectSpawnPinkertons(), new EffectSpawnLargestShip(), new EffectNoGravity(),
+				  new EffectFencedIn, new EffectLennyTakeTheReins(), new EffectWKeyStuck()};
 	
 	EffectsMap.clear();
 	

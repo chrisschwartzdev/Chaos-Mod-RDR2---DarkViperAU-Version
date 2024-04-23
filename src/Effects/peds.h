@@ -805,6 +805,106 @@ public:
 		name = "Spawn Griefer Cougar";
 		bTimed = false;
 	}
+	
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnCompanionDutch : public Effect
+{
+public:
+	EffectSpawnCompanionDutch()
+	{
+		ID = "spawn_companion_dutch";
+		name = "Have Faith In Dutch";
+		bTimed = false;
+	}
+	
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnKillerBunnyHorde : public Effect
+{
+public:
+	EffectSpawnKillerBunnyHorde()
+	{
+		ID = "spawn_killer_bunny_horde";
+		name = "Wabbit Season";
+		bTimed = true;
+		EffectDuration = 60;
+	}
+	
+	virtual void OnActivate() override;
+	virtual void OnTick() override;
+	virtual void OnDeactivate() override;
+	
+private:
+	std::set <Ped> rabbits;
+	Ped player;
+	int lastDamageTick;
+	Hash rabbitSkinModel;
+};
+
+class EffectSpawnUncleArmy : public Effect
+{
+public:
+	EffectSpawnUncleArmy()
+	{
+		ID = "spawn_uncle_army";
+		name = "Spawn Uncle Army";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnCompanionUncle : public Effect
+{
+public:
+	EffectSpawnCompanionUncle()
+	{
+		ID = "spawn_companion_uncle";
+		name = "Spawn Companion Uncle";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnCompanionPredator : public Effect
+{
+public:
+	EffectSpawnCompanionPredator()
+	{
+		ID = "spawn_companion_predator";
+		name = "Spawn Companion Predator";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnNativeAmbush : public Effect
+{
+public:
+	EffectSpawnNativeAmbush()
+	{
+		ID = "spawn_native_ambush";
+		name = "Native Ambush";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectSpawnPinkertons : public Effect
+{
+public:
+	EffectSpawnPinkertons()
+	{
+		ID = "spawn_pinkertons";
+		name = "Damn Pinkertons!";
+		bTimed = false;
+	}
 
 	virtual void OnActivate() override;
 };
