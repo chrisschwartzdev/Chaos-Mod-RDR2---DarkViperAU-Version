@@ -2128,6 +2128,215 @@ void EffectRandomGravity::OnTick()
 
 }
 
+void EffectReplaceEnemiesWithFish::OnActivate()
+{
+	const char *models[] = { "a_c_fishbluegil_01_ms", "a_c_fishbullheadcat_01_ms", "a_c_fishchainpickerel_01_ms",
+												"a_c_fishchannelcatfish_01_lg", "a_c_fishlargemouthbass_01_ms", "a_c_fishlongnosegar_01_lg",
+												"a_c_fishmuskie_01_lg", "a_c_fishnorthernpike_01_lg", "a_c_fishperch_01_ms",
+												"a_c_fishrainbowtrout_01_ms", "a_c_fishredfinpickerel_01_ms", "a_c_fishrockbass_01_ms",
+												"a_c_fishsalmonsockeye_01_ms", "a_c_fishsmallmouthbass_01_ms"};
+
+	const auto playerPed = PLAYER::PLAYER_PED_ID();
+	auto nearbyPeds = GetNearbyPeds(100);
+	
+	for (auto& ped : nearbyPeds)
+	{
+		if (!ENTITY::DOES_ENTITY_EXIST(ped))
+			continue;
+
+		const int rel = PED::GET_RELATIONSHIP_BETWEEN_PEDS(ped, playerPed);
+		
+		/** continue if ped is not an enemy  */
+		if (rel != 5 && rel != 4)
+			continue;
+		
+		auto [x, y, z] = ENTITY::GET_ENTITY_COORDS(ped, true, 0);
+		y += 1.6f;
+		const auto heading = ENTITY::GET_ENTITY_HEADING(ped);
+
+		const auto modelName = models[rand() % ARRAYSIZE(models)];
+		const auto skinModel = GET_HASH(modelName);
+		LoadModel(skinModel);
+
+		if (!STREAMING::HAS_MODEL_LOADED(skinModel))
+			WAIT(0);
+		
+		Ped fish = PED::CREATE_PED(skinModel, x, y, z, heading, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(fish, true);
+		PED::SET_PED_HEARING_RANGE(fish, 10000.0f);
+		ENTITY::SET_ENTITY_AS_MISSION_ENTITY(fish, false, false);
+		if (ENTITY::DOES_ENTITY_EXIST(fish))
+			ChaosMod::pedsSet.insert(fish);
+		
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(skinModel);
+		MarkPedAsEnemy(fish);
+		PED::DELETE_PED(&ped);
+	}
+}
+
+void EffectUTurn::OnActivate()
+{
+	static auto ProcessPed = [](const Ped& ped)
+	{
+		auto FlipEntityHeading = [](Entity entity)
+		{
+			const auto newHeading = fmod(180.0f + ENTITY::GET_ENTITY_HEADING(entity), 360.0f);
+			ENTITY::SET_ENTITY_HEADING(entity, newHeading);
+		};
+		
+		if (PED::IS_PED_ON_MOUNT(ped))
+			invoke<Void>(0xA09CFD29100F06C3, PED::GET_MOUNT(ped), 6, 0, 0);
+		else if (PED::IS_PED_IN_ANY_VEHICLE(ped, true))
+		{
+			const auto vehicle = PED::GET_VEHICLE_PED_IS_IN(ped, false);
+			FlipEntityHeading(vehicle);
+		}
+		else
+			FlipEntityHeading(ped);
+	};
+
+	const auto player = PLAYER::PLAYER_PED_ID();
+	ProcessPed(player);
+
+	auto nearbyPeds = GetNearbyPeds(100);
+	for (const auto& ped : nearbyPeds)
+	{
+		ProcessPed(ped);
+	}
+}
+
+void EffectNoGravity::OnActivate()
+{
+	auto nearbyPeds = GetNearbyPeds(100);
+	entities.clear();
+	
+	nearbyPeds.push_back(PLAYER::PLAYER_PED_ID());
+	
+	for (const auto& ped : nearbyPeds)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+		{
+			FixEntityInCutscene(ped);
+			PED::SET_PED_TO_RAGDOLL(ped, 20000, 20000, 0, true, true, false);
+		}
+	}
+}
+
+void EffectNoGravity::OnTick()
+{
+	Effect::OnTick();
+	
+	if (TimerTick(1000))
+	{
+		entities.clear();
+		auto nearbyPeds = GetNearbyPeds(45);
+		auto nearbyVehs = GetNearbyVehs(45);
+		const auto nearbyProps = GetNearbyProps(45);
+		
+		for (const auto& ped : nearbyPeds)
+			entities.insert(ped);
+		
+		for (const auto& veh : nearbyVehs)
+			entities.insert(veh);
+		
+		for (const auto& prop : nearbyProps)
+		{
+			ENTITY::SET_ENTITY_DYNAMIC(prop, true);
+			ENTITY::SET_ENTITY_HAS_GRAVITY(prop, true);
+			entities.insert(prop);
+		}
+		
+		entities.insert(PLAYER::PLAYER_PED_ID());
+	}
+	
+	for (const auto& entity : entities)
+	{
+		if (!ENTITY::DOES_ENTITY_EXIST(entity))
+			continue;
+		
+		if (ENTITY::IS_ENTITY_A_PED(entity) && !PED::IS_PED_RAGDOLL(entity))
+			PED::SET_PED_TO_RAGDOLL(entity, 3000, 3000, 0, true, true, false);
+		
+		ENTITY::SET_ENTITY_HAS_GRAVITY(entity, false);
+	}
+}
+
+void EffectNoGravity::OnDeactivate()
+{
+	for (const auto& entity : entities)
+	{
+		if (!ENTITY::DOES_ENTITY_EXIST(entity))
+			continue;
+		
+		ENTITY::SET_ENTITY_HAS_GRAVITY(entity, true);
+	}
+	entities.clear();
+}
+
+void EffectFencedIn::OnActivate()
+{
+	// Note: currently can't climb on / over the spawned fences, so it's timed
+
+	const auto fenceModel = GET_HASH("p_bra_fence01x");
+	LoadModel(fenceModel);
+	
+	while (!STREAMING::HAS_MODEL_LOADED(fenceModel))
+		WAIT(0);
+
+	auto SpawnFence = [](Hash fenceModel, float offsetX, float offsetY, float yaw, std::set<Entity> &fencesSet)
+	{
+		auto northFence = SpawnObject(fenceModel);
+		Vector3 pos = ENTITY::GET_ENTITY_COORDS(northFence, false, 0);
+		pos.x += offsetX;
+		pos.y += offsetY;
+		GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(pos.x, pos.y, pos.z, &pos.z, 0);
+		ENTITY::SET_ENTITY_COORDS(northFence, pos.x, pos.y, pos.z, 0, 0, 0, 0);
+		ENTITY::SET_ENTITY_ROTATION(northFence, 0, 0, yaw, 0, 0);
+		fencesSet.insert(northFence);
+	};
+
+	constexpr float dist = 1.4f;
+	SpawnFence(fenceModel, -dist, dist, 0, spawnedFences);
+	SpawnFence(fenceModel, -dist, -dist, 90, spawnedFences);
+	SpawnFence(fenceModel, dist, -dist, 180, spawnedFences);
+	SpawnFence(fenceModel, dist, dist, 270, spawnedFences);
+
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(fenceModel);
+}
+
+void EffectFencedIn::OnDeactivate()
+{
+	for (Entity fence : spawnedFences)
+	{
+		if (ENTITY::DOES_ENTITY_EXIST(fence))
+		{
+			ENTITY::SET_ENTITY_AS_MISSION_ENTITY(fence, false, false);
+			OBJECT::DELETE_OBJECT(&fence);
+		}
+	}
+	spawnedFences.clear();
+}
+
+void EffectWKeyStuck::OnTick()
+{
+	INPUT inputs[2] = {};
+	ZeroMemory(inputs, sizeof(inputs));
+
+	constexpr uint code = 0x57;
+	inputs[0].type = INPUT_KEYBOARD;
+	inputs[0].ki.wScan = MapVirtualKey(code, MAPVK_VK_TO_VSC);
+	inputs[0].ki.time = 0;
+	inputs[0].ki.dwExtraInfo = 0;
+	inputs[0].ki.wVk = code;
+	inputs[0].ki.dwFlags = 0;
+	
+	inputs[1].type = INPUT_KEYBOARD;
+	inputs[1].ki.wVk = VK_GAMEPAD_LEFT_THUMBSTICK_UP;
+	
+	SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+}
+
+
 void MetaEffectCanoeTime::OnActivate()
 {
 	OnDeactivate();
