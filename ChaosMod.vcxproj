@@ -31,11 +31,11 @@
     <ClCompile Include="src\server.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\rdr2_sdk\inc\enums.h" />
-    <ClInclude Include="..\rdr2_sdk\inc\main.h" />
-    <ClInclude Include="..\rdr2_sdk\inc\nativeCaller.h" />
-    <ClInclude Include="..\rdr2_sdk\inc\natives.h" />
-    <ClInclude Include="..\rdr2_sdk\inc\types.h" />
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\enums.h" />
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\main.h" />
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\nativeCaller.h" />
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\natives.h" />
+    <ClInclude Include="thirdparty\rdr2_sdk\inc\types.h" />
     <ClInclude Include="src\Effects\effect.h" />
     <ClInclude Include="src\Effects\misc.h" />
     <ClInclude Include="src\Effects\peds.h" />
