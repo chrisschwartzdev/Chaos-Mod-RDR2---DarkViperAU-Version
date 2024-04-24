@@ -832,3 +832,78 @@ void EffectOilWagonsRain::OnTick()
 		}
 	}
 }
+
+void EffectSpawnLargestShip::OnActivate()
+{
+	static auto model = GET_HASH("ship_guama02");
+	LoadModel(model);
+
+	while (!STREAMING::HAS_MODEL_LOADED(model) && GAMEPLAY::GET_GAME_TIMER())
+		WAIT(0);
+
+	const Vector3 vec = GetRandomCoordAroundPlayer(static_cast<float>(rand() % 25));
+	const Vehicle veh = VEHICLE::CREATE_VEHICLE(model, vec.x, vec.y, vec.z + 25.0f, 0.0f, 0, 0, true, 0);
+	
+	ENTITY::SET_ENTITY_VELOCITY(veh, 0.0f, 0.0f, -9.8f);
+	
+	if (ENTITY::DOES_ENTITY_EXIST(veh))
+		ChaosMod::vehsSet.insert(veh);
+	
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+}
+
+void EffectLennyTakeTheReins::OnActivate()
+{
+	const Ped playerPed = PLAYER::PLAYER_PED_ID();
+	const auto vehModel = GET_HASH("COACH3");
+
+	if (!PED::IS_PED_IN_ANY_VEHICLE(playerPed, false))
+	{
+		const Vector3 playerPos = ENTITY::GET_ENTITY_COORDS(playerPed, true, 0);
+		
+		LoadModel(vehModel);
+
+		const float playerHeading = ENTITY::GET_ENTITY_HEADING(playerPed);
+		const Vehicle veh = VEHICLE::CREATE_VEHICLE(vehModel, playerPos.x, playerPos.y, playerPos.z, playerHeading,
+		                                            false, false, false, false);
+		DECORATOR::DECOR_SET_BOOL(veh, const_cast<char*>("wagon_block_honor"), true);
+		
+		Vehicle vehCopy = veh;
+		ENTITY::SET_ENTITY_AS_NO_LONGER_NEEDED(&vehCopy);
+		
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(vehModel);
+		
+		PED::SET_PED_INTO_VEHICLE(playerPed, veh, -2);
+		
+		if (ENTITY::DOES_ENTITY_EXIST(veh))
+			ChaosMod::vehsSet.insert(veh);
+	}
+
+	static Hash lennyModel = GET_HASH("CS_LENNY");
+	LoadModel(lennyModel);
+
+	Hash relationshipGroup;
+	PED::ADD_RELATIONSHIP_GROUP(const_cast<char*>("_WHEEL_LENNY"), &relationshipGroup);
+	PED::SET_RELATIONSHIP_BETWEEN_GROUPS(0, relationshipGroup, GET_HASH("PLAYER"));
+
+	const Vehicle veh = PED::GET_VEHICLE_PED_IS_IN(playerPed, false);
+	PED::SET_PED_INTO_VEHICLE(playerPed, veh, -2);
+
+	const Ped lennyPed = PED::CREATE_PED_INSIDE_VEHICLE(veh, lennyModel, -1, -1, true, false);
+	VEHICLE::_SET_VEHICLE_EXCLUSIVE_DRIVER_2(veh, lennyPed, 0);
+
+	PED::SET_PED_RELATIONSHIP_GROUP_HASH(lennyPed, relationshipGroup);
+	
+	PED::SET_PED_KEEP_TASK(lennyPed, true);
+	PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(lennyPed, true);
+	
+	if (RADAR::IS_WAYPOINT_ACTIVE())
+	{
+		const auto coords = RADAR::GET_WAYPOINT_COORDS_3D();
+		AI::TASK_VEHICLE_DRIVE_TO_COORD(lennyPed, veh, coords.x, coords.y, coords.z, 9999.f, 0, vehModel, 0, 1, 0);
+	}
+	else
+	{
+		AI::TASK_VEHICLE_DRIVE_WANDER(lennyPed, veh, 9999.f, 4176732);
+	}
+}

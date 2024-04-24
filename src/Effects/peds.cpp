@@ -2489,3 +2489,226 @@ void EffectSpawnGrieferCougar::OnActivate()
 
 	MarkPedAsEnemy(ped);
 }
+
+void EffectSpawnCompanionDutch::OnActivate()
+{
+	Effect::OnActivate();
+	
+	static Hash model = GET_HASH("CS_Dutch");
+
+	const Ped ped = SpawnPedAroundPlayer(model, false, false);
+	
+	MarkPedAsCompanion(ped);
+	
+	RemoveAllPedWeapons(ped);
+	
+	static Hash weaponHash = GAMEPLAY::GET_HASH_KEY((char*) "WEAPON_REVOLVER_SCHOFIELD");
+	WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 9999, true, 0x2cd419dc);
+	WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+}
+
+void EffectSpawnKillerBunnyHorde::OnActivate()
+{
+	Effect::OnActivate();
+	
+	player = PLAYER::PLAYER_PED_ID();
+	rabbitSkinModel = GET_HASH("A_C_Rabbit_01");
+	LoadModel(rabbitSkinModel);
+}
+
+void EffectSpawnKillerBunnyHorde::OnTick()
+{
+	constexpr int maxRabbits = 10;
+	for (int i = 0; i < maxRabbits - rabbits.size(); i++)
+	{
+		const Vector3 spawnPosition = GetRandomCoordInRange(ENTITY::GET_ENTITY_COORDS(player, true, 0), 30);
+		float groundZ = spawnPosition.z;
+		GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(spawnPosition.x, spawnPosition.y, spawnPosition.z, &groundZ, false);
+		
+		Ped rabbit = PED::CREATE_PED(rabbitSkinModel, spawnPosition.x, spawnPosition.y, groundZ, 0.0f, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(rabbit, true);
+		PED::SET_PED_HEARING_RANGE(rabbit, 10000.0f);
+
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 58, true);
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 5, true);
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 38, true);
+		PED::SET_PED_COMBAT_ATTRIBUTES(rabbit, 68, true);
+		
+		if (ENTITY::DOES_ENTITY_EXIST(rabbit))
+			ChaosMod::pedsSet.insert(rabbit);
+		
+		MarkPedAsEnemy(rabbit);
+		rabbits.insert(rabbit);
+	}
+	
+	if (GAMEPLAY::GET_GAME_TIMER() < lastDamageTick + 2000)
+		return;
+	
+	auto it = rabbits.begin();
+	while (it != rabbits.end())
+	{
+		Ped rabbit = *it;
+		const Vector3 vec = ENTITY::GET_ENTITY_COORDS(player, true, 0);
+		const Vector3 vec2 = ENTITY::GET_ENTITY_COORDS(rabbit, true, 0);
+		const float distance = GetDistance3D(vec, vec2);
+		if (distance < 3.0f)
+		{
+			PED::APPLY_DAMAGE_TO_PED(player, 30, true, 0, 0);
+			AUDIO::PLAY_PAIN(player, 1, 0, 0, 0);
+			
+			static auto animDict = const_cast<char*>("mech_melee@unarmed@_male@_ambient@_healthy@_variations");
+			static auto animName = const_cast<char*>("att_hitreact_stepback_v2");
+			AI::TASK_PLAY_ANIM(player, animDict, animName, 8.0f, 8.0f, -1, 32, 1, false, false, false, 0, 0);
+			lastDamageTick = GAMEPLAY::GET_GAME_TIMER();
+			break;
+		}
+		if (PED::IS_PED_DEAD_OR_DYING(rabbit, 0) || distance > 100.0f)
+		{
+			PED::DELETE_PED(&rabbit);
+			it = rabbits.erase(it);
+		}
+		std::advance(it, 1);
+	}
+}
+
+void EffectSpawnKillerBunnyHorde::OnDeactivate()
+{
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(rabbitSkinModel);
+	
+	auto it = rabbits.begin();
+	Ped rabbit = 0;
+	while (it != rabbits.end())
+	{
+		rabbit = *it;
+		PED::DELETE_PED(&rabbit);
+		std::advance(it, 1);
+	}
+}
+
+void EffectSpawnUncleArmy::OnActivate()
+{
+	Effect::OnActivate();
+	
+	static auto model = GET_HASH("CS_Uncle");
+
+	for (int i = 0; i < 10; i++)
+	{
+		const Ped ped = SpawnPedAroundPlayer(model, false, false);
+		
+		MarkPedAsEnemy(ped);
+		WEAPON::REMOVE_ALL_PED_WEAPONS(ped, false, 0);
+
+		// need to remove these specific weapons from uncle because he will always spawn with them
+		auto specificWeapons = {"weapon_revolver_schofield_uncle", "weapon_shotgun_doublebarrel_uncle",
+													"weapon_melee_knife_uncle"};
+
+		for(const auto& weapon : specificWeapons)
+		{
+			const auto weaponHash = GET_HASH(weapon);
+			WEAPON::REMOVE_WEAPON_FROM_PED(ped, weaponHash, false, 0xF77DE93D);
+		}
+		
+		// REMOVE_ALL_PED_AMMO
+		invoke<Void>(0x1B83C0DEEBCBB214, ped);
+		
+		static Hash weaponHash = GET_HASH("WEAPON_UNARMED");
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 9999, true, 0x2cd419dc);
+		WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+
+		ENTITY::SET_ENTITY_MAX_HEALTH(ped, 1);
+		ENTITY::SET_ENTITY_HEALTH(ped, 1, 0);
+	}
+}
+
+void EffectSpawnCompanionUncle::OnActivate()
+{
+	static auto model = GET_HASH("CS_Uncle");
+	const Ped ped = SpawnPedAroundPlayer(model, false, false);
+	MarkPedAsCompanion(ped);
+}
+
+void EffectSpawnCompanionPredator::OnActivate()
+{
+	// KNOWN ISSUE: if the predator gets too far away from the player, the predator will attack when the player gets back in-range.
+	const char *models[] = {"A_C_Alligator_01", "A_C_Bear_01", "A_C_Cougar_01", "A_C_LionMangy_01",
+											  "A_C_Panther_01", "A_C_Wolf" };
+	
+	std::map<const char*, std::set < uint32_t>> disabledOutfits;
+	disabledOutfits.emplace("A_C_Bear_01", std::set<uint32_t>({9, 10}));
+
+	const auto modelName = models[rand() % ARRAYSIZE(models)];
+
+	const Ped ped = SpawnPedAroundPlayer(GET_HASH(modelName), false, false);
+
+	const uint32_t maxOutfits = PED::_0x10C70A515BC03707(ped);
+	
+	uint32_t randOutfit = rand() % maxOutfits;
+	
+	if (disabledOutfits.contains(modelName) && disabledOutfits[modelName].contains(randOutfit))
+		randOutfit = 0;
+	
+	invoke<Void>(0x77FF8D35EEC6BBC4, ped, randOutfit, false);
+	
+	MarkPedAsCompanion(ped);
+}
+
+void EffectSpawnNativeAmbush::OnActivate()
+{
+	const char *models[] = {"A_M_M_WAPWARRIORS_01", "A_F_O_WAPTOWNFOLK_01"};
+	static auto player = PLAYER::PLAYER_PED_ID();
+	
+	for (int i = 0; i <= 10; i++)
+	{
+		const auto modelName = GET_HASH(models[rand() % ARRAYSIZE(models)]);
+		LoadModel(modelName);
+
+		const auto spawnPosition = GetRandomCoordInRange(ENTITY::GET_ENTITY_COORDS(player, true, 0), 30);
+		float groundZ = spawnPosition.z;
+		GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(spawnPosition.x, spawnPosition.y, spawnPosition.z, &groundZ, false);
+		
+		auto ped = PED::CREATE_PED(modelName, spawnPosition.x, spawnPosition.y, groundZ, 0.0f, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(ped, true);
+		PED::SET_PED_HEARING_RANGE(ped, 10000.0f);
+
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+			ChaosMod::pedsSet.insert(ped);
+
+		const auto weaponHash = GET_HASH("WEAPON_BOW");
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 100, true, 0x2cd419dc);
+		WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+		
+		MarkPedAsEnemy(ped);
+	}
+}
+
+void EffectSpawnPinkertons::OnActivate()
+{
+	const auto modelName = GET_HASH("CS_PinkertonGoon");
+	const char *weapons[] = {"weapon_rifle_springfield", "weapon_rifle_boltaction", "weapon_shotgun_pump",
+						"weapon_shotgun_doublebarrel", "weapon_pistol_mauser", "weapon_revolver_lemat",
+						"weapon_repeater_winchester"};
+	static auto player = PLAYER::PLAYER_PED_ID();
+	
+	for (int i = 0; i <= 6; i++)
+	{
+		LoadModel(modelName);
+
+		const auto spawnPosition = GetRandomCoordInRange(ENTITY::GET_ENTITY_COORDS(player, true, 0), 30);
+		float groundZ = spawnPosition.z;
+		GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(spawnPosition.x, spawnPosition.y, spawnPosition.z, &groundZ, false);
+		
+		auto ped = PED::CREATE_PED(modelName, spawnPosition.x, spawnPosition.y, groundZ, 0.0f, 1, 0, 0, 0);
+		PED::SET_PED_VISIBLE(ped, true);
+		PED::SET_PED_HEARING_RANGE(ped, 10000.0f);
+		PED::SET_PED_AS_COP(ped, false);
+
+		if (ENTITY::DOES_ENTITY_EXIST(ped))
+			ChaosMod::pedsSet.insert(ped);
+
+		const auto weaponHash = GET_HASH(weapons[rand() % ARRAYSIZE(weapons)]);
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(ped, weaponHash, 100, true, 0x2cd419dc);
+		WEAPON::SET_CURRENT_PED_WEAPON(ped, weaponHash, true, 0, 0, 0);
+		
+		MarkPedAsEnemy(ped);
+	}
+}

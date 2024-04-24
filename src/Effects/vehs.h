@@ -289,3 +289,29 @@ private:
 	std::vector <Vehicle> vehs;
 	std::set <Vehicle> notExplodedVehs;
 };
+
+class EffectSpawnLargestShip : public Effect
+{
+public:
+	EffectSpawnLargestShip()
+	{
+		ID = "spawn_largest_ship";
+		name = "Spawn Largest Ship";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class EffectLennyTakeTheReins : public Effect
+{
+public:
+	EffectLennyTakeTheReins()
+	{
+		ID = "lenny_take_the_reins";
+		name = "Lenny Take The Reins";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
