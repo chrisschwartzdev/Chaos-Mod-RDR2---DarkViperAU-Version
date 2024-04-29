@@ -2335,10 +2335,11 @@ public:
 	{
 		ID = "lightning_storm";
 		name = "Lightning Storm";
-		bTimed = false;
+		bTimed = true;
+		EffectDuration = 25;
 	}
 
-	virtual void OnActivate() override;
+	virtual void OnTick() override;
 };
 
 class EffectBurningMicahOnHorse : public Effect
@@ -2795,6 +2796,20 @@ public:
 		name = "Calm Boosting";
 		bTimed = true;
 		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+
+class IsThisRevenge : public Effect
+{
+public:
+	IsThisRevenge()
+	{
+		ID = "is_this_revenge";
+		name = "Is This Revenge?";
+		bTimed = true;
+		EffectDuration = 35;
 	}
 
 	virtual void OnTick() override;

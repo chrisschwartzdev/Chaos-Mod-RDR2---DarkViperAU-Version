@@ -3296,24 +3296,22 @@ void EffectFireRain::OnTick() {
 	}
 }
 
-void EffectLightningStorm::OnActivate() {
-	for (int _ : std::ranges::iota_view{ 0, 50 }) { // we do a little trolling xd
-		std::random_device rd_0;
-		std::mt19937 gen_0(rd_0());
-		std::uniform_int_distribution<std::size_t> dist_0(0, 20);
+void EffectLightningStorm::OnTick() {
+	std::random_device rd_0;
+	std::mt19937 gen_0(rd_0());
+	std::uniform_int_distribution<std::size_t> dist_0(0, 20);
 
-		std::random_device rd_1;
-		std::mt19937 gen_1(rd_1());
-		std::uniform_int_distribution<std::size_t> dist_1(0, 20);
+	std::random_device rd_1;
+	std::mt19937 gen_1(rd_1());
+	std::uniform_int_distribution<std::size_t> dist_1(0, 20);
 
-		auto const playerPed = PLAYER::PLAYER_PED_ID();
-		auto const location = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(playerPed, dist_0(gen_0), dist_1(gen_1), 0);
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const location = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(playerPed, dist_0(gen_0), dist_1(gen_1), 0);
 
-		GAMEPLAY::FORCE_LIGHTNING_FLASH();
-		GAMEPLAY::_FORCE_LIGHTNING_FLASH_AT_COORDS(location.x, location.y, location.z, 1.f);
+	GAMEPLAY::FORCE_LIGHTNING_FLASH();
+	GAMEPLAY::_FORCE_LIGHTNING_FLASH_AT_COORDS(location.x, location.y, location.z, 1.f);
 
-		WAIT(1);
-	}
+	WAIT(2000);
 }
 
 void EffectBurningMicahOnHorse::OnActivate() {
@@ -4278,4 +4276,29 @@ void CalmBoosting::OnTick() {
 
 	ENTITY::SET_ENTITY_COORDS(playerMount, coordsToGetTo.x, coordsToGetTo.y, coordsToGetTo.z, 0, 0, 0, 0);
 	PLAYER::_0x09C28F828EE674FA(playerPed, 2.f, 2000);
+}
+
+
+void IsThisRevenge::OnTick() {
+	static int a{};
+	static std::int32_t ped{};
+
+	if (ped == 0) {
+		SpawnPedAroundPlayer(GET_HASH("CS_leviticuscornwall"), false, false);
+	}
+
+	auto const isPedDead = PED::IS_PED_DEAD_OR_DYING(ped, false);
+
+	if (isPedDead) {
+
+		if (a % 2 == 0) {
+			ped = SpawnPedAroundPlayer(GET_HASH("CS_bronte"), false, false);
+		}
+		else {
+			ped = SpawnPedAroundPlayer(GET_HASH("CS_leviticuscornwall"), false, false);
+		}
+		a++;
+	}
+
+	MarkPedAsEnemy(ped);
 }
