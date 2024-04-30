@@ -2828,3 +2828,30 @@ public:
 	virtual void OnActivate() override;
 };
 
+class AllRedCores : public Effect
+{
+public:
+	AllRedCores()
+	{
+		ID = "all_red_cores";
+		name = "ALL Red Cores";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class Marshmellos : public Effect
+{
+public:
+	Marshmellos()
+	{
+		ID = "marshmellos";
+		name = "Marshmellos";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+};
+

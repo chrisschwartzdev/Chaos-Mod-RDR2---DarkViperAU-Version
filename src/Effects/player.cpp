@@ -4316,3 +4316,19 @@ void NewYorker::OnActivate() {
 	PED::_EQUIP_PED_BODY_COMPONENT(playerPed, hairModel);
 	PED::_UPDATE_PED_VARIATION(playerPed, 0, 1, 1, 1, false);
 }
+
+void Marshmellos::OnTick() {
+	auto const playerID = PLAYER::PLAYER_ID();
+
+	PLAYER::SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(playerID, 0.f);
+	PLAYER::SET_PLAYER_WEAPON_DAMAGE_MODIFIER(playerID, 0.f);
+	PLAYER::SET_PLAYER_WEAPON_DEFENSE_MODIFIER(playerID, 0.f);
+}
+
+void AllRedCores::OnActivate() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	for (int i = 0; i < 3; i++) {
+		ATTRIBUTE::_0xC6258F41D86676E0(playerPed, i, 0);
+	}
+}

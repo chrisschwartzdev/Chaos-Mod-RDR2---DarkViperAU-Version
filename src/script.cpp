@@ -99,7 +99,7 @@ void ChaosMod::ToggleModStatus()
 	ChaosMod::globalMutex.lock();
 	
 	bEnabled = !bEnabled;
-
+	
 	if (bEnabled)
 	{
 		bool bPrevTwitchStatus = config.bTwitch;
@@ -407,7 +407,7 @@ void ChaosMod::Update()
 	ChaosMod::PLAYER_PED = PLAYER::PLAYER_PED_ID();
 	
 	ChaosMod::globalMutex.unlock();
-	
+
 	if (!bEnabled)
 	{
 		return;
@@ -996,7 +996,7 @@ void ChaosMod::InitEffects()
 				  new MidasTouch(), new EffectLightningStorm(), new EffectSpawnCompanionDutch(), new EffectSpawnKillerBunnyHorde(), new EffectReplaceEnemiesWithFish(),
 				  new EffectSpawnUncleArmy(), new EffectSpawnCompanionUncle(), new EffectUTurn(), new EffectSpawnCompanionPredator(),
 				  new EffectSpawnNativeAmbush(), new EffectSpawnPinkertons(), new EffectSpawnLargestShip(), new EffectNoGravity(),
-				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(), new NewYorker()
+				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(), new NewYorker(), new Marshmellos(), new AllRedCores()
 	};
 
 	EffectsMap.clear();
