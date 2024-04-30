@@ -2814,3 +2814,17 @@ public:
 
 	virtual void OnTick() override;
 };
+
+class NewYorker : public Effect
+{
+public:
+	NewYorker()
+	{
+		ID = "new_yorker";
+		name = "New Yorker";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+

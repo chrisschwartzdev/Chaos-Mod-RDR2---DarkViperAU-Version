@@ -4278,7 +4278,6 @@ void CalmBoosting::OnTick() {
 	PLAYER::_0x09C28F828EE674FA(playerPed, 2.f, 2000);
 }
 
-
 void IsThisRevenge::OnTick() {
 	static int a{};
 	static std::int32_t ped{};
@@ -4301,4 +4300,19 @@ void IsThisRevenge::OnTick() {
 	}
 
 	MarkPedAsEnemy(ped);
+}
+
+void NewYorker::OnActivate() {
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	PED::_SET_PED_OUTFIT_INDEX(playerPed, 10, false);
+
+	auto const static constexpr hairComponent = 0x864B03AE;
+	auto const static constexpr hairModel = 0x10A31955;
+
+	PED::_SET_PED_COMPONENT_ENABLED(playerPed, hairModel, 1, 0, true);
+	PED::_SET_PED_COMPONENT_VARIATION(playerPed, hairComponent, hairModel, true, false, 0);
+	PED::_EQUIP_PED_BODY_COMPONENT(playerPed, hairModel);
+	PED::_UPDATE_PED_VARIATION(playerPed, 0, 1, 1, 1, false);
 }

@@ -94,14 +94,12 @@ ChaosMod::OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExten
 	}
 }
 
-
 void ChaosMod::ToggleModStatus()
 {
 	ChaosMod::globalMutex.lock();
 	
 	bEnabled = !bEnabled;
-	
-	
+
 	if (bEnabled)
 	{
 		bool bPrevTwitchStatus = config.bTwitch;
@@ -991,14 +989,14 @@ void ChaosMod::InitEffects()
 				  new EffectSlowWorldFor5Seconds(), new EffectSetAllPlayerHorseStatsToMax(), new EffectSetAllPlayerHorseStatsToMin(),
 				  new EffectSetAllPlayerHorseStatsToHalf(), new EffectHorseMagnet(), new EffectFightingGhosts(),
 				  new EffectGunslingerDuel(), new EffectOldWestNoir(), new EffectHorseLosesAllStamina(),
-				  new EffectTreeHugger(),  new EffectChaosRain(), new FlyingHorses(),new SlightlyOffAim(), new HeadshotOnly(),
+				  new EffectTreeHugger(), new EffectChaosRain(), new FlyingHorses(),new SlightlyOffAim(), new HeadshotOnly(),
 				  new FakeDeathScreen(), new SpawnAllLegendaryAnimalsNearby(), new JustMyPlayerIsInvincible(), new EveryKillCausesRandomWeather(),
 				  new Pacifist(), new VehiclesDisappearOnImpact(), new NeedForSpeed(), new WhatsTheBoostButton(), new RandomizePlayerClothes(),
 				  new RemoveJustArthursWeapons(), new SpawnCompanionAlligator(), new GravitySphere(), new EveryoneIsBloody(), new CalmBoosting(),
-				  new MidasTouch(), new EffectLightningStorm(),new EffectSpawnCompanionDutch(), new EffectSpawnKillerBunnyHorde(), new EffectReplaceEnemiesWithFish(),
+				  new MidasTouch(), new EffectLightningStorm(), new EffectSpawnCompanionDutch(), new EffectSpawnKillerBunnyHorde(), new EffectReplaceEnemiesWithFish(),
 				  new EffectSpawnUncleArmy(), new EffectSpawnCompanionUncle(), new EffectUTurn(), new EffectSpawnCompanionPredator(),
 				  new EffectSpawnNativeAmbush(), new EffectSpawnPinkertons(), new EffectSpawnLargestShip(), new EffectNoGravity(),
-				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(),
+				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(), new NewYorker()
 	};
 
 	EffectsMap.clear();
