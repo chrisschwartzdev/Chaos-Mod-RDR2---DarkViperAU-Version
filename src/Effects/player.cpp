@@ -5,6 +5,9 @@
 #include "vehs.h"
 #include <random>
 #include <ranges>
+#include <random>
+#include <numeric>
+#undef min
 
 void EffectLaunchPlayerUp::OnActivate()
 {
@@ -4093,19 +4096,27 @@ void NeedForSpeed::OnTick() {
 }
 
 void WhatsTheBoostButton::OnTick() {
-	static constexpr const auto H = VK_F4;
+
+	static constexpr const auto H = 0x48;
 
 	auto const playerPed = PLAYER::PLAYER_PED_ID();
-	auto const playerVehicle = PED::IS_PED_ON_MOUNT(playerPed);
-
-	if (!playerVehicle) {
+	auto const playerMount = PED::GET_MOUNT(playerPed);
+	auto const isPlayerOnMount = PED::IS_PED_ON_MOUNT(playerPed);
+	if (!isPlayerOnMount) {
 		return;
 	}
 
-	auto const isEPreesed = GetAsyncKeyState(H);
+	auto const isHPressed = GetAsyncKeyState(H);
+	auto const horseVelocity = ENTITY::GET_ENTITY_VELOCITY(playerMount, false);
 
-	if (isEPreesed) {
-		ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(playerVehicle, 1, 0, 10, 0, false, true, false, false);
+	int xStuff = 1;
+	int yStuff = 1;
+
+	xStuff = (horseVelocity.x < 0) ? -1 : xStuff;
+	yStuff = (horseVelocity.y < 0) ? -1 : yStuff;
+
+	if (isHPressed) {
+		ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(playerMount, 1, horseVelocity.x * xStuff, horseVelocity.y * yStuff, -2, 0, 1, 1, 1);
 	}
 }
 
@@ -4331,4 +4342,89 @@ void AllRedCores::OnActivate() {
 	for (int i = 0; i < 3; i++) {
 		ATTRIBUTE::_0xC6258F41D86676E0(playerPed, i, 0);
 	}
+}
+void EveryoneShufflesHorses::OnActivate() {
+	const auto nearbyPeds = GetNearbyPeds(25);
+	const int playerPed = PLAYER::PLAYER_PED_ID();
+
+	std::vector<int> horses;
+	std::vector<int> mountedPeds;
+
+	for (const auto ped : nearbyPeds) {
+		const auto pedModel = ENTITY::GET_ENTITY_MODEL(ped);
+		const bool isPedHorse = PED::_0x772A1969F649E902(pedModel);
+
+		if (isPedHorse) {
+			horses.push_back(ped);
+		}
+
+		if (PED::IS_PED_ON_MOUNT(ped)) {
+			mountedPeds.push_back(ped);
+		}
+	}
+
+	if (PED::IS_PED_ON_MOUNT(playerPed)) {
+		mountedPeds.push_back(playerPed);
+	}
+
+	std::random_device rd;
+	std::mt19937 rng(rd());
+	std::shuffle(horses.begin(), horses.end(), rng);
+
+	for (const auto& ped : mountedPeds) {
+		PED::_REMOVE_PED_FROM_MOUNT(ped, 0, 0);
+	}
+
+	const size_t numHorsesAvailable = std::min(horses.size(), mountedPeds.size());
+
+	std::vector<size_t> indices(numHorsesAvailable);
+	std::iota(indices.begin(), indices.end(), 0);
+
+	for (const auto i : indices) {
+		const auto ped = mountedPeds[i];
+		const auto horse = horses[i];
+
+		const auto horseLocation = ENTITY::GET_ENTITY_COORDS(horse, true, false);
+		ENTITY::SET_ENTITY_COORDS(ped, horseLocation.x, horseLocation.y, horseLocation.z, false, false, false, false);
+
+		WAIT(100);
+
+		AI::TASK_MOUNT_ANIMAL(ped, horse, 1, -1, -1, 1, 0, 0);
+		WAIT(250);
+		AI::TASK_MOUNT_ANIMAL(ped, horse, 1, -1, -1, 1, 0, 0);
+	}
+}
+
+void BrakeBoosting::OnTick() {
+
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+	auto const playerMount = PED::GET_MOUNT(playerPed);
+	auto const isPlayerOnMount = PED::IS_PED_ON_MOUNT(playerPed);
+
+	if (!isPlayerOnMount) {
+		return;
+	}
+
+	auto const isHPressed = GetAsyncKeyState(VK_CONTROL);
+	auto const horseVelocity = ENTITY::GET_ENTITY_VELOCITY(playerMount, false);
+
+	int xStuff = 1.05;
+	int yStuff = 1.05;
+
+	xStuff = (horseVelocity.x < 0) ? -1 : xStuff;
+	yStuff = (horseVelocity.y < 0) ? -1 : yStuff;
+
+	auto const static constexpr INPUT_VEH_BRAKE = 0xe16b9aad;
+	auto const brake = CONTROLS::IS_CONTROL_PRESSED(0, INPUT_VEH_BRAKE);
+
+	CONTROLS::DISABLE_CONTROL_ACTION(0, INPUT_VEH_BRAKE, true);
+
+	if (isHPressed) {
+		ENTITY::APPLY_FORCE_TO_ENTITY_CENTER_OF_MASS(playerMount, 1, horseVelocity.x * xStuff, horseVelocity.y * yStuff, -1, 0, 1, 1, 1);
+	}
+}
+
+void BrakeBoosting::OnDeactivate() {
+	auto const static constexpr INPUT_VEH_BRAKE = 0xe16b9aad;
+	CONTROLS::ENABLE_CONTROL_ACTION(0, INPUT_VEH_BRAKE, true);
 }

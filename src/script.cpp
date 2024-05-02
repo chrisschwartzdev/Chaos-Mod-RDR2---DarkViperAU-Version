@@ -6,6 +6,9 @@
 #include <tlhelp32.h>
 #include <filesystem>
 #include <fstream>
+#include <random>
+#include <numeric>
+#undef min
 
 ChaosMod* ChaosMod::Singleton = nullptr;
 std::mutex ChaosMod::globalMutex = std::mutex();
@@ -76,8 +79,7 @@ void ChaosMod::DrawText(char* text, Vector2 position, Vector2 scale, LinearColor
 	UI::DRAW_TEXT(varString, 0.5f, 0.5f);
 }
 
-void
-ChaosMod::OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore,
+void ChaosMod::OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore,
 							BOOL isUpNow)
 {
 	if (key < 0xFF)
@@ -996,7 +998,8 @@ void ChaosMod::InitEffects()
 				  new MidasTouch(), new EffectLightningStorm(), new EffectSpawnCompanionDutch(), new EffectSpawnKillerBunnyHorde(), new EffectReplaceEnemiesWithFish(),
 				  new EffectSpawnUncleArmy(), new EffectSpawnCompanionUncle(), new EffectUTurn(), new EffectSpawnCompanionPredator(),
 				  new EffectSpawnNativeAmbush(), new EffectSpawnPinkertons(), new EffectSpawnLargestShip(), new EffectNoGravity(),
-				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(), new NewYorker(), new Marshmellos(), new AllRedCores()
+				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(), new NewYorker(), new Marshmellos(), new AllRedCores(),
+				  new EveryoneShufflesHorses(), new BrakeBoosting()
 	};
 
 	EffectsMap.clear();

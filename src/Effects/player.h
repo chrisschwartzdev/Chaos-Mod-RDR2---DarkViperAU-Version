@@ -2855,3 +2855,30 @@ public:
 	virtual void OnTick() override;
 };
 
+class EveryoneShufflesHorses : public Effect
+{
+public:
+	EveryoneShufflesHorses()
+	{
+		ID = "everyone_shuffles_horses";
+		name = "Everyone Shuffles Horses";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class BrakeBoosting : public Effect
+{
+public:
+	BrakeBoosting()
+	{
+		ID = "brake_boosting";
+		name = "Brake Boosting";
+		bTimed = true;
+		EffectDuration = 30;
+	}
+
+	virtual void OnTick() override;
+	virtual void OnDeactivate() override;
+};
