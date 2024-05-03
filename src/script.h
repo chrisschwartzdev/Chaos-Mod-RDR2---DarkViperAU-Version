@@ -15,6 +15,7 @@
 #include <set>
 #include "Misc/menu.h"
 #include "Misc/config.h"
+#include <mmsystem.h>
 
 struct Vector2
 {
@@ -118,6 +119,8 @@ public:
 	/** Enabled and disbles the mod */
 	void ToggleModStatus();
 	
+	void PlayActivationSound();
+
 	void ActivateEffect(Effect* effect);
 	
 	void ActivateSubEffect(int num_subs);
@@ -166,6 +169,9 @@ private:
 	
 	bool bEnabled = false;
 	
+	// cached activation mp3 file - so we can play it without having to grab it from disk every time
+	std::string activationSoundFile;
+
 	std::string ModUITextString;
 	uint32_t ModUITextEndTime = 0;
 	
@@ -178,6 +184,20 @@ private:
 	
 	void ShowNotification(const char* title, const char* subtitle, const char* iconDict, const char* iconName,
 						  int32_t durationMs = 2000, const char* iconColor = "");
+
+	static LPCSTR ConvertStringToLPCSTR(const std::string& str)
+	{
+		const int size = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), nullptr, 0);
+		std::wstring wstr(size, 0);
+		MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), wstr.data(), size);
+
+		const int length = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+		std::string narrow(length, 0);
+		WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, narrow.data(), length, nullptr, nullptr);
+
+		return narrow.c_str();
+	}
+
 
 public:
 	/** Timers and effects */

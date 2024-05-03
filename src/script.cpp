@@ -9,6 +9,11 @@
 #include <random>
 #include <numeric>
 #undef min
+#include <string>
+#include <sstream>
+#include <codecvt>
+#include <windows.h>
+#pragma warning(disable : 4996)
 
 ChaosMod* ChaosMod::Singleton = nullptr;
 std::mutex ChaosMod::globalMutex = std::mutex();
@@ -232,12 +237,69 @@ bool ChaosMod::IsEffectActive(std::string effect_id)
 	return false;
 }
 
+void ChaosMod::PlayActivationSound()
+{
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+
+	// ported from https://github.com/gta-chaos-mod/ChaosModV/blob/master/ChaosMod/Components/Mp3Manager.cpp
+	// all credits to the original author
+	if (activationSoundFile.empty())
+	{
+		// we haven't cached the sound location yet - so we'll do it now
+		WCHAR gameDir[MAX_PATH];
+		GetCurrentDirectoryW(MAX_PATH, gameDir);
+
+		std::wstring chaosDir = gameDir;
+
+		activationSoundFile = std::string(chaosDir.begin(), chaosDir.end()) + "\\ChaosMod\\EffectActivated.mp3";
+	}
+
+	std::ostringstream tmp;
+	std::string tmpStr;
+
+	tmp << "open \"" << activationSoundFile << "\" type mpegvideo";
+	tmpStr = tmp.str();
+
+	// as we have an older version of the compiler, we need to convert the string to LPCSTR
+	// mciSendString is an experimental preview in this version ;/
+	LPCSTR command = ConvertStringToLPCSTR(tmpStr);
+	int error = mciSendString(command, nullptr, 0, nullptr);
+
+	if (error != MCIERR_DEVICE_OPEN)
+	{
+		std::string logStr = "Error opening activation sound file: " + std::to_string(error) + " (" + activationSoundFile + ")";
+		std::cout << logStr.c_str() << std::endl;
+		
+		LogToFile(logStr.c_str());
+		return;
+	}
+	else {
+		std::cout << "5" << std::endl;
+	}
+	std::ostringstream playOss;
+	playOss << "play \"" << activationSoundFile << "\" from 0";
+
+	std::string playCommand = playOss.str();
+	std::cout << playCommand << "/n";
+
+	LPCSTR playCmd = ConvertStringToLPCSTR(playCommand);
+	std::cout << playCmd << "/n";
+
+	error = mciSendString(playCmd, nullptr, 0, nullptr);
+
+	std::cout << error << "/n";
+}
+
+
 void ChaosMod::ActivateEffect(Effect* effect)
 {
 	if (!effect)
 	{
 		return;
 	}
+
+	PlayActivationSound();
 	
 	effect->ActivationTime = GetTickCount();
 
