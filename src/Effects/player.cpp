@@ -2291,10 +2291,10 @@ void EffectOneBulletReload::OnTick() {
 
 
 void EffectExtremeSnow::OnActivate() {
-	static auto constexpr const heavey_snow = 0x2b402288;
+	static auto constexpr const heavey_snow = 0x27EA2814;
 
-	GAMEPLAY::SET_WEATHER_TYPE(heavey_snow, 0, 1, 0, 0.0, 0);
-	GRAPHICS::_SET_SNOW_COVERAGE_TYPE(0);
+	GAMEPLAY::_0xBE83CAE8ED77A94F(heavey_snow);
+	GRAPHICS::_SET_SNOW_COVERAGE_TYPE(2);
 }
 
 void EffectBoop::OnActivate() {
@@ -3959,7 +3959,8 @@ void FakeDeathScreen::OnActivate() {
 
 	for (int _ : std::ranges::iota_view{ 0, 250 }) {
 		GRAPHICS::DRAW_RECT(0, 0, 10000, 10000, 0, 0, 0, 255, false, false);
-		DrawCenterText(const_cast<char*>("~COLOR_PLAYER_STATUS_NEGATIVE~LOL"), 960, 269);
+		auto const message = std::format("~COLOR_PLAYER_STATUS_NEGATIVE~{}", g_randomMessage);
+		DrawCenterText(const_cast<char*>(message.c_str()), 960, 269);
 		WAIT(1);
 	}
 
@@ -4427,4 +4428,82 @@ void BrakeBoosting::OnTick() {
 void BrakeBoosting::OnDeactivate() {
 	auto const static constexpr INPUT_VEH_BRAKE = 0xe16b9aad;
 	CONTROLS::ENABLE_CONTROL_ACTION(0, INPUT_VEH_BRAKE, true);
+}
+
+inline float DegreeToRadian(float deg)
+{
+	const double Radian = (3.14159265359 / 180) * deg;
+	return (float)Radian;
+}
+
+void FusRoDah::OnActivate() {
+	auto const playerPed = PLAYER::PLAYER_PED_ID();
+
+	static auto const processEntity = [=](std::int32_t entity) -> void {
+		auto const pedCoors = ENTITY::GET_ENTITY_COORDS(playerPed, false, false);
+		auto const entityCoords = ENTITY::GET_ENTITY_COORDS(entity, false, false);
+
+		auto const isEntityOnScreen = ENTITY::IS_ENTITY_ON_SCREEN(entity);
+
+		if (!isEntityOnScreen) {
+			return;
+		}
+
+		for (int i = 0; i < 10; i++) {
+
+			const auto myCoords = ENTITY::GET_ENTITY_COORDS(playerPed, false, false);
+			const auto rotation = CAM::GET_GAMEPLAY_CAM_ROT(2);
+			const auto pitch = DegreeToRadian(rotation.x);
+			const auto yaw = DegreeToRadian(rotation.z + 90.f);
+			const auto coords = ENTITY::GET_ENTITY_COORDS(entity, false, false);
+
+			Vector3 velocity{};
+
+			velocity.x = coords.x - (myCoords.x + (-1000 * cos(pitch) * cos(yaw)));
+			velocity.y = coords.y - (myCoords.y + (-1000 * sin(yaw) * cos(pitch)));
+			velocity.z = coords.z - (myCoords.z + (-100 * sin(pitch)));
+
+			ENTITY::SET_ENTITY_VELOCITY(entity, velocity.x + 100, velocity.y + 100, velocity.z);
+		}
+	};
+
+	auto const peds = GetNearbyPeds(50);
+	auto const props = GetNearbyProps(50);
+	auto const vehs = GetNearbyVehs(50);
+
+	for (auto const& prop : props) {
+		processEntity(prop);
+	}
+
+	for (auto const& veh : vehs) {
+		processEntity(veh);
+	}
+
+	for (auto const& ped : peds) {
+		processEntity(ped);
+	}
+}
+
+void JournalTime::OnActivate() {
+	for (int i = 0; i < 10; i++) {
+		INPUT inputs[2] = {};
+		ZeroMemory(inputs, sizeof(inputs));
+
+		constexpr uint code = 0x4A;
+		inputs[0].type = INPUT_KEYBOARD;
+		inputs[0].ki.wScan = MapVirtualKey(code, MAPVK_VK_TO_VSC);
+		inputs[0].ki.time = 0;
+		inputs[0].ki.dwExtraInfo = 0;
+		inputs[0].ki.wVk = code;
+		inputs[0].ki.dwFlags = 0;
+
+		inputs[1].type = INPUT_KEYBOARD;
+		inputs[1].ki.wVk = VK_GAMEPAD_LEFT_THUMBSTICK_UP;
+
+		SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+	}
+}
+
+void JellyBeans::OnActivate() {
+	PlayJellyBeansSound();
 }

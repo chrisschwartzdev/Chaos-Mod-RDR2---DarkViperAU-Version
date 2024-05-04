@@ -2882,3 +2882,44 @@ public:
 	virtual void OnTick() override;
 	virtual void OnDeactivate() override;
 };
+
+class FusRoDah : public Effect
+{
+public:
+	FusRoDah()
+	{
+		ID = "fus_ro_dah";
+		name = "FUS-RO-DAH";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+class JournalTime : public Effect
+{
+public:
+	JournalTime()
+	{
+		ID = "journal_time";
+		name = "Journal Time!";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};
+
+void PlayJellyBeansSound();
+
+class JellyBeans : public Effect
+{
+public:
+	JellyBeans()
+	{
+		ID = "jelly_beans";
+		name = "Jelly Beans";
+		bTimed = false;
+	}
+
+	virtual void OnActivate() override;
+};

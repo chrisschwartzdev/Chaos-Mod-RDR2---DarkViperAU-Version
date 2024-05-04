@@ -87,6 +87,7 @@ void WebSocketServer::OnMessage(websocketpp::connection_hdl hdl, _server::messag
 {
 	std::string logStr = "Got message from websocket client: \n\"";
 	logStr += msg->get_payload() + "\"";
+	g_randomMessage = msg->get_payload();
 	ChaosMod::LogToFile(logStr.c_str());
 	
 	rapidjson::Document document;

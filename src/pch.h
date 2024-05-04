@@ -7,3 +7,5 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/document.h"
+
+inline std::string g_randomMessage{};

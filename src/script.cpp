@@ -106,7 +106,7 @@ void ChaosMod::ToggleModStatus()
 	ChaosMod::globalMutex.lock();
 	
 	bEnabled = !bEnabled;
-	
+
 	if (bEnabled)
 	{
 		bool bPrevTwitchStatus = config.bTwitch;
@@ -270,7 +270,7 @@ void ChaosMod::PlayActivationSound()
 	{
 		std::string logStr = "Error opening activation sound file: " + std::to_string(error) + " (" + activationSoundFile + ")";
 		std::cout << logStr.c_str() << std::endl;
-		
+
 		LogToFile(logStr.c_str());
 		return;
 	}
@@ -291,6 +291,69 @@ void ChaosMod::PlayActivationSound()
 	std::cout << error << "/n";
 }
 
+static LPCSTR ConvertStringToLPCSTR1(const std::string& str)
+{
+	const int size = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), nullptr, 0);
+	std::wstring wstr(size, 0);
+	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), wstr.data(), size);
+
+	const int length = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	std::string narrow(length, 0);
+	WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, narrow.data(), length, nullptr, nullptr);
+
+	return narrow.c_str();
+}
+
+void PlayJellyBeansSound() {
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+
+	static std::string jellyBeansSoundFile;
+
+	// ported from https://github.com/gta-chaos-mod/ChaosModV/blob/master/ChaosMod/Components/Mp3Manager.cpp
+	// all credits to the original author
+	if (jellyBeansSoundFile.empty())
+	{
+		WCHAR gameDir[MAX_PATH];
+		GetCurrentDirectoryW(MAX_PATH, gameDir);
+
+		std::wstring chaosDir = gameDir;
+
+		jellyBeansSoundFile = std::string(chaosDir.begin(), chaosDir.end()) + "\\ChaosMod\\EffectJellyBeans.mp3";
+	}
+
+	std::ostringstream tmp;
+	std::string tmpStr;
+
+	tmp << "open \"" << jellyBeansSoundFile << "\" type mpegvideo";
+	tmpStr = tmp.str();
+
+	LPCSTR command = ConvertStringToLPCSTR1(tmpStr);
+	int error = mciSendString(command, nullptr, 0, nullptr);
+
+	if (error != MCIERR_DEVICE_OPEN)
+	{
+		std::string logStr = "Error opening JellyBeans sound file: " + std::to_string(error) + " (" + jellyBeansSoundFile + ")";
+		std::cout << logStr.c_str() << std::endl;
+
+		return;
+	}
+	else {
+		std::cout << "5" << std::endl;
+	}
+	std::ostringstream playOss;
+	playOss << "play \"" << jellyBeansSoundFile << "\" from 0";
+
+	std::string playCommand = playOss.str();
+	std::cout << playCommand << "/n";
+
+	LPCSTR playCmd = ConvertStringToLPCSTR1(playCommand);
+	std::cout << playCmd << "/n";
+
+	error = mciSendString(playCmd, nullptr, 0, nullptr);
+
+	std::cout << error << "/n";
+}
 
 void ChaosMod::ActivateEffect(Effect* effect)
 {
@@ -1061,7 +1124,7 @@ void ChaosMod::InitEffects()
 				  new EffectSpawnUncleArmy(), new EffectSpawnCompanionUncle(), new EffectUTurn(), new EffectSpawnCompanionPredator(),
 				  new EffectSpawnNativeAmbush(), new EffectSpawnPinkertons(), new EffectSpawnLargestShip(), new EffectNoGravity(),
 				  new EffectFencedIn(), new EffectLennyTakeTheReins(), new EffectWKeyStuck(), new NewYorker(), new Marshmellos(), new AllRedCores(),
-				  new EveryoneShufflesHorses(), new BrakeBoosting()
+				  new EveryoneShufflesHorses(), new BrakeBoosting(), new FusRoDah(), new JournalTime(), new JellyBeans()
 	};
 
 	EffectsMap.clear();
@@ -1406,12 +1469,35 @@ std::vector<Effect*> ChaosMod::GenerateEffectsWithChances(uint32_t maxEffects)
 	for (uint32_t i = 0; i < maxEffects; i++)
 	{
 		uint32_t randomIndex = rand() % effectsIndices.size();
+		if (randomIndex >= effectsIndices.size()) {
+			std::cout << "Error: Random index is out of bounds." << std::endl;
+			continue;
+		}
+
 		uint16_t effectIndex = effectsIndices[randomIndex];
-		
+
+		if (effectIndex >= config.effects.size()) {
+			std::cout << "Error: Effect index is out of bounds." << std::endl;
+			continue;
+		}
+
 		ConfigEffect configEffect = config.effects[effectIndex];
-		
+
+		auto effectIt = EffectsMap.find(configEffect.id);
+		if (effectIt == EffectsMap.end()) {
+			std::cout << "Error: Config effect id is not found in EffectsMap." << std::endl;
+			continue;
+		}
+
 		auto* effect = EffectsMap[configEffect.id];
-		
+
+
+		if (effect) {
+			AllocConsole();
+			freopen("CONOUT$", "w", stdout);
+			std::cout << "effect: " << effect->name << std::endl;
+		}
+
 		if (effect)
 		{
 			effects.push_back(effect);
