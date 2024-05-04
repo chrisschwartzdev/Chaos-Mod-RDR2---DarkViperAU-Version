@@ -1149,7 +1149,7 @@ public:
 		ID = "cant_tie_shoes";
 		name = "Can't Tie Shoes";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -1172,7 +1172,7 @@ public:
 		ID = "infinite_ammo";
 		name = "Infinite Ammo";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -1199,7 +1199,7 @@ public:
 		ID = "arthur_hataway";
 		name = "Arthur Hataway";
 		bTimed = true;
-		EffectDuration = 35;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1226,7 +1226,7 @@ public:
 		ID = "super_run_and_jump";
 		name = "Super Run & Jump";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1280,7 +1280,7 @@ public:
 		ID = "redneck_rage";
 		name = "Redneck Rage";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1307,7 +1307,7 @@ public:
 		ID = "rainbow_everything";
 		name = "Rainbow Everything";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1334,7 +1334,7 @@ public:
 		ID = "forcefield";
 		name = "Forcefield";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 
@@ -1470,7 +1470,7 @@ public:
 		ID = "one_bullet_reload";
 		name = "One Bullet Reload";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -1511,7 +1511,7 @@ public:
 		ID = "lumbago";
 		name = "Lumbago";
 		bTimed = true;
-		EffectDuration = 35;
+		EffectDuration = 90;
 	}
 
 	virtual void OnActivate() override;
@@ -1539,7 +1539,7 @@ public:
 		ID = "minimal_damage";
 		name = "Minimal Damage";
 		bTimed = true;
-		EffectDuration = 20;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1555,7 +1555,7 @@ public:
 		ID = "never_wanted";
 		name = "Never Wanted";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1569,7 +1569,7 @@ public:
 		ID = "hot_horses";
 		name = "Hot Horses";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -1584,7 +1584,7 @@ public:
 		ID = "trigger_finger";
 		name = "Trigger Finger";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1599,7 +1599,7 @@ public:
 		ID = "knife_only";
 		name = "Knife Only";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -1615,7 +1615,7 @@ public:
 		ID = "explosive_melee";
 		name = "Explosive Melee";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -1630,7 +1630,7 @@ public:
 		ID = "weather_change_on_kill";
 		name = "Weather Change On Kill";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -1644,7 +1644,7 @@ public:
 		ID = "turn_into_giant";
 		name = "Turn Into Giant";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnActivate() override;
@@ -1685,7 +1685,7 @@ public:
 		ID = "cant_decide_on_outfit";
 		name = "Cant Decide On Outfit";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -1725,7 +1725,7 @@ public:
 		ID = "snake_rain";
 		name = "Snake Rain";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -1792,7 +1792,7 @@ public:
 		ID = "doggo_gun";
 		name = "Doggo Gun";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 60;
 
 	}
 
@@ -1821,7 +1821,7 @@ public:
 		ID = "shoot_horses";
 		name = "Horse Gun";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 
 	}
 
@@ -1836,7 +1836,7 @@ public:
 		ID = "revenge_is_a_fools_game";
 		name = "Revenge Is A Fools Game";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 
 	}
 
@@ -1879,7 +1879,7 @@ public:
 		ID = "williams_redemption";
 		name = "Williams Redemption";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 
 	}
 
@@ -1894,7 +1894,7 @@ public:
 		ID = "trot";
 		name = "Trot";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 
 	}
 
@@ -1992,7 +1992,7 @@ public:
 		ID = "ponzi_scheme";
 		name = "Ponzi Scheme";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 
 	}
 
@@ -2020,7 +2020,7 @@ public:
 		ID = "explosive_ammo";
 		name = "Explosive Ammo";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2034,7 +2034,7 @@ public:
 		ID = "fake_money";
 		name = "Fake Money ";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -2079,7 +2079,7 @@ public:
 		ID = "fastest_in_the_west";
 		name = "Fastest In The West";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2093,7 +2093,7 @@ public:
 		ID = "ten_times_movement_speed";
 		name = "10x Movement Speed";
 		bTimed = true;
-		EffectDuration = 35;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2159,7 +2159,7 @@ public:
 		ID = "walk_on_water";
 		name = "Walk On Water";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -2252,7 +2252,7 @@ public:
 		ID = "rocky_rain";
 		name = "Rocky Rain";
 		bTimed = true;
-		EffectDuration = 20;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2266,7 +2266,7 @@ public:
 		ID = "cant_dismount_horse";
 		name = "Cant Dismount Horse";
 		bTimed = true;
-		EffectDuration = 40;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2281,7 +2281,7 @@ public:
 		ID = "animals_run_away_from_player";
 		name = "Animal Runs Away From Player";
 		bTimed = true;
-		EffectDuration = 20;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2308,7 +2308,7 @@ public:
 		ID = "raining_fish";
 		name = "Raining Fish";
 		bTimed = true;
-		EffectDuration = 20;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2322,7 +2322,7 @@ public:
 		ID = "fire_rain";
 		name = "Fire Rain";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2336,7 +2336,7 @@ public:
 		ID = "lightning_storm";
 		name = "Lightning Storm";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2376,7 +2376,7 @@ public:
 		ID = "aimbot";
 		name = "Aimbot";
 		bTimed = true;
-		EffectDuration = 35;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2390,7 +2390,7 @@ public:
 		ID = "disable_deadeye";
 		name = "Disable Deadeye";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -2404,7 +2404,7 @@ public:
 		ID = "shoot_random_prop";
 		name = "Shoot Random Prop";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2484,7 +2484,7 @@ public:
 		ID = "smoke_gun";
 		name = "Smoke Guns";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -2550,7 +2550,7 @@ public:
 		ID = "flying_horses";
 		name = "Flying Horses";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 	}
 
 	virtual void OnActivate() override;
@@ -2564,7 +2564,7 @@ public:
 		ID = "slightly_off_aim";
 		name = "Slightly Off Aim";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2578,7 +2578,7 @@ public:
 		ID = "headshot_only";
 		name = "Headshot Only";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2632,7 +2632,7 @@ public:
 		ID = "every_kill_causes_random_weather";
 		name = "Every Kill Causes Random Weather";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -2646,7 +2646,7 @@ public:
 		ID = "pacifist";
 		name = "Pacifist";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2660,7 +2660,7 @@ public:
 		ID = "vehicles_disappear_on_impact";
 		name = "Vehicles Disappear On Impact";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2674,7 +2674,7 @@ public:
 		ID = "need_for_speed";
 		name = "Need For Speed";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2688,7 +2688,7 @@ public:
 		ID = "whats_the_boost_button";
 		name = "What's The Boost Button";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 90;
 	}
 
 	virtual void OnTick() override;
@@ -2741,7 +2741,7 @@ public:
 		ID = "gravity_sphere";
 		name = "Gravity Sphere";
 		bTimed = true;
-		EffectDuration = 25;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2781,7 +2781,7 @@ public:
 		ID = "midas_touch";
 		name = "Midas Touch";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 45;
 	}
 
 	virtual void OnTick() override;
@@ -2809,7 +2809,7 @@ public:
 		ID = "is_this_revenge";
 		name = "Is This Revenge?";
 		bTimed = true;
-		EffectDuration = 35;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2849,7 +2849,7 @@ public:
 		ID = "marshmellos";
 		name = "Marshmellos";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;
@@ -2876,7 +2876,7 @@ public:
 		ID = "brake_boosting";
 		name = "Brake Boosting";
 		bTimed = true;
-		EffectDuration = 30;
+		EffectDuration = 60;
 	}
 
 	virtual void OnTick() override;

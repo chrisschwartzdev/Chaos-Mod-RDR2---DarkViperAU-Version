@@ -239,8 +239,6 @@ bool ChaosMod::IsEffectActive(std::string effect_id)
 
 void ChaosMod::PlayActivationSound()
 {
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
 
 	// ported from https://github.com/gta-chaos-mod/ChaosModV/blob/master/ChaosMod/Components/Mp3Manager.cpp
 	// all credits to the original author
@@ -266,16 +264,13 @@ void ChaosMod::PlayActivationSound()
 	LPCSTR command = ConvertStringToLPCSTR(tmpStr);
 	int error = mciSendString(command, nullptr, 0, nullptr);
 
-	if (error != MCIERR_DEVICE_OPEN)
+	if (error != 0 && error != MCIERR_DEVICE_OPEN)
 	{
 		std::string logStr = "Error opening activation sound file: " + std::to_string(error) + " (" + activationSoundFile + ")";
 		std::cout << logStr.c_str() << std::endl;
 
 		LogToFile(logStr.c_str());
 		return;
-	}
-	else {
-		std::cout << "5" << std::endl;
 	}
 	std::ostringstream playOss;
 	playOss << "play \"" << activationSoundFile << "\" from 0";
@@ -305,8 +300,6 @@ static LPCSTR ConvertStringToLPCSTR1(const std::string& str)
 }
 
 void PlayJellyBeansSound() {
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
 
 	static std::string jellyBeansSoundFile;
 
@@ -331,15 +324,12 @@ void PlayJellyBeansSound() {
 	LPCSTR command = ConvertStringToLPCSTR1(tmpStr);
 	int error = mciSendString(command, nullptr, 0, nullptr);
 
-	if (error != MCIERR_DEVICE_OPEN)
+	if (error != 0 && error != MCIERR_DEVICE_OPEN)
 	{
 		std::string logStr = "Error opening JellyBeans sound file: " + std::to_string(error) + " (" + jellyBeansSoundFile + ")";
 		std::cout << logStr.c_str() << std::endl;
 
 		return;
-	}
-	else {
-		std::cout << "5" << std::endl;
 	}
 	std::ostringstream playOss;
 	playOss << "play \"" << jellyBeansSoundFile << "\" from 0";
@@ -1493,9 +1483,7 @@ std::vector<Effect*> ChaosMod::GenerateEffectsWithChances(uint32_t maxEffects)
 
 
 		if (effect) {
-			AllocConsole();
-			freopen("CONOUT$", "w", stdout);
-			std::cout << "effect: " << effect->name << std::endl;
+			//std::cout << "effect: " << effect->name << std::endl;
 		}
 
 		if (effect)
